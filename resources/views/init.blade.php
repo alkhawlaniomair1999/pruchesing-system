@@ -59,8 +59,8 @@
                 <td>1</td>
                 <td>فرع 1</td>
                 <td class="action-buttons">
-                    <button class="edit-btn">تعديل</button>
-                    <button class="delete-btn">حذف</button>
+                    <button class="edit-btn">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
+                    <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
                 </td>
             </tr>
             <tr>
