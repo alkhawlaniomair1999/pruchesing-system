@@ -18,7 +18,8 @@ class DetailsController extends Controller
         $items = items::all();
         $Branch = Branch::all();
         $accounts = accounts::all();
-        return view('details',['items'=>$items,'Branch'=>$Branch,'accounts'=>$accounts]);
+        $details = details::all();
+        return view('details',['items'=>$items,'Branch'=>$Branch,'accounts'=>$accounts,'details'=>$details]);
     }
 
     /**

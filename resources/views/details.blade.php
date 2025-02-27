@@ -70,89 +70,52 @@
             </div>
         </form>
     </div>
-
-    <div class="tables-container">
-        <input type="text" class="search-input" placeholder="بحث في الفروع..."
-            onkeyup="searchTable(this, 'branches-table')">
-        <table id="branches-table">
-            <thead>
-                <tr>
-                    <th onclick="sortTable(0, 'branches-table')">الرقم</th>
-                    <th onclick="sortTable(1, 'branches-table')">الفروع</th>
-                    <th>الإجراءات</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (isset($branchs))
-                    @foreach ($branchs as $b)
-                        <tr>
-                            <td>{{ $b->id }}</td>
-                            <td>{{ $b->branch }} </td>
-                            <td class="action-buttons">
-                                <button class="edit-btn">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
-                                <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
-            </tbody>
-        </table>
-        <div class="pagination" id="branches-pagination"></div>
-
-        <input type="text" class="search-input" placeholder="بحث في الحسابات..."
-            onkeyup="searchTable(this, 'accounts-table')">
-        <table id="accounts-table">
-            <thead>
-                <tr>
-                    <th onclick="sortTable(0, 'accounts-table')">الرقم</th>
-                    <th onclick="sortTable(1, 'accounts-table')">الحسابات</th>
-                    <th>الإجراءات</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (isset($data1))
-                    @foreach ($data1 as $d1)
-                        <tr>
-                            <td>{{ $d1->id }}</td>
-                            <td>{{ $d1->account }} </td>
-                            <td class="action-buttons">
-                                <button class="edit-btn">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
-                                <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
-            </tbody>
-        </table>
-        <div class="pagination" id="accounts-pagination"></div>
-
-        <input type="text" class="search-input" placeholder="بحث في الأصناف..."
-            onkeyup="searchTable(this, 'categories-table')">
-        <table id="categories-table">
-            <thead>
-                <tr>
-                    <th onclick="sortTable(0, 'categories-table')">الرقم</th>
-                    <th onclick="sortTable(1, 'categories-table')">الأصناف</th>
-                    <th>الإجراءات</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (isset($data))
-                    @foreach ($data as $d)
-                        <tr>
-                            <td>{{ $d->id }}</td>
-                            <td>{{ $d->item }} </td>
-                            <td class="action-buttons">
-                                <button class="edit-btn">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
-                                <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
-
-            </tbody>
-        </table>
-        <div class="pagination" id="categories-pagination"></div>
-    </div>
-    </div>
+    <h2>جدول عرض البيانات</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>التفصيل</th>
+                <th>الصنف</th>
+                <th>الفرع</th>
+                <th>الحساب</th>
+                <th>السعر الإجمالي</th>
+                <th>الضريبة</th>
+                <th>صافي السعر</th>
+                <th>التاريخ</th>
+                <th>الإجراءات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (isset($details))
+                @foreach ($details as $d)
+                    <tr>
+                        <td>{{ $d->detail }}</td>
+                        @foreach ($items as $i)
+                            @if ($i->id == $d->item_id)
+                                <td>{{ $i->item }}</td>
+                            @endif
+                        @endforeach
+                        @foreach ($Branch as $b)
+                            @if ($b->id == $d->branch_id)
+                                <td>{{ $b->branch }}</td>
+                            @endif
+                        @endforeach
+                        @foreach ($accounts as $a)
+                            @if ($a->id == $d->account_id)
+                                <td>{{ $a->account }}</td>
+                            @endif
+                        @endforeach
+                        <td>{{ $d->total }}</td>
+                        <td>{{ $d->tax }}</td>
+                        <td>{{ $d->price }}</td>
+                        <td>{{ $d->created_at }}</td>
+                        <td class="action-buttons">
+                            <button class="edit-btn">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
+                            <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                @endforeach
+            @endif
+        </tbody>
+    </table>
 @endsection
