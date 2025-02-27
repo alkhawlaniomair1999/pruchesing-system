@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\details;
+use App\Models\accounts;
+use App\Models\Branch;
+use App\Models\items;
 use Illuminate\Http\Request;
 
 class DetailsController extends Controller
@@ -12,7 +15,10 @@ class DetailsController extends Controller
      */
     public function index()
     {
-        //
+        $items = items::all();
+        $Branch = Branch::all();
+        $accounts = accounts::all();
+        return view('details',['items'=>$items,'Branch'=>$Branch,'accounts'=>$accounts]);
     }
 
     /**
@@ -28,7 +34,20 @@ class DetailsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $details['detail'] = $request->detail;
+        $details['total'] = $request->totalPrice;
+        $details['item_id'] = $request->item;
+        $details['branch_id'] = $request->branch;
+        $details['account_id'] = $request->account;
+        $details['tax'] = $request->tax;
+        if ($request->tax == 1) {
+            $details['price'] = $request->totalPrice * (1-0.15);
+        } else {
+            $details['price'] = $request->totalPrice;
+        }
+        details::create($details);
+        return redirect()->back();
+        
     }
 
     /**
