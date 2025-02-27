@@ -28,7 +28,11 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->branch_name;
+        Branch::create([
+            'branch' => $data,
+        ]);
+        return redirect()->back();
     }
 
     /**

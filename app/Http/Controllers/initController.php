@@ -11,7 +11,8 @@ class initController extends Controller
 {
     public function index()
     {
+        $branchs=Branch::All();
         $data = items::All();
-        return view('init',['data'=>$data]);
+        return view('init',['data'=>$data],['branchs'=>$branchs]);
     }
 }

@@ -11,10 +11,11 @@
     <div class="container">
         <div class="form-container">
             <h3>إضافة فرع</h3>
-            <form>
+            <form method="POST" action="{{route('branch.store')}}">
+                @csrf
                 <div class="form-group">
-                    <label for="branch-name">اسم الفرع</label>
-                    <input type="text" id="branch-name" name="branch-name" required>
+                    <label for="branch_name">اسم الفرع</label>
+                    <input type="text" id="branch_name" name="branch_name" required>
                     <button type="submit">إضافة</button>
                 </div>
             </form>
@@ -56,30 +57,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>فرع 1</td>
-                    <td class="action-buttons">
-                        <button class="edit-btn">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
-                        <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>فرع 2</td>
-                    <td class="action-buttons">
-                        <button class="edit-btn">تعديل</button>
-                        <button class="delete-btn">حذف</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>فرع 3</td>
-                    <td class="action-buttons">
-                        <button class="edit-btn">تعديل</button>
-                        <button class="delete-btn">حذف</button>
-                    </td>
-                </tr>
+                @if (isset($branchs))
+                    @foreach ($branchs as $b)
+                        <tr>
+                            <td>{{ $b->id }}</td>
+                            <td>{{ $b->branch }} </td>
+                            <td class="action-buttons">
+                                <button class="edit-btn">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
+                                <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
         <div class="pagination" id="branches-pagination"></div>
