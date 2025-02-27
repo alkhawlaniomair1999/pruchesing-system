@@ -89,11 +89,12 @@
 
         <div class="form-container">
             <h3>إضافة حساب</h3>
-            <form>
+            <form method="POST" action="{{route('account.store')}}">
+                @csrf
                 
                 <div class="form-group">
-                    <label for="account-name">اسم الحساب</label>
-                    <input type="text" id="account-name" name="account-name" required>
+                    <label for="account_name">اسم الحساب</label>
+                    <input type="text" id="account_name" name="account_name" required>
                     <button type="submit">إضافة</button>
                 </div>
             </form>
@@ -151,14 +152,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>حساب 1</td>
-                    <td class="action-buttons">
-                        <button class="edit-btn">تعديل</button>
-                        <button class="delete-btn">حذف</button>
-                    </td>
-                </tr>
+                @if (isset($data1))
+                @foreach ($data1 as $c)
+                    <tr>
+                        <td>{{ $c->id }}</td>
+                        <td>{{ $c->account }} </td>
+                        <td class="action-buttons">
+                            <button class="edit-btn">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
+                            <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                @endforeach
+            @endif
+
             </tbody>
         </table>
         <div class="pagination" id="accounts-pagination"></div>
