@@ -28,6 +28,11 @@ class AccountsController extends Controller
      */
     public function store(Request $request)
     {
+        $data = $request->account_name;
+        accounts::create([
+            'account' => $data,
+        ]);
+        return redirect()->back();
         //
     }
 

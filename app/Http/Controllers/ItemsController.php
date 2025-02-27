@@ -28,7 +28,11 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->category_name;
+        items::create([
+            'item' => $data,
+        ]);
+        return redirect()->back();
     }
 
     /**
