@@ -228,7 +228,7 @@ td {
 }
 
 tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #ececec;
 }
 
 tr:nth-child(odd) {
@@ -249,10 +249,20 @@ tr:nth-child(odd) {
     color: white;
 }
 
+.edit-btn:hover {
+    background-color: #218838;
+    /* Darker green for hover */
+}
+
 .delete-btn {
     background-color: #dc3545;
     /* Red color for delete */
     color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+    /* Darker red for hover */
 }
 
 .search-input {
