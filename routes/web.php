@@ -7,6 +7,7 @@ use App\Http\Controllers\initController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\AccountsController;
 use App\Http\Controllers\DetailsController;
+use App\Http\Controllers\ReportsController;
 
 
 
@@ -46,6 +47,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/account', [AccountsController::class, 'store'])->name('account.store');
     Route::post('/account/update', [AccountsController::class, 'update'])->name('account.update');
     Route::get('/account/destroy/{id}', [AccountsController::class, 'destroy'])->name('account.destroy');
+
+//التقارير
+Route::get('/reports',[ReportsController::class,'index'])->name('reports.index');
+
+
+
 
 
 });
