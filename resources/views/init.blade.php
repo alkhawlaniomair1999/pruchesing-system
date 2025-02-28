@@ -290,8 +290,8 @@
           <form id="editForm" action="{{ route('account.update') }}" method="POST">
             @csrf
             <h2>تعديل بيانات الحساب</h2>
-            <label for="accountId">ID:</label>
-            <input type="text" id="accountId" name="id" value="${record.id}" disabled>
+            
+            <input type="text" id="accountId" name="id" value="${record.id}" hidden>
             <label for="accountOldName">الاسم السابق:</label>
             <input type="text" id="accountOldName" name="oldName" value="${record.name}" disabled>
             <label for="accountNewName">الاسم الجديد:</label>
@@ -304,8 +304,7 @@
           <form id="editForm" action="{{ route('items.update') }}" method="POST">
             @csrf
             <h2>تعديل بيانات الصنف</h2>
-            <label for="categoryId">ID:</label>
-            <input type="text" id="categoryId" name="id" value="${record.id}" disabled>
+            <input type="text" id="categoryId" name="id" value="${record.id}" hidden>
             <label for="categoryOldName">الاسم السابق:</label>
             <input type="text" id="categoryOldName" name="oldName" value="${record.name}" disabled>
             <label for="categoryNewName">الاسم الجديد:</label>
