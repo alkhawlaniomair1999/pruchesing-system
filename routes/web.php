@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
 
    //الفروع
     Route::post('/branch', [BranchController::class, 'store'])->name('branch.store');
+    Route::post('/branch/update', [BranchController::class, 'update'])->name('branch.update');
+
     //الحسابات
     Route::post('/account', [AccountsController::class, 'store'])->name('account.store');
 

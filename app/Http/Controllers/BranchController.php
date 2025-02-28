@@ -56,7 +56,10 @@ class BranchController extends Controller
      */
     public function update(Request $request, Branch $branch)
     {
-        //
+        $b['branch']=$request->newName;
+        
+        Branch::where('id',$request->id)->update($b);
+        return redirect()->back();
     }
 
     /**

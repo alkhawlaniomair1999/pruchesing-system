@@ -68,10 +68,42 @@
         border-radius: 4px;
     }
 
+
+
+
+
     input[disabled] {
         background-color: #f2f2f2;
         cursor: not-allowed;
     }
+
+    #toast {
+      visibility: hidden;
+      min-width: 250px;
+      max-width: 90%;
+      background-color: #444;
+      color: #fff;
+      text-align: center;
+      border-radius: 4px;
+      padding: 16px 20px;
+      position: fixed;
+      z-index: 999;
+      left: 50%;
+      top: 20px;
+      transform: translateX(-50%);
+      font-size: 16px;
+      opacity: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      line-height: 1.4;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    #toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
+
+
+
 </style>
 @section('main')
     <div class="container">
@@ -131,7 +163,7 @@
                             <td>{{ $b->id }}</td>
                             <td>{{ $b->branch }} </td>
                             <td class="action-buttons">
-                                <button class="edit-btn"onclick="openModal('{{$b->id}}', ' {{$b->branch}}')">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
+                                <button class="edit-btn"onclick="openModal({id: '{{$b->id}}', name: '{{ $b->branch }}'}, 'category')">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
                                 <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
@@ -199,64 +231,121 @@
     </div>
     </div>
 
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <form id="editForm">
-                <label for="branchName">اسم الفرع (قديم):</label>
-                <input type="text" id="branchName" name="branchName" disabled>
-    
-                <label for="branchId">رقم الفرع:</label>
-                <input type="text" id="branchId" name="branchId" disabled>
-    
-                <label for="name">الاسم الجديد:</label>
-                <input type="text" id="name" name="name" required>
-    
-                <input type="hidden" id="itemId" name="itemId">
-                <button type="submit">حفظ التعديلات</button>
-            </form>
-        </div>
+   
+
+
+
+
+<!-- النافذة المنبثقة (Modal) -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <!-- سيتم تحميل النموذج المناسب هنا -->
+      <div id="modalFormContent"></div>
     </div>
-    
-    <script>
-        // الحصول على العناصر
-        var modal = document.getElementById("myModal");
-        var span = document.getElementsByClassName("close")[0];
-        var form = document.getElementById("editForm");
-        var itemIdInput = document.getElementById("itemId");
-        var branchNameInput = document.getElementById("branchName");
-        var branchIdInput = document.getElementById("branchId");
-        var nameInput = document.getElementById("name");
-    
-        // عندما يتم الضغط على زر التعديل، تظهر النافذة المنبثقة مع ID واسم الفرع ورقم الفرع
-        function openModal(id, branchName) {
-            itemIdInput.value = id;
-            branchNameInput.value = branchName;
-            branchIdInput.value = id; // رقم الفرع هو نفسه الـ ID
-            nameInput.value = ""; // يمكن تخصيص هذا لإظهار الاسم الجديد
-            modal.style.display = "block";
+  </div>
+
+  <!-- عنصر التوست (Toast) الذي سيظهر في أعلى الشاشة -->
+  <div id="toast"></div>
+
+  <script>
+    const modal = document.getElementById("myModal");
+    const closeBtn = document.querySelector(".close");
+    const modalFormContent = document.getElementById("modalFormContent");
+
+    /**
+     * دالة فتح النافذة واستدعاء النموذج المناسب بناءً على السجل والنوع.
+     * @param {Object} record - يحتوي على بيانات السجل {id, name}.
+     * @param {string} type - نوع الكيان ("branch", "account", "category").
+     */
+    function openModal(record, type) {
+      let formHtml = "";
+      if (type === "branch") {
+        formHtml = `
+          <form id="editForm"  action="{{ route('branch.update') }}" method="POST>
+            @csrf
+            <h2>تعديل بيانات الفرع</h2>
+            <label for="branchId">ID:</label>
+            <input type="text" id="branchId" name="id" value="${record.id}" disabled>
+            <label for="branchOldName">الاسم السابق:</label>
+            <input type="text" id="branchOldName" name="oldName" value="${record.name}" disabled>
+            <label for="branchNewName">الاسم الجديد:</label>
+            <input type="text" id="branchNewName" name="newName" placeholder="أدخل الاسم الجديد" required>
+            <button type="submit">حفظ التعديلات</button>
+          </form>
+        `;
+      } else if (type === "account") {
+        formHtml = `
+          <form id="editForm">
+            <h2>تعديل بيانات الحساب</h2>
+            <label for="accountId">ID:</label>
+            <input type="text" id="accountId" name="id" value="${record.id}" disabled>
+            <label for="accountOldName">الاسم السابق:</label>
+            <input type="text" id="accountOldName" name="oldName" value="${record.name}" disabled>
+            <label for="accountNewName">الاسم الجديد:</label>
+            <input type="text" id="accountNewName" name="newName" placeholder="أدخل الاسم الجديد" required>
+            <button type="submit">حفظ التعديلات</button>
+          </form>
+        `;
+      } else if (type === "category") {
+        formHtml = `
+          <form id="editForm">
+            <h2>تعديل بيانات الصنف</h2>
+            <label for="categoryId">ID:</label>
+            <input type="text" id="categoryId" name="id" value="${record.id}" disabled>
+            <label for="categoryOldName">الاسم السابق:</label>
+            <input type="text" id="categoryOldName" name="oldName" value="${record.name}" disabled>
+            <label for="categoryNewName">الاسم الجديد:</label>
+            <input type="text" id="categoryNewName" name="newName" placeholder="أدخل الاسم الجديد" required>
+            <button type="submit">حفظ التعديلات</button>
+          </form>
+        `;
+      }
+      modalFormContent.innerHTML = formHtml;
+      modal.style.display = "block";
+
+      // معالجة حدث إرسال النموذج، مع إخفاء النافذة فوراً وإظهار التوست بعد تأخير بسيط
+      document.getElementById("editForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        let message = "تم حفظ التعديلات:\n";
+        for (const [key, value] of formData.entries()) {
+          message += `${key}: ${value}\n`;
         }
-    
-        // عندما يتم الضغط على زر الإغلاق، تختفي النافذة المنبثقة
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-    
-        // عندما يتم النقر في أي مكان خارج النافذة المنبثقة، تختفي النافذة
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    
-        // إرسال الفورم (يمكنك تعديل هذا الجزء لمعالجة البيانات كما تريد)
-        form.onsubmit = function(event) {
-            event.preventDefault();
-            alert("ID: " + itemIdInput.value + "\nBranch Name: " + branchNameInput.value + "\nBranch ID: " + branchIdInput.value + "\nNew Name: " + nameInput.value);
-            modal.style.display = "none";
-        }
-    </script>
-    
+        closeModal();
+        setTimeout(() => {
+          showToast(message);
+        }, 100);
+      }, { once: true });
+    }
+
+    // دالة إغلاق النافذة
+    function closeModal() {
+      modal.style.display = "none";
+      modalFormContent.innerHTML = "";
+    }
+
+    // دالة إظهار رسالة التوست في أعلى الشاشة ثم إخفاؤها تلقائيًا بعد 2 ثانية
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.innerText = message;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2000);
+    }
+
+    // إغلاق النافذة عند النقر على أيقونة الإغلاق أو خارج المحتوى
+    closeBtn.onclick = closeModal;
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        closeModal();
+      }
+    };
+  </script>
+
+
+
 
 
 
