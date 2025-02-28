@@ -103,45 +103,23 @@
         visibility: visible;
         opacity: 1;
     }
+i{
+margin-right: 10px
+
+}
+
 </style>
 @section('main')
     <div class="container">
-        <div class="form-container">
-            <h3>إضافة فرع</h3>
-            <form method="POST" action="{{ route('branch.store') }}">
-                @csrf
-                <div class="form-group">
-                    <label for="branch_name">اسم الفرع</label>
-                    <input type="text" id="branch_name" name="branch_name" required>
-                    <button type="submit">إضافة</button>
-                </div>
-            </form>
-        </div>
+        <button class="edit-btn"
+        onclick="openModal1('branch_add')">إضافة فرع<i
+            class="fa fa-plus-square"></i></button>
 
-        <div class="form-container">
-            <h3>إضافة حساب</h3>
-            <form method="POST" action="{{ route('account.store') }}">
-                @csrf
+            <button class="edit-btn"
+            onclick="openModal1('account_add')">إضافة حساب<i class=" fa fa-plus-square"></i></button>
 
-                <div class="form-group">
-                    <label for="account_name">اسم الحساب</label>
-                    <input type="text" id="account_name" name="account_name" required>
-                    <button type="submit">إضافة</button>
-                </div>
-            </form>
-        </div>
-
-        <div class="form-container">
-            <h3>إضافة صنف</h3>
-            <form action="{{ route('items.store') }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="category-name">اسم الصنف</label>
-                    <input type="text" id="category-name" name="category_name" required>
-                    <button type="submit">إضافة</button>
-                </div>
-            </form>
-        </div>
+                <button class="edit-btn"
+                onclick="openModal1('category_add')">إضافة صنف<i  class="fa fa-plus-square"></i></button>
     </div>
 
     <div class="tables-container">
@@ -276,7 +254,7 @@
           <form id="editForm"  action="{{ route('branch.update') }}" method="POST">
             @csrf
             <h2>تعديل بيانات الفرع</h2>
-            <label for="branchId">ID:</label>
+            
             <input type="number" id="branchId" name="id" value="${record.id}" hidden>
             <label for="branchOldName">الاسم السابق:</label>
             <input type="text" id="branchOldName" name="oldName" value="${record.name}" disabled>
@@ -313,6 +291,11 @@
           </form>
         `;
             }
+
+
+
+
+            
             modalFormContent.innerHTML = formHtml;
             modal.style.display = "block";
 
@@ -361,6 +344,104 @@
                 closeModal();
             }
         };
+
+       
+        /**
+         * دالة فتح النافذة واستدعاء النموذج المناسب بناءً على السجل والنوع.
+         * @param {Object} record - يحتوي على بيانات السجل {id, name}.
+         * @param {string} type - نوع الكيان ("branch", "account", "category").
+         */
+        function openModal1(type) {
+            let formHtml = "";
+            if (type === "branch_add") {
+                formHtml = `
+                <h3>إضافة فرع</h3>
+          <form method="POST" action="{{ route('branch.store') }}">
+                @csrf
+                <div class="form-group">
+                    <label for="branch_name">اسم الفرع</label>
+                    <input type="text" id="branch_name" name="branch_name" required>
+                    <button type="submit">إضافة</button>
+                </div>
+            </form>
+        `;
+            }
+            else if (type === "account_add") {
+                formHtml = `
+           <h3>إضافة حساب</h3>
+            <form method="POST" action="{{ route('account.store') }}">
+                @csrf
+
+                <div class="form-group">
+                    <label for="account_name">اسم الحساب</label>
+                    <input type="text" id="account_name" name="account_name" required>
+                    <button type="submit">إضافة</button>
+                </div>
+            </form>
+
+        `;
+            } else if (type === "category_add") {
+                formHtml = `
+           <h3>إضافة صنف</h3>
+            <form action="{{ route('items.store') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="category-name">اسم الصنف</label>
+                    <input type="text" id="category-name" name="category_name" required>
+                    <button type="submit">إضافة</button>
+                </div>
+            </form>
+        `;
+            }
+
+
+
+
+
+
+
+
+            modalFormContent.innerHTML = formHtml;
+            modal.style.display = "block";
+
+            // //   معالجة حدث إرسال النموذج، مع إخفاء النافذة فوراً وإظهار التوست بعد تأخير بسيط
+            //   document.getElementById("editForm").addEventListener("submit", function(e) {
+            //     // e.preventDefault();
+            //     const formData = new FormData(this);
+            //     let message = "تم حفظ التعديلات:\n";
+            //     for (const [key, value] of formData.entries()) {
+            //       message += `${key}: ${value}\n`;
+            //     }
+            //     closeModal();
+            //     setTimeout(() => {
+            //       showToast(message);
+            //     }, 100);
+            //   }, { once: true });
+        }
+
+        // دالة إغلاق النافذة
+        
+
+        // دالة إظهار رسالة التوست في أعلى الشاشة ثم إخفاؤها تلقائيًا بعد 2 ثانية
+       
+        
+
+        // إغلاق النافذة عند النقر على أيقونة الإغلاق أو خارج المحتوى
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </script>
 
 
