@@ -147,7 +147,17 @@
                             @endif
                         @endforeach
                         <td>{{ $d->total }}</td>
-                        <td>{{ $d->tax }}</td>
+                        
+                            @if ($d->tax==1)
+                            <td>نعم</td>
+                            @elseif ($d->tax==0)
+                            <td>لا</td>
+                            @else
+                            <td></td>
+
+                            @endif
+                            
+                            
                         <td>{{ $d->price }}</td>
                         <td>{{ $d->created_at }}</td>
                         <td class="action-buttons">
