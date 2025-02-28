@@ -54,11 +54,11 @@ class BranchController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Branch $branch)
+    public function update(Request $request)
     {
-        $b['branch']=$request->newName;
+        $b1['branch']=$request->newName;
         
-        Branch::where('id',$request->id)->update($b);
+        Branch::where('id',$request->id)->update($b1);
         return redirect()->back();
     }
 

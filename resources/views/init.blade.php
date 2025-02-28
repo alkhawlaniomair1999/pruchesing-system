@@ -163,7 +163,7 @@
                             <td>{{ $b->id }}</td>
                             <td>{{ $b->branch }} </td>
                             <td class="action-buttons">
-                                <button class="edit-btn"onclick="openModal({id: '{{$b->id}}', name: '{{ $b->branch }}'}, 'category')">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
+                                <button class="edit-btn"onclick="openModal({id: '{{$b->id}}', name: '{{ $b->branch }}'}, 'branch')">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
                                 <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
@@ -262,11 +262,11 @@
       let formHtml = "";
       if (type === "branch") {
         formHtml = `
-          <form id="editForm"  action="{{ route('branch.update') }}" method="POST>
+          <form id="editForm"  action="{{route('branch.update') }}" method="POST">
             @csrf
             <h2>تعديل بيانات الفرع</h2>
             <label for="branchId">ID:</label>
-            <input type="text" id="branchId" name="id" value="${record.id}" disabled>
+            <input type="number" id="branchId" name="id" value="${record.id}" hidden>
             <label for="branchOldName">الاسم السابق:</label>
             <input type="text" id="branchOldName" name="oldName" value="${record.name}" disabled>
             <label for="branchNewName">الاسم الجديد:</label>
@@ -304,19 +304,19 @@
       modalFormContent.innerHTML = formHtml;
       modal.style.display = "block";
 
-      // معالجة حدث إرسال النموذج، مع إخفاء النافذة فوراً وإظهار التوست بعد تأخير بسيط
-      document.getElementById("editForm").addEventListener("submit", function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        let message = "تم حفظ التعديلات:\n";
-        for (const [key, value] of formData.entries()) {
-          message += `${key}: ${value}\n`;
-        }
-        closeModal();
-        setTimeout(() => {
-          showToast(message);
-        }, 100);
-      }, { once: true });
+    // //   معالجة حدث إرسال النموذج، مع إخفاء النافذة فوراً وإظهار التوست بعد تأخير بسيط
+    //   document.getElementById("editForm").addEventListener("submit", function(e) {
+    //     // e.preventDefault();
+    //     const formData = new FormData(this);
+    //     let message = "تم حفظ التعديلات:\n";
+    //     for (const [key, value] of formData.entries()) {
+    //       message += `${key}: ${value}\n`;
+    //     }
+    //     closeModal();
+    //     setTimeout(() => {
+    //       showToast(message);
+    //     }, 100);
+    //   }, { once: true });
     }
 
     // دالة إغلاق النافذة
