@@ -36,6 +36,7 @@ class ItemsController extends Controller
         return redirect()->back();
         //
     }
+    
 
     /**
      * Display the specified resource.
@@ -64,8 +65,13 @@ class ItemsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(items $accounts)
-    {
+
+
+        public function destroy($id)
+        {
+            items::where('id',$id)->delete();
+            return redirect()->back();
+        }
         //
     }
-}
+

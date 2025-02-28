@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/details/destroy/{id}', [DetailsController::class, 'destroy'])->name('details.destroy');
    //الاصناف
     Route::post('/items', [ItemsController::class, 'store'])->name('items.store');
+    Route::get('/items/destroy/{id}', [ItemsController::class, 'destroy'])->name('items.destroy');
    
 
    //الفروع

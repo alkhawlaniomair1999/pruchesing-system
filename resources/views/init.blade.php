@@ -214,12 +214,14 @@
             <tbody>
                 @if (isset($data))
                     @foreach ($data as $d)
+                
                         <tr>
                             <td>{{ $d->id }}</td>
                             <td>{{ $d->item }} </td>
                             <td class="action-buttons">
                                 <button class="edit-btn">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
-                                <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
+                                <button class="delete-btn" onclick="confirmDelete({{ $d->id }})">حذف<i
+                                    class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -334,6 +336,12 @@
         toast.classList.remove("show");
       }, 2000);
     }
+    function confirmDelete(id) {
+            if (confirm('هل أنت متأكد أنك تريد حذف هذا السجل؟')) {
+                // إذا تم التأكيد، قم بتوجيه المستخدم إلى الراوت الخاص بالحذف
+                window.location.href = '/Items/destroy/' + id;
+            }
+        }
 
     // إغلاق النافذة عند النقر على أيقونة الإغلاق أو خارج المحتوى
     closeBtn.onclick = closeModal;
