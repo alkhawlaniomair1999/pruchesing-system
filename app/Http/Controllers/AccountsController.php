@@ -55,16 +55,19 @@ class AccountsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, accounts $accounts)
+    public function update(Request $request)
     {
-        //
+        $b1['account']=$request->newName;
+        accounts::where('id',$request->id)->update($b1);
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(accounts $accounts)
+    public function destroy($id)
     {
-        //
+        accounts::where('id', $id)->delete();
+        return redirect()->back();
     }
 }

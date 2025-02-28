@@ -16,7 +16,7 @@
         width: 100%;
         height: 100%;
         overflow: auto;
-        background-color: rgba(0,0,0,0.6);
+        background-color: rgba(0, 0, 0, 0.6);
         padding-top: 60px;
     }
 
@@ -25,7 +25,7 @@
         margin: 5% auto;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         width: 80%;
         max-width: 500px;
     }
@@ -59,7 +59,8 @@
         background-color: #0056b3;
     }
 
-    input[type="text"], input[type="hidden"] {
+    input[type="text"],
+    input[type="hidden"] {
         width: 100%;
         padding: 10px;
         margin: 8px 0;
@@ -78,38 +79,36 @@
     }
 
     #toast {
-      visibility: hidden;
-      min-width: 250px;
-      max-width: 90%;
-      background-color: #444;
-      color: #fff;
-      text-align: center;
-      border-radius: 4px;
-      padding: 16px 20px;
-      position: fixed;
-      z-index: 999;
-      left: 50%;
-      top: 20px;
-      transform: translateX(-50%);
-      font-size: 16px;
-      opacity: 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      line-height: 1.4;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
+        visibility: hidden;
+        min-width: 250px;
+        max-width: 90%;
+        background-color: #444;
+        color: #fff;
+        text-align: center;
+        border-radius: 4px;
+        padding: 16px 20px;
+        position: fixed;
+        z-index: 999;
+        left: 50%;
+        top: 20px;
+        transform: translateX(-50%);
+        font-size: 16px;
+        opacity: 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        line-height: 1.4;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
     }
+
     #toast.show {
-      visibility: visible;
-      opacity: 1;
+        visibility: visible;
+        opacity: 1;
     }
-
-
-
 </style>
 @section('main')
     <div class="container">
         <div class="form-container">
             <h3>إضافة فرع</h3>
-            <form method="POST" action="{{route('branch.store')}}">
+            <form method="POST" action="{{ route('branch.store') }}">
                 @csrf
                 <div class="form-group">
                     <label for="branch_name">اسم الفرع</label>
@@ -121,9 +120,9 @@
 
         <div class="form-container">
             <h3>إضافة حساب</h3>
-            <form method="POST" action="{{route('account.store')}}">
+            <form method="POST" action="{{ route('account.store') }}">
                 @csrf
-                
+
                 <div class="form-group">
                     <label for="account_name">اسم الحساب</label>
                     <input type="text" id="account_name" name="account_name" required>
@@ -163,8 +162,12 @@
                             <td>{{ $b->id }}</td>
                             <td>{{ $b->branch }} </td>
                             <td class="action-buttons">
-                                <button class="edit-btn"onclick="openModal({id: '{{$b->id}}', name: '{{ $b->branch }}'}, 'branch')">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
-                                <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
+                                <button class="edit-btn"
+                                    onclick="openModal({id: '{{ $b->id }}', name: '{{ $b->branch }}'}, 'branch')">تعديل<i
+                                        class="fa-solid fa-pen-to-square"></i></button>
+                                <button class="delete-btn"
+                                    onclick="confirmDelete({{ $b->id }},'/branch/destroy/')">حذف<i
+                                        class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -185,17 +188,21 @@
             </thead>
             <tbody>
                 @if (isset($data1))
-                @foreach ($data1 as $c)
-                    <tr>
-                        <td>{{ $c->id }}</td>
-                        <td>{{ $c->account }} </td>
-                        <td class="action-buttons">
-                            <button class="edit-btn">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
-                            <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                @endforeach
-            @endif
+                    @foreach ($data1 as $c)
+                        <tr>
+                            <td>{{ $c->id }}</td>
+                            <td>{{ $c->account }} </td>
+                            <td class="action-buttons">
+                                <button class="edit-btn"
+                                    onclick="openModal({id: '{{ $c->id }}', name: '{{ $c->account }}'}, 'account')">تعديل<i
+                                        class="fa-solid fa-pen-to-square"></i></button>
+                                <button class="delete-btn"
+                                    onclick="confirmDelete({{ $c->id }},'/account/destroy/')">حذف<i
+                                        class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
 
             </tbody>
         </table>
@@ -214,14 +221,16 @@
             <tbody>
                 @if (isset($data))
                     @foreach ($data as $d)
-                
                         <tr>
                             <td>{{ $d->id }}</td>
                             <td>{{ $d->item }} </td>
                             <td class="action-buttons">
-                                <button class="edit-btn">تعديل<i class="fa-solid fa-pen-to-square"></i></button>
-                                <button class="delete-btn" onclick="confirmDelete({{ $d->id }})">حذف<i
-                                    class="fa-solid fa-trash"></i></button>
+                                <button class="edit-btn"
+                                    onclick="openModal({id: '{{ $d->id }}', name: '{{ $d->item }}'}, 'category')">تعديل<i
+                                        class="fa-solid fa-pen-to-square"></i></button>
+                                <button class="delete-btn"
+                                    onclick="confirmDelete({{ $d->id }},'/items/destroy/')">حذف<i
+                                        class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -233,38 +242,38 @@
     </div>
     </div>
 
-   
 
 
 
 
-<!-- النافذة المنبثقة (Modal) -->
-<div id="myModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <!-- سيتم تحميل النموذج المناسب هنا -->
-      <div id="modalFormContent"></div>
+
+    <!-- النافذة المنبثقة (Modal) -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <!-- سيتم تحميل النموذج المناسب هنا -->
+            <div id="modalFormContent"></div>
+        </div>
     </div>
-  </div>
 
-  <!-- عنصر التوست (Toast) الذي سيظهر في أعلى الشاشة -->
-  <div id="toast"></div>
+    <!-- عنصر التوست (Toast) الذي سيظهر في أعلى الشاشة -->
+    <div id="toast"></div>
 
-  <script>
-    const modal = document.getElementById("myModal");
-    const closeBtn = document.querySelector(".close");
-    const modalFormContent = document.getElementById("modalFormContent");
+    <script>
+        const modal = document.getElementById("myModal");
+        const closeBtn = document.querySelector(".close");
+        const modalFormContent = document.getElementById("modalFormContent");
 
-    /**
-     * دالة فتح النافذة واستدعاء النموذج المناسب بناءً على السجل والنوع.
-     * @param {Object} record - يحتوي على بيانات السجل {id, name}.
-     * @param {string} type - نوع الكيان ("branch", "account", "category").
-     */
-    function openModal(record, type) {
-      let formHtml = "";
-      if (type === "branch") {
-        formHtml = `
-          <form id="editForm"  action="{{route('branch.update') }}" method="POST">
+        /**
+         * دالة فتح النافذة واستدعاء النموذج المناسب بناءً على السجل والنوع.
+         * @param {Object} record - يحتوي على بيانات السجل {id, name}.
+         * @param {string} type - نوع الكيان ("branch", "account", "category").
+         */
+        function openModal(record, type) {
+            let formHtml = "";
+            if (type === "branch") {
+                formHtml = `
+          <form id="editForm"  action="{{ route('branch.update') }}" method="POST">
             @csrf
             <h2>تعديل بيانات الفرع</h2>
             <label for="branchId">ID:</label>
@@ -276,9 +285,10 @@
             <button type="submit">حفظ التعديلات</button>
           </form>
         `;
-      } else if (type === "account") {
-        formHtml = `
-          <form id="editForm">
+            } else if (type === "account") {
+                formHtml = `
+          <form id="editForm" action="{{ route('account.update') }}" method="POST">
+            @csrf
             <h2>تعديل بيانات الحساب</h2>
             <label for="accountId">ID:</label>
             <input type="text" id="accountId" name="id" value="${record.id}" disabled>
@@ -289,9 +299,10 @@
             <button type="submit">حفظ التعديلات</button>
           </form>
         `;
-      } else if (type === "category") {
-        formHtml = `
-          <form id="editForm">
+            } else if (type === "category") {
+                formHtml = `
+          <form id="editForm" action="{{ route('items.update') }}" method="POST">
+            @csrf
             <h2>تعديل بيانات الصنف</h2>
             <label for="categoryId">ID:</label>
             <input type="text" id="categoryId" name="id" value="${record.id}" disabled>
@@ -302,55 +313,56 @@
             <button type="submit">حفظ التعديلات</button>
           </form>
         `;
-      }
-      modalFormContent.innerHTML = formHtml;
-      modal.style.display = "block";
+            }
+            modalFormContent.innerHTML = formHtml;
+            modal.style.display = "block";
 
-    // //   معالجة حدث إرسال النموذج، مع إخفاء النافذة فوراً وإظهار التوست بعد تأخير بسيط
-    //   document.getElementById("editForm").addEventListener("submit", function(e) {
-    //     // e.preventDefault();
-    //     const formData = new FormData(this);
-    //     let message = "تم حفظ التعديلات:\n";
-    //     for (const [key, value] of formData.entries()) {
-    //       message += `${key}: ${value}\n`;
-    //     }
-    //     closeModal();
-    //     setTimeout(() => {
-    //       showToast(message);
-    //     }, 100);
-    //   }, { once: true });
-    }
+            // //   معالجة حدث إرسال النموذج، مع إخفاء النافذة فوراً وإظهار التوست بعد تأخير بسيط
+            //   document.getElementById("editForm").addEventListener("submit", function(e) {
+            //     // e.preventDefault();
+            //     const formData = new FormData(this);
+            //     let message = "تم حفظ التعديلات:\n";
+            //     for (const [key, value] of formData.entries()) {
+            //       message += `${key}: ${value}\n`;
+            //     }
+            //     closeModal();
+            //     setTimeout(() => {
+            //       showToast(message);
+            //     }, 100);
+            //   }, { once: true });
+        }
 
-    // دالة إغلاق النافذة
-    function closeModal() {
-      modal.style.display = "none";
-      modalFormContent.innerHTML = "";
-    }
+        // دالة إغلاق النافذة
+        function closeModal() {
+            modal.style.display = "none";
+            modalFormContent.innerHTML = "";
+        }
 
-    // دالة إظهار رسالة التوست في أعلى الشاشة ثم إخفاؤها تلقائيًا بعد 2 ثانية
-    function showToast(message) {
-      const toast = document.getElementById("toast");
-      toast.innerText = message;
-      toast.classList.add("show");
-      setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2000);
-    }
-    function confirmDelete(id) {
+        // دالة إظهار رسالة التوست في أعلى الشاشة ثم إخفاؤها تلقائيًا بعد 2 ثانية
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2000);
+        }
+
+        function confirmDelete(id, pa) {
             if (confirm('هل أنت متأكد أنك تريد حذف هذا السجل؟')) {
                 // إذا تم التأكيد، قم بتوجيه المستخدم إلى الراوت الخاص بالحذف
-                window.location.href = '/Items/destroy/' + id;
+                window.location.href = pa + id;
             }
         }
 
-    // إغلاق النافذة عند النقر على أيقونة الإغلاق أو خارج المحتوى
-    closeBtn.onclick = closeModal;
-    window.onclick = function(event) {
-      if (event.target === modal) {
-        closeModal();
-      }
-    };
-  </script>
+        // إغلاق النافذة عند النقر على أيقونة الإغلاق أو خارج المحتوى
+        closeBtn.onclick = closeModal;
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
 
 
 

@@ -33,16 +33,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/details/destroy/{id}', [DetailsController::class, 'destroy'])->name('details.destroy');
    //الاصناف
     Route::post('/items', [ItemsController::class, 'store'])->name('items.store');
+    Route::post('/items/update', [ItemsController::class, 'update'])->name('items.update');
     Route::get('/items/destroy/{id}', [ItemsController::class, 'destroy'])->name('items.destroy');
    
 
    //الفروع
     Route::post('/branch', [BranchController::class, 'store'])->name('branch.store');
     Route::post('/branch/update', [BranchController::class, 'update'])->name('branch.update');
+    Route::get('/branch/destroy/{id}', [BranchController::class, 'destroy'])->name('branch.destroy');
 
     //الحسابات
     Route::post('/account', [AccountsController::class, 'store'])->name('account.store');
-
+    Route::post('/account/update', [AccountsController::class, 'update'])->name('account.update');
+    Route::get('/account/destroy/{id}', [AccountsController::class, 'destroy'])->name('account.destroy');
 
 
 });

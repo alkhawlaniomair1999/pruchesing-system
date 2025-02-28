@@ -57,9 +57,11 @@ class ItemsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, items $accounts)
+    public function update(Request $request)
     {
-        //
+        $b1['item']=$request->newName;
+        items::where('id',$request->id)->update($b1);
+        return redirect()->back();
     }
 
     /**

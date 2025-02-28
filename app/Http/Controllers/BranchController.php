@@ -65,8 +65,9 @@ class BranchController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Branch $branch)
+    public function destroy($id)
     {
-        //
-    }
+        Branch::where('id',$id)->delete();
+        return redirect()->back();
+        }
 }
