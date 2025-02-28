@@ -70,9 +70,21 @@ class DetailsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, details $details)
+    public function update(Request $request)
     {
-        //
+        $details['detail'] = $request->detail;
+        $details['total'] = $request->totalPrice;
+        $details['item_id'] = $request->item;
+        $details['branch_id'] = $request->branch;
+        $details['account_id'] = $request->account;
+        $details['tax'] = $request->tax;
+        if ($request->tax == 1) {
+            $details['price'] = $request->totalPrice * (1-0.15);
+        } else {
+            $details['price'] = $request->totalPrice;
+        }
+        details::where('id',$request->id)->update($details);
+        return redirect()->back();
     }
 
     /**
