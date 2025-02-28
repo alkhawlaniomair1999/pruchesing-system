@@ -153,7 +153,8 @@
                         <td class="action-buttons">
                             <button class="edit-btn" onclick="openModal(this)">تعديل<i
                                     class="fa-solid fa-pen-to-square"></i></button>
-                            <button class="delete-btn">حذف<i class="fa-solid fa-trash"></i></button>
+                            <button class="delete-btn" onclick="confirmDelete({{ $d->id }})">حذف<i
+                                    class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 @endforeach
@@ -254,6 +255,13 @@
         // إغلاق النموذج المنبثق
         function closeModal() {
             document.getElementById('editModal').style.display = 'none';
+        }
+
+        function confirmDelete(id) {
+            if (confirm('هل أنت متأكد أنك تريد حذف هذا السجل؟')) {
+                // إذا تم التأكيد، قم بتوجيه المستخدم إلى الراوت الخاص بالحذف
+                window.location.href = '/details/destroy/' + id;
+            }
         }
     </script>
 @endsection

@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/details',[DetailsController::class,'index'])->name('details.index');
     Route::post('/details/store', [DetailsController::class, 'store'])->name('details.store');
     Route::post('/details/update', [DetailsController::class, 'update'])->name('details.update');
+    Route::get('/details/destroy/{id}', [DetailsController::class, 'destroy'])->name('details.destroy');
    //الاصناف
     Route::post('/items', [ItemsController::class, 'store'])->name('items.store');
    

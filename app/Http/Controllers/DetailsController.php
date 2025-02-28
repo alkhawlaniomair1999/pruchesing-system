@@ -90,8 +90,12 @@ class DetailsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(details $details)
+    public function destroy($id)
     {
+        details::where('id',$id)->delete();
+        return redirect()->back();
+    }
+        public function getDetails($id){
         //
     }
 }
