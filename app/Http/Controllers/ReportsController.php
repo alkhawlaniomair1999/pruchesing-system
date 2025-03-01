@@ -21,10 +21,10 @@ class ReportsController extends Controller
         $month = $request->input('month');
         $year = $request->input('year');
 
-        $accounts = accounts::whereYear('updated_at', $year)->whereMonth('updated_at', $month)->get();
-        $branches = Branch::whereYear('updated_at', $year)->whereMonth('updated_at', $month)->get();
         $details = details::whereYear('updated_at', $year)->whereMonth('updated_at', $month)->get();
-        $items = items::whereYear('updated_at', $year)->whereMonth('updated_at', $month)->get();
+        $accounts = accounts::all();
+        $branches = Branch::all();
+        $items = items::all();
 
         return view('reports',['accounts'=>$accounts,'branches'=>$branches,'details'=>$details,'items'=>$items,'month'=>$month,'year'=>$year]);
     }
