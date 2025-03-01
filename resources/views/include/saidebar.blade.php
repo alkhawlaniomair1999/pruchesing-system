@@ -7,8 +7,7 @@
         </li>
         <li><a href="{{ url('init') }}" class="fa-solid fa-gear">التهيئة </a></li>
         <li><a href="{{ url('details') }}" class="fa-solid fa-">التسجيل اليومي </a></li>
-        <li><a href="{{url('reports')}}" class="fa fa-info-circle">التقارير </a></li>
-
+        <li><a href="{{ url('reports') }}" class="fa fa-info-circle">التقارير </a></li>
         <li><a href="#" class="fa-solid fa-circle-user">المستخدمين </a></li>
         <li><a href="{{ url('logout') }}"class="fa-solid fa-right-from-bracket">خروج </a></li>
 

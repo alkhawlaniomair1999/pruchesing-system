@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
 
 //التقارير
 Route::get('/reports',[ReportsController::class,'index'])->name('reports.index');
+Route::post('/reports/monthly', [ReportsController::class, 'monthly'])->name('reports.monthly');
 
 
 

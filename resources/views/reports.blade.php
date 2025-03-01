@@ -9,7 +9,7 @@
 @section('main')
 
 
-    <h2>جدول عرض البيانات</h2>
+    <h2>تقرير الشهر: {{ $month }}/{{ $year }}</h2>
     <table>
         <thead>
             <tr>
