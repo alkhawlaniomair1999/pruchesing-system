@@ -91,7 +91,10 @@
                         @endif
                     </select>
                 </div>
-
+                <div class="custom-form-group third-width">
+                    <label for="date">التاريخ:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
                 <div class="custom-form-group third-width">
                     <label for="item">الصنف:</label>
                     <select id="item" name="item" required>
@@ -147,19 +150,18 @@
                             @endif
                         @endforeach
                         <td>{{ $d->total }}</td>
-                        
-                            @if ($d->tax==1)
-                            <td>نعم</td>
-                            @elseif ($d->tax==0)
-                            <td>لا</td>
-                            @else
-                            <td></td>
 
-                            @endif
-                            
-                            
+                        @if ($d->tax == 1)
+                            <td>نعم</td>
+                        @elseif ($d->tax == 0)
+                            <td>لا</td>
+                        @else
+                            <td></td>
+                        @endif
+
+
                         <td>{{ $d->price }}</td>
-                        <td>{{ $d->created_at }}</td>
+                        <td>{{ $d->date }}</td>
                         <td class="action-buttons">
                             <button class="edit-btn" onclick="openModal(this)">تعديل<i
                                     class="fa-solid fa-pen-to-square"></i></button>
@@ -219,7 +221,10 @@
                             @endif
                         </select>
                     </div>
-
+                    <div class="custom-form-group third-width">
+                        <label for="date">التاريخ:</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
                     <div class="custom-form-group third-width">
                         <label for="editItem">الصنف:</label>
                         <select id="editItem" name="item" required>

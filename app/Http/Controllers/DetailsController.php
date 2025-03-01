@@ -40,6 +40,7 @@ class DetailsController extends Controller
         $details['item_id'] = $request->item;
         $details['branch_id'] = $request->branch;
         $details['account_id'] = $request->account;
+        $details['date'] = $request->date;
         $details['tax'] = $request->tax;
         if ($request->tax == 1) {
             $details['price'] = $request->totalPrice * (1-0.15);
@@ -77,6 +78,7 @@ class DetailsController extends Controller
         $details['item_id'] = $request->item;
         $details['branch_id'] = $request->branch;
         $details['account_id'] = $request->account;
+        $details['date'] = $request->date;
         $details['tax'] = $request->tax;
         if ($request->tax == 1) {
             $details['price'] = $request->totalPrice * (1-0.15);

@@ -21,7 +21,7 @@ class ReportsController extends Controller
         $month = $request->input('month');
         $year = $request->input('year');
 
-        $details = details::whereYear('updated_at', $year)->whereMonth('updated_at', $month)->get();
+        $details = details::whereYear('date', $year)->whereMonth('date', $month)->get();
         $accounts = accounts::all();
         $branches = Branch::all();
         $items = items::all();

@@ -18,10 +18,10 @@ return new class extends Migration
             $table->integer('total');
             $table->boolean('tax');
             $table->integer('price');
+            $table->date('date');
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('branch_id');
             $table->unsignedBigInteger('account_id');
-
             $table->foreign('item_id')->references('id')->on('items');
             $table->foreign('branch_id')->references('id')->on('branches');
             $table->foreign('account_id')->references('id')->on('accounts');
