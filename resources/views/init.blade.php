@@ -113,8 +113,9 @@
         <button class="edit-btn" onclick="openModal1('branch_add')">إضافة فرع<i class="fa fa-plus-square"></i></button>
 
         <button class="edit-btn" onclick="openModal1('account_add')">إضافة حساب<i class=" fa fa-plus-square"></i></button>
-
         <button class="edit-btn" onclick="openModal1('category_add')">إضافة صنف<i class="fa fa-plus-square"></i></button>
+        <button class="edit-btn" onclick="openModal1('cashir_add')">إضافة كاشير<i class="fa fa-plus-square"></i></button>
+
     </div>
 
     <div class="tables-container">
@@ -393,7 +394,28 @@
             </form>
         `;
             }
-
+            else if (type === "cashir_add") {
+                formHtml = `
+           <h3>إضافة كاشير</h3>
+            <form action="{{ route('casher.store') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="casher">اسم الكاشير</label>
+                    <input type="text" id="casher" name="casher" required>
+                    <label for="branch">الفرع:</label>
+                    <select id="branch" name="branch" required>
+                    
+                        @if (isset($branchs))
+                            @foreach ($branchs as $b)
+                                <option value="{{ $b->id }}">{{ $b->branch }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                    <button type="submit">إضافة</button>
+                </div>
+            </form>
+        `;
+            }
 
 
 

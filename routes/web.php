@@ -8,6 +8,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\AccountsController;
 use App\Http\Controllers\DetailsController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\CasherController;
 
 
 
@@ -52,6 +53,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/reports',[ReportsController::class,'index'])->name('reports.index');
 Route::post('/reports/monthly', [ReportsController::class, 'monthly'])->name('reports.monthly');
 
+Route::post('/casher', [CasherController::class, 'store'])->name('casher.store');
 
 
 

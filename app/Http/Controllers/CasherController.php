@@ -28,13 +28,17 @@ class CasherController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cash['casher'] = $request->casher;
+        $cash['branch_id'] = $request->branch;
+
+        cashers::create($cash);
+        return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(casher $casher)
+    public function show( $casher)
     {
         //
     }
@@ -42,7 +46,7 @@ class CasherController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(casher $casher)
+    public function edit( $casher)
     {
         //
     }
@@ -50,7 +54,7 @@ class CasherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, casher $casher)
+    public function update(Request $request,  $casher)
     {
         //
     }
@@ -58,7 +62,7 @@ class CasherController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(casher $casher)
+    public function destroy( $casher)
     {
         //
     }

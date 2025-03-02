@@ -28,13 +28,13 @@ class CasherProcController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(casher_proc $casher_proc)
+    public function show( $casher_proc)
     {
         //
     }
@@ -42,7 +42,7 @@ class CasherProcController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(casher_proc $casher_proc)
+    public function edit( $casher_proc)
     {
         //
     }
@@ -50,7 +50,7 @@ class CasherProcController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, casher_proc $casher_proc)
+    public function update(Request $request,  $casher_proc)
     {
         //
     }
@@ -58,7 +58,7 @@ class CasherProcController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(casher_proc $casher_proc)
+    public function destroy( $casher_proc)
     {
         //
     }
