@@ -103,23 +103,18 @@
         visibility: visible;
         opacity: 1;
     }
-i{
-margin-right: 10px
 
-}
-
+    i {
+        margin-right: 10px
+    }
 </style>
 @section('main')
     <div class="container">
-        <button class="edit-btn"
-        onclick="openModal1('branch_add')">إضافة فرع<i
-            class="fa fa-plus-square"></i></button>
+        <button class="edit-btn" onclick="openModal1('branch_add')">إضافة فرع<i class="fa fa-plus-square"></i></button>
 
-            <button class="edit-btn"
-            onclick="openModal1('account_add')">إضافة حساب<i class=" fa fa-plus-square"></i></button>
+        <button class="edit-btn" onclick="openModal1('account_add')">إضافة حساب<i class=" fa fa-plus-square"></i></button>
 
-                <button class="edit-btn"
-                onclick="openModal1('category_add')">إضافة صنف<i  class="fa fa-plus-square"></i></button>
+        <button class="edit-btn" onclick="openModal1('category_add')">إضافة صنف<i class="fa fa-plus-square"></i></button>
     </div>
 
     <div class="tables-container">
@@ -161,6 +156,9 @@ margin-right: 10px
                 <tr>
                     <th onclick="sortTable(0, 'accounts-table')">الرقم</th>
                     <th onclick="sortTable(1, 'accounts-table')">الحسابات</th>
+                    <th onclick="sortTable(2, 'accounts-table')">مدين</th>
+                    <th onclick="sortTable(3, 'accounts-table')">دائن</th>
+                    <th onclick="sortTable(4, 'accounts-table')">الرصيد</th>
                     <th>الإجراءات</th>
                 </tr>
             </thead>
@@ -170,6 +168,9 @@ margin-right: 10px
                         <tr>
                             <td>{{ $c->id }}</td>
                             <td>{{ $c->account }} </td>
+                            <td>{{ $c->debt }}</td>
+                            <td>{{ $c->credit }}</td>
+                            <td>{{ $c->balance }}</td>
                             <td class="action-buttons">
                                 <button class="edit-btn"
                                     onclick="openModal({id: '{{ $c->id }}', name: '{{ $c->account }}'}, 'account')">تعديل<i
@@ -295,7 +296,7 @@ margin-right: 10px
 
 
 
-            
+
             modalFormContent.innerHTML = formHtml;
             modal.style.display = "block";
 
@@ -345,7 +346,7 @@ margin-right: 10px
             }
         };
 
-       
+
         /**
          * دالة فتح النافذة واستدعاء النموذج المناسب بناءً على السجل والنوع.
          * @param {Object} record - يحتوي على بيانات السجل {id, name}.
@@ -365,8 +366,7 @@ margin-right: 10px
                 </div>
             </form>
         `;
-            }
-            else if (type === "account_add") {
+            } else if (type === "account_add") {
                 formHtml = `
            <h3>إضافة حساب</h3>
             <form method="POST" action="{{ route('account.store') }}">
@@ -420,28 +420,13 @@ margin-right: 10px
         }
 
         // دالة إغلاق النافذة
-        
+
 
         // دالة إظهار رسالة التوست في أعلى الشاشة ثم إخفاؤها تلقائيًا بعد 2 ثانية
-       
-        
+
+
 
         // إغلاق النافذة عند النقر على أيقونة الإغلاق أو خارج المحتوى
-       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </script>
 
 
