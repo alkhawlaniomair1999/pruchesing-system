@@ -9,6 +9,7 @@ use App\Http\Controllers\AccountsController;
 use App\Http\Controllers\DetailsController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\CasherController;
+use App\Http\Controllers\CasherProcController;
 
 
 
@@ -52,8 +53,13 @@ Route::middleware('auth')->group(function () {
 //التقارير
 Route::get('/reports',[ReportsController::class,'index'])->name('reports.index');
 Route::post('/reports/monthly', [ReportsController::class, 'monthly'])->name('reports.monthly');
-
+//الكاشير
 Route::post('/casher', [CasherController::class, 'store'])->name('casher.store');
+
+//عمليات الكاشير
+Route::get('/casher_proc',[CasherProcController::class,'index'])->name('casher_proc.index');
+
+Route::post('/casher_proc', [CasherProcController::class, 'store'])->name('casher_proc.store');
 
 
 

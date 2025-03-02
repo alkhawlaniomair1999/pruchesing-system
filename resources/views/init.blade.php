@@ -400,7 +400,9 @@
             <form action="{{ route('casher.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
+                <div class="custom-form-group third-width">
                     <label for="casher">اسم الكاشير</label>
+                    
                     <input type="text" id="casher" name="casher" required>
                     <label for="branch">الفرع:</label>
                     <select id="branch" name="branch" required>
@@ -411,8 +413,13 @@
                             @endforeach
                         @endif
                     </select>
-                    <button type="submit">إضافة</button>
+                     
+                    </div>
+                    
                 </div>
+                <div class="custom-form-group third-width">
+                    <button type="submit">إضافة</button>
+                    </div>
             </form>
         `;
             }

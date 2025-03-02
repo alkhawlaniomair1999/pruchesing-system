@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\casher_procs;
+use App\Models\cashers;
+use App\Models\Branch;
+
+
+
 use Illuminate\Http\Request;
 
 class CasherProcController extends Controller
@@ -12,7 +17,11 @@ class CasherProcController extends Controller
      */
     public function index()
     {
-        //
+        $casher_proc=casher_procs::all();
+        $casher=cashers::all();
+        $branch=Branch::all();
+        
+        return view('casherproc',['casher_proc'=>$casher_proc,'casher'=>$casher,'branch'=>$branch]);
     }
 
     /**
@@ -31,9 +40,7 @@ class CasherProcController extends Controller
         
     }
 
-    /**
-     * Display the specified resource.
-     */
+    
     public function show( $casher_proc)
     {
         //
