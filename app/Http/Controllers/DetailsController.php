@@ -102,13 +102,11 @@ accounts::where('id',$request->account)->update(['credit'=>$credit]);
     {
        $c1=details::where('id',$id)->first();
 
-       $ce= accounts::where('id',$c1['account'])->first();
-        
-       $c2=$ce['credit']-$c1['total'];
-        details::where('id',$id)->delete();
-accounts::where('id',$ce['id'])->update(['credit'=>$c2]);
-
-        return redirect()->back();
+       $ce= accounts::where('id',$c1['account_id'])->first();
+            $c2 = $ce['credit'] - $c1['total'];
+            details::where('id',$id)->delete();
+    accounts::where('id',$ce['id'])->update(['credit'=>$c2]);    
+       return redirect()->back();
     }
         public function getDetails($id){
         //
