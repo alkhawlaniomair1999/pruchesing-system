@@ -79,6 +79,19 @@ accounts::where('id',$request->account)->update(['credit'=>$credit]);
      */
     public function update(Request $request)
     {
+        $det = details::where('id',$request->id)->first();
+        $ce= accounts::where('id',$det['account_id'])->first();
+        if ($det['account_id'] == $request->account) {
+            $c2 = $ce['credit'] - $det['total'] + $request->totalPrice;
+            accounts::where('id',$ce['id'])->update(['credit'=>$c2]);
+        } else {
+            $c2 = $ce['credit'] - $det['total'];
+            accounts::where('id',$ce['id'])->update(['credit'=>$c2]);
+            $acc=accounts::where('id',$request->account)->first();
+            $credit=$acc['credit']+$request->totalPrice;
+            accounts::where('id',$request->account)->update(['credit'=>$credit]);
+            # code...
+        }
         $details['detail'] = $request->detail;
         $details['total'] = $request->totalPrice;
         $details['item_id'] = $request->item;
