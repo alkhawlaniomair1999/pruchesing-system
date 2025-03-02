@@ -15,6 +15,11 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('account');
+            $table->float('debt');
+            $table->float('credit');
+            $table->float('balance');
+
+
         });
     }
 

@@ -31,6 +31,10 @@ class AccountsController extends Controller
         $data = $request->account_name;
         accounts::create([
             'account' => $data,
+            'debt'=>0,
+            'credit'=>0,
+            'balance'=>0,
+
         ]);
         return redirect()->back();
         //

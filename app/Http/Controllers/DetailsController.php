@@ -48,6 +48,12 @@ class DetailsController extends Controller
             $details['price'] = $request->totalPrice;
         }
         details::create($details);
+$acc=accounts::where('id',$request->account)->first();
+
+$credit=$acc['credit']+$request->totalPrice;
+accounts::where('id',$request->account)->update(['credit'=>$credit]);
+
+
         return redirect()->back();
         
     }
@@ -94,7 +100,14 @@ class DetailsController extends Controller
      */
     public function destroy($id)
     {
+       $c1=details::where('id',$id)->first();
+
+       $ce= accounts::where('id',$c1['account'])->first();
+        
+       $c2=$ce['credit']-$c1['total'];
         details::where('id',$id)->delete();
+accounts::where('id',$ce['id'])->update(['credit'=>$c2]);
+
         return redirect()->back();
     }
         public function getDetails($id){
