@@ -113,19 +113,21 @@
         </form>
     </div>
     <h2>جدول عرض البيانات</h2>
-    <table>
+    <input type="text" class="search-input" placeholder="بحث في الأصناف..."
+        onkeyup="searchTable(this, 'categories-table')">
+    <table id="categories-table">
         <thead>
             <tr>
-                <th>الرقم</th>
-                <th>التفصيل</th>
-                <th>الصنف</th>
-                <th>الفرع</th>
-                <th>الحساب</th>
-                <th>السعر الإجمالي</th>
-                <th>الضريبة</th>
-                <th>صافي السعر</th>
-                <th>التاريخ</th>
-                <th>الإجراءات</th>
+                <th onclick="sortTable(0, 'categories-table')">الرقم</th>
+                <th onclick="sortTable(1, 'categories-table')">التفصيل</th>
+                <th onclick="sortTable(2, 'categories-table')">الصنف</th>
+                <th onclick="sortTable(3, 'categories-table')">الفرع</th>
+                <th onclick="sortTable(4, 'categories-table')">الحساب</th>
+                <th onclick="sortTable(5, 'categories-table')">السعر الإجمالي</th>
+                <th onclick="sortTable(6, 'categories-table')">الضريبة</th>
+                <th onclick="sortTable(7, 'categories-table')">صافي السعر</th>
+                <th onclick="sortTable(8, 'categories-table')">التاريخ</th>
+                <th onclick="sortTable(9, 'categories-table')">الإجراءات</th>
             </tr>
         </thead>
         <tbody>
@@ -173,6 +175,8 @@
             @endif
         </tbody>
     </table>
+    <div class="pagination" id="categories-pagination"></div>
+
     <!-- HTML للنموذج المنبثق -->
     <div id="editModal" class="modal">
         <div class="modal-content">
