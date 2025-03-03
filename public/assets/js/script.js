@@ -94,3 +94,6 @@ document.querySelectorAll('select').forEach(select => {
     });
 });
 
+var today = new Date();
+        var dateField = document.getElementById('date');
+        dateField.value = today.toISOString().split('T')[0];
