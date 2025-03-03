@@ -49,9 +49,9 @@ class DetailsController extends Controller
         }
         details::create($details);
 $acc=accounts::where('id',$request->account)->first();
-
 $credit=$acc['credit']+$request->totalPrice;
-accounts::where('id',$request->account)->update(['credit'=>$credit]);
+$balance=$acc['balance']-$request->totalPrice;
+accounts::where('id',$request->account)->update(['credit'=>$credit,'balance'=>$balance]);
 
 
         return redirect()->back();

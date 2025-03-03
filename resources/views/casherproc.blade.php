@@ -1,10 +1,10 @@
 @extends('include.app')
 @section('title')
-    عمليات الكاشيرات 
+    عمليات الكاشيرات
 @endsection
 
 @section('page')
-    عمليات الكاشيرات 
+    عمليات الكاشيرات
 @endsection
 <style>
     .modal {
@@ -52,7 +52,7 @@
         <form id="detailsForm" action="{{ route('casher_proc.store') }}" method="POST">
             @csrf
             <div class="custom-form-fields">
-            <div class="custom-form-group half-width">
+                <div class="custom-form-group half-width">
                     <label for="casher">الكاشير:</label>
                     <select id="casher" name="casher" required>
                         @if (isset($casher))
@@ -79,7 +79,7 @@
                     <label for="out">المصروفات :</label>
                     <input type="number" id="out" name="out" required>
                 </div>
-              <div class="custom-form-group third-width">
+                <div class="custom-form-group third-width">
                     <label for="date">التاريخ:</label>
                     <input type="date" id="date" name="date" required>
                 </div>
@@ -105,7 +105,7 @@
                 <th onclick="sortTable(5, 'categories-table')">المصروفات</th>
                 <th onclick="sortTable(6, 'categories-table')">عجز/زياده</th>
                 <th onclick="sortTable(6, 'categories-table')">التاريخ</th>
-
+                <th>العمليات</th>
             </tr>
         </thead>
         <tbody>
@@ -119,14 +119,14 @@
                             @endif
                         @endforeach
                         <td>{{ $d->total }}</td>
-                        
+
                         <td>{{ $d->bank }}</td>
                         <td>{{ $d->cash }}</td>
                         <td>{{ $d->out }}</td>
                         <td>{{ $d->plus }}</td>
                         <td>{{ $d->date }}</td>
 
-                        
+
                         <td class="action-buttons">
                             <button class="edit-btn" onclick="openModal(this)">تعديل<i
                                     class="fa-solid fa-pen-to-square"></i></button>
