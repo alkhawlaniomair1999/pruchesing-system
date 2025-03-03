@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\cashers;
 use Illuminate\Http\Request;
 use App\Models\accounts;
 use App\Models\items;
@@ -15,6 +16,7 @@ class initController extends Controller
         $branchs=Branch::All();
         $data = items::All();
         $data1=accounts::All();
-        return view('init',['data'=>$data ,'data1'=>$data1,'branchs'=>$branchs]);
+        $casher=cashers::All();
+        return view('init',['data'=>$data ,'data1'=>$data1,'branchs'=>$branchs,'casher'=>$casher]);
     }
 }

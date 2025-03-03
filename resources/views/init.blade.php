@@ -200,6 +200,50 @@
             </tbody>
         </table>
         <div class="pagination" id="accounts-pagination"></div>
+<!-- الكاشيرات -->
+        <input type="text" class="search-input" placeholder="بحث في الكاشيرات..."
+            onkeyup="searchTable(this, 'casher-table')">
+        <table id="casher-table">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0, 'casher-table')">الرقم</th>
+                    <th onclick="sortTable(1, 'casher-table')">الاسم</th>
+                    <th onclick="sortTable(1, 'casher-table')">الفرع</th>
+
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (isset($casher))
+                    @foreach ($casher as $b)
+                        <tr>
+                            <td>{{ $b->id }}</td>
+                            <td>{{ $b->casher }} </td>
+                            <td>
+                            @foreach ($branchs as $b1)
+                                    @if ($b1->id == $b->branch_id)
+                                        {{ $b1->branch }}
+                                    @endif
+                                @endforeach
+
+                                 </td>
+                            <td class="action-buttons">
+                                <button class="edit-btn"
+                                    onclick="openModal({id: '{{ $b->id }}', name: '{{ $b->casher }}'}, 'casher')">تعديل<i
+                                        class="fa-solid fa-pen-to-square"></i></button>
+                                <button class="delete-btn"
+                                    onclick="confirmDelete({{ $b->id }},'/casher/destroy/')">حذف<i
+                                        class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
+
+
+
+
 
         <input type="text" class="search-input" placeholder="بحث في الأصناف..."
             onkeyup="searchTable(this, 'categories-table')">
@@ -233,6 +277,9 @@
         </table>
         <div class="pagination" id="categories-pagination"></div>
     </div>
+
+
+    
     </div>
 
 
@@ -289,14 +336,13 @@
             <input type="text" id="accountOldName" name="oldName" value="${record.name}" disabled>
             <label for="accountNewName">الاسم الجديد:</label>
             <input type="text" id="accountNewName" name="newName" placeholder="أدخل الاسم الجديد" required>
-            <div class="form-group">
-            <label for="branch">نوع الحساب:</label>
-
-                    <select id="type" name="type" required>
-                    <option value="box">صندوق</option>
-                  <option value="bank">بنك</option>
-                  </div>
-</select>  
+            <div class="custom-form-group half-width">
+                        <label for="type">النوع:</label>
+                        <select id="type" name="type" required>
+                            <option value="box">صندوق</option>
+                            <option value="bank">بنك</option>
+                        </select>
+                    </div>
             <button type="submit">حفظ التعديلات</button>
           </form>
         `;
@@ -310,6 +356,35 @@
             <input type="text" id="categoryOldName" name="oldName" value="${record.name}" disabled>
             <label for="categoryNewName">الاسم الجديد:</label>
             <input type="text" id="categoryNewName" name="newName" placeholder="أدخل الاسم الجديد" required>
+            <button type="submit">حفظ التعديلات</button>
+          </form>
+        `;
+            }
+            else if (type === "casher") {
+                formHtml = `
+          <form id="editForm" action="{{ route('casher.update') }}" method="POST">
+            @csrf
+            <h2>تعديل بيانات الكاشير</h2>
+            <input type="text" id="id" name="id" value="${record.id}" hidden>
+            <label for="casherOldName">الاسم السابق:</label>
+            <input type="text" id="casherOldName" name="oldName" value="${record.casher}" disabled>
+            <label for="casherNewName">الاسم الجديد:</label>
+            <input type="text" id="categoryNewName" name="newName" placeholder="أدخل الاسم الجديد" required>
+
+<label for="casherOldbranch">الفرع السابق:</label>
+            <input type="text" id="casherOldbranch" name="oldbranch" value="${record.branch}" disabled>
+            <label for="casherNewName">الفرع الجديد:</label>
+            <div class="custom-form-group half-width">
+                        
+                   
+<select id="branch" name="branch" required>                   
+                        @if (isset($branchs))
+                            @foreach ($branchs as $b)
+                                <option value="{{ $b->id }}">{{ $b->branch }}</option>
+                            @endforeach
+                        @endif
+                    </select>  
+                     </div>
             <button type="submit">حفظ التعديلات</button>
           </form>
         `;
@@ -433,7 +508,7 @@
             } else if (type === "cashir_add") {
                 formHtml = `
            <h3>إضافة كاشير</h3>
-            <form action="{{ route('casher.store') }}" method="POST">
+            <form action="#" method="POST">
                 @csrf
                 <div class="form-group">
                 <div class="custom-form-group third-width">

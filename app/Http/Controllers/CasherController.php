@@ -62,8 +62,9 @@ class CasherController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( $casher)
+    public function destroy( $id)
     {
-        //
+        cashers::where('id',$id)->delete();
+            return redirect()->back();
     }
 }

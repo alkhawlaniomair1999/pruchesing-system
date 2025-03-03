@@ -66,6 +66,8 @@ class AccountsController extends Controller
     public function update(Request $request)
     {
         $b1['account']=$request->newName;
+        $b1['type']=$request->type;
+
         accounts::where('id',$request->id)->update($b1);
         return redirect()->back();
     }

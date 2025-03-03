@@ -55,6 +55,8 @@ Route::get('/reports',[ReportsController::class,'index'])->name('reports.index')
 Route::post('/reports/monthly', [ReportsController::class, 'monthly'])->name('reports.monthly');
 //الكاشير
 Route::post('/casher', [CasherController::class, 'store'])->name('casher.store');
+Route::post('/casher', [CasherController::class, 'update'])->name('casher.update');
+Route::get('/casher/destroy/{id}', [CasherController::class, 'destroy'])->name('casher.destroy');
 
 //عمليات الكاشير
 Route::get('/casher_proc',[CasherProcController::class,'index'])->name('casher_proc.index');
