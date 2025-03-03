@@ -86,8 +86,9 @@
 @section('main')
     <div class="custom-form-container">
         <div class="custom-form-header">
-            <h2 class="custom-form-title">نموذج إضافة تفاصيل</h2>
             <button type="button" id="toggleButton" onclick="toggleForm()">-</button>
+            <h2 class="custom-form-title">نموذج إضافة تفاصيل</h2>
+            <p></p>
         </div>
         <form id="detailsForm" action="{{ route('details.store') }}" method="POST">
             @csrf
