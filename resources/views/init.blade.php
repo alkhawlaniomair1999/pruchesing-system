@@ -448,22 +448,7 @@
                                 <option value="{{ $b->id }}">{{ $b->branch }}</option>
                             @endforeach
                         @endif
-                    </select>
-                    <select id="box" name="box" required>                   
-                        @if (isset($accounts))
-                            @foreach ($accounts as $b)
-                                <option value="{{ $b->id }}">{{ $b->branch }}</option>
-                            @endforeach
-                        @endif
-                    </select> 
-                    <select id="bank" name="bank" required>                   
-                        @if (isset($accounts))
-                            @foreach ($accounts as $b)
-                                <option value="{{ $b->id }}">{{ $b->branch }}</option>
-                            @endforeach
-                        @endif
-                    </select> 
-                     
+                    </select>                 
                     </div>
                     
                 </div>

@@ -47,8 +47,14 @@ class CasherProcController extends Controller
         $data['plus'] = $request->total - ($request->out+$request->cash+$request->bank);
         casher_procs::create($data);
         $cacher = cashers::where('id',$request->casher)->first();
-        $account = accounts::where('branch_id',$cacher->branch_id)->All();
-
+        $box = accounts::where('branch_id',$cacher->branch_id)->where('type','box')->first();
+        $box1 = $box->debt + $request->cash;
+        $balance = $box->balance + $request->cash;
+        accounts::where('id',$box->id)->update(['debt'=>$box1,'balance'=>$balance]);
+        $bank = accounts::where('branch_id',$cacher->branch_id)->where('type','bank')->first();
+        $bank1 = $bank->debt + $request->bank;
+        $balance = $bank->balance + $request->bank;
+        accounts::where('id',$bank->id)->update(['debt'=>$bank1,'balance'=>$balance]);
         return redirect()->back();
     }
 
