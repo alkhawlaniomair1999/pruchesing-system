@@ -84,12 +84,21 @@ accounts::where('id',$request->account)->update(['credit'=>$credit,'balance'=>$b
         if ($det['account_id'] == $request->account) {
             $c2 = $ce['credit'] - $det['total'] + $request->totalPrice;
             accounts::where('id',$ce['id'])->update(['credit'=>$c2]);
+            $acc=accounts::where('id',$ce['id'])->first();
+            $balance=$acc['debt']-$acc['credit'];
+            accounts::where('id',$ce['id'])->update(['balance'=>$balance]);
         } else {
             $c2 = $ce['credit'] - $det['total'];
             accounts::where('id',$ce['id'])->update(['credit'=>$c2]);
+            $ac=accounts::where('id',$ce['id'])->first();
+            $balance=$ac['debt']-$ac['credit'];
+            accounts::where('id',$ce['id'])->update(['balance'=>$balance]);
             $acc=accounts::where('id',$request->account)->first();
             $credit=$acc['credit']+$request->totalPrice;
             accounts::where('id',$request->account)->update(['credit'=>$credit]);
+            $acc1=accounts::where('id',$request->account)->first();
+            $balance=$acc1['debt']-$acc1['credit'];
+            accounts::where('id',$request->account)->update(['balance'=>$balance]);
             # code...
         }
         $details['detail'] = $request->detail;
@@ -114,11 +123,15 @@ accounts::where('id',$request->account)->update(['credit'=>$credit,'balance'=>$b
     public function destroy($id)
     {
        $c1=details::where('id',$id)->first();
-
        $ce= accounts::where('id',$c1['account_id'])->first();
             $c2 = $ce['credit'] - $c1['total'];
-            details::where('id',$id)->delete();
-    accounts::where('id',$ce['id'])->update(['credit'=>$c2]);    
+            $balance=$ce['balance']+$c1['total'];
+    accounts::where('id',$ce['id'])->update(['credit'=>$c2]);
+    $ce= accounts::where('id',$c1['account_id'])->first();
+    $balance=$ce['debt']-$ce['credit'];
+    accounts::where('id',$ce['id'])->update(['balance'=>$balance]);  
+    details::where('id',$id)->delete();
+  
        return redirect()->back();
     }
         public function getDetails($id){
