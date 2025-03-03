@@ -30,12 +30,14 @@ class AccountsController extends Controller
     {
         $data = $request->account_name;
         $d_branch = $request->branch;
+        $d_type = $request->type;
         accounts::create([
             'account' => $data,
             'debt'=>0,
             'credit'=>0,
             'balance'=>0,
             'branch_id'=>$d_branch,
+            'type'=>$d_type,
 
         ]);
         return redirect()->back();

@@ -46,6 +46,8 @@ class CasherProcController extends Controller
         $data['out'] = $request->out;
         $data['plus'] = $request->total - ($request->out+$request->cash+$request->bank);
         casher_procs::create($data);
+        $cacher = cashers::where('id',$request->casher)->first();
+        $account = accounts::where('branch_id',$cacher->branch_id)->All();
 
         return redirect()->back();
     }

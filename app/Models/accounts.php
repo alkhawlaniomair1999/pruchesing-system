@@ -9,5 +9,5 @@ class accounts extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['account','debt','credit' ,'balance','branch_id','updated_at', 'created_at'];
+    protected $fillable = ['account','debt','credit' ,'balance','type','branch_id','updated_at', 'created_at'];
 }
