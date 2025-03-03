@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     paginateTable('branches-table', 'branches-pagination');
     paginateTable('accounts-table', 'accounts-pagination');
     paginateTable('categories-table', 'categories-pagination');
+    paginateTable('casher-table', 'casher-pagination');
 });
 
 document.querySelectorAll('select').forEach(select => {
@@ -95,5 +96,5 @@ document.querySelectorAll('select').forEach(select => {
 });
 
 var today = new Date();
-        var dateField = document.getElementById('date');
-        dateField.value = today.toISOString().split('T')[0];
+var dateField = document.getElementById('date');
+dateField.value = today.toISOString().split('T')[0];

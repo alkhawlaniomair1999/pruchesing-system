@@ -200,7 +200,7 @@
             </tbody>
         </table>
         <div class="pagination" id="accounts-pagination"></div>
-<!-- الكاشيرات -->
+        <!-- الكاشيرات -->
         <input type="text" class="search-input" placeholder="بحث في الكاشيرات..."
             onkeyup="searchTable(this, 'casher-table')">
         <table id="casher-table">
@@ -215,24 +215,24 @@
             </thead>
             <tbody>
                 @if (isset($casher))
-                    @foreach ($casher as $b)
+                    @foreach ($casher as $c11)
                         <tr>
-                            <td>{{ $b->id }}</td>
-                            <td>{{ $b->casher }} </td>
+                            <td>{{ $c11->id }}</td>
+                            <td>{{ $c11->casher }} </td>
                             <td>
-                            @foreach ($branchs as $b1)
+                                @foreach ($branchs as $b1)
                                     @if ($b1->id == $b->branch_id)
                                         {{ $b1->branch }}
                                     @endif
                                 @endforeach
 
-                                 </td>
+                            </td>
                             <td class="action-buttons">
                                 <button class="edit-btn"
-                                    onclick="openModal({id: '{{ $b->id }}', name: '{{ $b->casher }}'}, 'casher')">تعديل<i
+                                    onclick="openModal({id: '{{ $c11->id }}', name: '{{ $c11->casher }}'}, 'casher')">تعديل<i
                                         class="fa-solid fa-pen-to-square"></i></button>
                                 <button class="delete-btn"
-                                    onclick="confirmDelete({{ $b->id }},'/casher/destroy/')">حذف<i
+                                    onclick="confirmDelete({{ $c11->id }},'/casher/destroy/')">حذف<i
                                         class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
@@ -240,8 +240,7 @@
                 @endif
             </tbody>
         </table>
-
-
+        <div class="pagination" id="casher-pagination"></div>
 
 
 
@@ -279,7 +278,7 @@
     </div>
 
 
-    
+
     </div>
 
 
@@ -359,8 +358,7 @@
             <button type="submit">حفظ التعديلات</button>
           </form>
         `;
-            }
-            else if (type === "casher") {
+            } else if (type === "casher") {
                 formHtml = `
           <form id="editForm" action="{{ route('casher.update') }}" method="POST">
             @csrf
@@ -508,7 +506,7 @@
             } else if (type === "cashir_add") {
                 formHtml = `
            <h3>إضافة كاشير</h3>
-            <form action="#" method="POST">
+            <form action="{{ route('casher.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
                 <div class="custom-form-group third-width">
