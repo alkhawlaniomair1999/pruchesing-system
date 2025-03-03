@@ -44,16 +44,51 @@
         text-decoration: none;
         cursor: pointer;
     }
+
     #myForm {
-            display: block;
-        }
+        display: block;
+    }
+
+    #toggleButton {
+        font-size: 2em;
+        /* حجم الخط كبير */
+        font-weight: bold;
+        /* خط عريض */
+        background: none;
+        /* بدون خلفية */
+        border: none;
+        /* بدون حدود */
+        cursor: pointer;
+        /* مؤشر الفأرة */
+        outline: none;
+        /* إزالة التحديد */
+        width: 50px;
+        /* عرض الزر */
+        height: 50px;
+        /* ارتفاع الزر */
+        display: flex;
+    }
+
+    #toggleButton:focus {
+        outline: none;
+        /* إزالة التحديد عند التركيز */
+    }
+
+    .custom-form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0px;
+        height: 30px;
+    }
 </style>
 
 @section('main')
     <div class="custom-form-container">
-        <button type="button" id="toggleButton" onclick="toggleForm()">-</button>
-
-        <h2 class="custom-form-title">نموذج إضافة تفاصيل</h2>
+        <div class="custom-form-header">
+            <h2 class="custom-form-title">نموذج إضافة تفاصيل</h2>
+            <button type="button" id="toggleButton" onclick="toggleForm()">-</button>
+        </div>
         <form id="detailsForm" action="{{ route('details.store') }}" method="POST">
             @csrf
             <div class="custom-form-fields">
@@ -288,9 +323,9 @@
             }
         }
 
-        
-       
-   
+
+
+
         function toggleForm() {
             var form = document.getElementById("detailsForm");
             var button = document.getElementById("toggleButton");
@@ -303,7 +338,5 @@
                 button.textContent = "+"; // تغيير النص إلى "+"
             }
         }
-
-
     </script>
 @endsection
