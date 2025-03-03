@@ -157,9 +157,10 @@
                 <tr>
                     <th onclick="sortTable(0, 'accounts-table')">الرقم</th>
                     <th onclick="sortTable(1, 'accounts-table')">الحسابات</th>
-                    <th onclick="sortTable(2, 'accounts-table')">مدين</th>
-                    <th onclick="sortTable(3, 'accounts-table')">دائن</th>
-                    <th onclick="sortTable(4, 'accounts-table')">الرصيد</th>
+                    <th onclick="sortTable(2, 'accounts-table')">الفرع</th>
+                    <th onclick="sortTable(3, 'accounts-table')">مدين</th>
+                    <th onclick="sortTable(4, 'accounts-table')">دائن</th>
+                    <th onclick="sortTable(5, 'accounts-table')">الرصيد</th>
                     <th>الإجراءات</th>
                 </tr>
             </thead>
@@ -169,9 +170,17 @@
                         <tr>
                             <td>{{ $c->id }}</td>
                             <td>{{ $c->account }} </td>
+                            <td>
+                                @foreach ($branchs as $b1)
+                                    @if ($b1->id == $c->branch_id)
+                                        {{ $b1->branch }}
+                                    @endif
+                                @endforeach
+                            </td>
                             <td>{{ $c->debt }}</td>
                             <td>{{ $c->credit }}</td>
                             <td>{{ $c->balance }}</td>
+
                             <td class="action-buttons">
                                 <button class="edit-btn"
                                     onclick="openModal({id: '{{ $c->id }}', name: '{{ $c->account }}'}, 'account')">تعديل<i
@@ -369,17 +378,27 @@
         `;
             } else if (type === "account_add") {
                 formHtml = `
-           <h3>إضافة حساب</h3>
-            <form method="POST" action="{{ route('account.store') }}">
+            <h3>إضافة حساب</h3>
+            <form action="{{ route('account.store') }}" method="POST">
                 @csrf
-
                 <div class="form-group">
-                    <label for="account_name">اسم الحساب</label>
-                    <input type="text" id="account_name" name="account_name" required>
-                    <button type="submit">إضافة</button>
+                <div class="custom-form-group third-width">
+                    <label for="casher">اسم الحساب</label>                    
+                    <input type="text" id="account" name="account_name" required>
+                    <label for="branch">الفرع:</label>
+                    <select id="branch" name="branch" required>                   
+                        @if (isset($branchs))
+                            @foreach ($branchs as $b)
+                                <option value="{{ $b->id }}">{{ $b->branch }}</option>
+                            @endforeach
+                        @endif
+                    </select>                     
+                    </div>                    
                 </div>
+                <div class="custom-form-group third-width">
+                    <button type="submit">إضافة</button>
+                    </div>
             </form>
-
         `;
             } else if (type === "category_add") {
                 formHtml = `
@@ -393,8 +412,7 @@
                 </div>
             </form>
         `;
-            }
-            else if (type === "cashir_add") {
+            } else if (type === "cashir_add") {
                 formHtml = `
            <h3>إضافة كاشير</h3>
             <form action="{{ route('casher.store') }}" method="POST">

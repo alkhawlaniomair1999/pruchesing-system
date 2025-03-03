@@ -29,11 +29,13 @@ class AccountsController extends Controller
     public function store(Request $request)
     {
         $data = $request->account_name;
+        $d_branch = $request->branch;
         accounts::create([
             'account' => $data,
             'debt'=>0,
             'credit'=>0,
             'balance'=>0,
+            'branch_id'=>$d_branch,
 
         ]);
         return redirect()->back();

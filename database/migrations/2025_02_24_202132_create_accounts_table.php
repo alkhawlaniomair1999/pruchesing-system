@@ -18,6 +18,8 @@ return new class extends Migration
             $table->float('debt');
             $table->float('credit');
             $table->float('balance');
+            $table->unsignedBigInteger('branch_id');
+            $table->foreign('branch_id')->references('id')->on('branches');
 
 
         });
