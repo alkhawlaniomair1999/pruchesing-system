@@ -339,5 +339,12 @@
                 button.textContent = "+"; // تغيير النص إلى "+"
             }
         }
+
+ // تعيين تاريخ اليوم كالقيمة الافتراضية لحقل التاريخ
+ var today = new Date();
+        var dateField = document.getElementById('date');
+        dateField.value = today.toISOString().split('T')[0];
+
+
     </script>
 @endsection
