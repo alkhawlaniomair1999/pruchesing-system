@@ -161,6 +161,8 @@
                     <th onclick="sortTable(3, 'accounts-table')">مدين</th>
                     <th onclick="sortTable(4, 'accounts-table')">دائن</th>
                     <th onclick="sortTable(5, 'accounts-table')">الرصيد</th>
+                    <th onclick="sortTable(6, 'accounts-table')">النوع</th>
+
                     <th>الإجراءات</th>
                 </tr>
             </thead>
@@ -180,6 +182,7 @@
                             <td>{{ $c->debt }}</td>
                             <td>{{ $c->credit }}</td>
                             <td>{{ $c->balance }}</td>
+                            <td>{{ $c->type }}</td>
 
                             <td class="action-buttons">
                                 <button class="edit-btn"
@@ -189,6 +192,7 @@
                                     onclick="confirmDelete({{ $c->id }},'/account/destroy/')">حذف<i
                                         class="fa-solid fa-trash"></i></button>
                             </td>
+
                         </tr>
                     @endforeach
                 @endif
@@ -285,6 +289,14 @@
             <input type="text" id="accountOldName" name="oldName" value="${record.name}" disabled>
             <label for="accountNewName">الاسم الجديد:</label>
             <input type="text" id="accountNewName" name="newName" placeholder="أدخل الاسم الجديد" required>
+            <div class="form-group">
+            <label for="branch">نوع الحساب:</label>
+
+                    <select id="type" name="type" required>
+                    <option value="box">صندوق</option>
+                  <option value="bank">بنك</option>
+                  </div>
+</select>  
             <button type="submit">حفظ التعديلات</button>
           </form>
         `;
@@ -392,7 +404,13 @@
                                 <option value="{{ $b->id }}">{{ $b->branch }}</option>
                             @endforeach
                         @endif
-                    </select>                     
+                    </select>  
+                      <label for="branch">نوع الحساب:</label>
+
+                    <select id="type" name="type" required>
+                    <option value="box">صندوق</option>
+                  <option value="bank">بنك</option>
+</select>  
                     </div>                    
                 </div>
                 <div class="custom-form-group third-width">
@@ -431,6 +449,20 @@
                             @endforeach
                         @endif
                     </select>
+                    <select id="box" name="box" required>                   
+                        @if (isset($accounts))
+                            @foreach ($accounts as $b)
+                                <option value="{{ $b->id }}">{{ $b->branch }}</option>
+                            @endforeach
+                        @endif
+                    </select> 
+                    <select id="bank" name="bank" required>                   
+                        @if (isset($accounts))
+                            @foreach ($accounts as $b)
+                                <option value="{{ $b->id }}">{{ $b->branch }}</option>
+                            @endforeach
+                        @endif
+                    </select> 
                      
                     </div>
                     
