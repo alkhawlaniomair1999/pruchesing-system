@@ -51,7 +51,7 @@
 
 @section('main')
     <div class="custom-form-container">
-        <button type="button" onclick="toggleForm()">إخفاء النموذج</button>
+        <button type="button" id="toggleButton" onclick="toggleForm()">-</button>
 
         <h2 class="custom-form-title">نموذج إضافة تفاصيل</h2>
         <form id="detailsForm" action="{{ route('details.store') }}" method="POST">
@@ -289,16 +289,20 @@
         }
 
         
+       
+   
         function toggleForm() {
             var form = document.getElementById("detailsForm");
+            var button = document.getElementById("toggleButton");
+
             if (form.style.display === "none") {
                 form.style.display = "block";
+                button.textContent = "-"; // تغيير النص إلى "-"
             } else {
                 form.style.display = "none";
+                button.textContent = "+"; // تغيير النص إلى "+"
             }
         }
-   
-
 
 
     </script>
