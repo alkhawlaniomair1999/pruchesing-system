@@ -127,7 +127,12 @@
                     <select id="account" name="account" required>
                         @if (isset($accounts))
                             @foreach ($accounts as $d1)
-                                <option value="{{ $d1->id }}">{{ $d1->account }}</option>
+                                @foreach ($Branch as $b1)
+                                    @if ($b1->id == $d1->branch_id)
+                                        <option value="{{ $d1->id }}">{{ $d1->account }}({{ $b1->branch }})
+                                        </option>
+                                    @endif
+                                @endforeach
                             @endforeach
                         @endif
                     </select>
@@ -340,8 +345,6 @@
             }
         }
 
- // تعيين تاريخ اليوم كالقيمة الافتراضية لحقل التاريخ
- 
-
+        // تعيين تاريخ اليوم كالقيمة الافتراضية لحقل التاريخ
     </script>
 @endsection
