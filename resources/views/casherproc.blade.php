@@ -62,9 +62,6 @@
                         @endif
                     </select>
                 </div>
-
-
-
                 <div class="custom-form-group half-width">
                     <label for="total">الاجمالي:</label>
                     <input type="number" id="total" name="total" required>
@@ -78,22 +75,11 @@
                     <label for="bank">البنك:</label>
                     <input type="number" id="bank" name="bank" required>
                 </div>
-
-
-
-
-
                 <div class="custom-form-group half-width">
                     <label for="out">المصروفات :</label>
                     <input type="number" id="out" name="out" required>
                 </div>
-
-                
-
-                
-
-               
-                <div class="custom-form-group third-width">
+              <div class="custom-form-group third-width">
                     <label for="date">التاريخ:</label>
                     <input type="date" id="date" name="date" required>
                 </div>
@@ -106,7 +92,7 @@
         </form>
     </div>
     <h2>جدول عرض البيانات</h2>
-    <input type="text" class="search-input" placeholder="بحث في الأصناف..."
+    <input type="text" class="search-input" placeholder="بحث في بيانات الكواشير..."
         onkeyup="searchTable(this, 'categories-table')">
     <table id="categories-table">
         <thead>

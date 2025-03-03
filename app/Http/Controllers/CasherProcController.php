@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\casher_procs;
 use App\Models\cashers;
 use App\Models\Branch;
+use App\Models\accounts;
 
 
 
@@ -37,7 +38,16 @@ class CasherProcController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $data['casher_id'] = $request->casher;
+        $data['date'] = $request->date;
+        $data['total'] = $request->total;
+        $data['bank'] = $request->bank;
+        $data['cash'] = $request->cash;
+        $data['out'] = $request->out;
+        $data['plus'] = $request->total - ($request->out+$request->cash+$request->bank);
+        casher_procs::create($data);
+
+        return redirect()->back();
     }
 
     
