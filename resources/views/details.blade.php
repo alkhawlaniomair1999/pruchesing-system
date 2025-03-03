@@ -44,10 +44,15 @@
         text-decoration: none;
         cursor: pointer;
     }
+    #myForm {
+            display: block;
+        }
 </style>
 
 @section('main')
     <div class="custom-form-container">
+        <button type="button" onclick="toggleForm()">إخفاء النموذج</button>
+
         <h2 class="custom-form-title">نموذج إضافة تفاصيل</h2>
         <form id="detailsForm" action="{{ route('details.store') }}" method="POST">
             @csrf
@@ -282,5 +287,19 @@
                 window.location.href = '/details/destroy/' + id;
             }
         }
+
+        
+        function toggleForm() {
+            var form = document.getElementById("detailsForm");
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+   
+
+
+
     </script>
 @endsection
