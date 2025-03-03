@@ -58,7 +58,6 @@ Route::post('/casher', [CasherController::class, 'store'])->name('casher.store')
 
 //عمليات الكاشير
 Route::get('/casher_proc',[CasherProcController::class,'index'])->name('casher_proc.index');
-
 Route::post('/casher_proc', [CasherProcController::class, 'store'])->name('casher_proc.store');
 
 

@@ -10,5 +10,5 @@ class casher_procs extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['total','date','bank','cash','out','plus', 'updated_at', 'created_at'];
+    protected $fillable = ['total','date','bank','cash','out','plus','casher_id', 'updated_at', 'created_at'];
 }
