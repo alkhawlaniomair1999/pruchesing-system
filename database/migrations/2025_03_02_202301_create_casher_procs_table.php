@@ -21,7 +21,7 @@ return new class extends Migration
             $table->float('out');
             $table->float('plus');
             $table->unsignedBigInteger('casher_id');
-            $table->foreign('casher_id')->references('id')->on('casher');
+            $table->foreign('casher_id')->references('id')->on('cashers');
         });
     }
 
