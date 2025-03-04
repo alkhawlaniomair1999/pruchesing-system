@@ -145,65 +145,42 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>تعديل البيانات</h2>
-            <form id="editForm" action="{{ route('details.update') }}" method="POST">
+            <form id="editForm" action="{{ route('casher_proc.update') }}" method="POST">
                 @csrf
                 <div class="custom-form-fields">
                     <input type="text" id="id" name="id" style="display: none;">
+                    <div class="custom-form-group third-width">
+                        <label for="editCasher">الكاشير:</label>
+                        <select id="editCasher" name="casher_id" required>
+                            @if (isset($casher))
+                                @foreach ($casher as $ca)
+                                    <option value="{{ $ca->id }}">{{ $ca->casher }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
                     <div class="custom-form-group full-width">
-                        <label for="editDescription">التفصيل:</label>
-                        <input type="text" id="editDescription" name="detail" required>
+                        <label for="editTotal">الاجمالي:</label>
+                        <input type="text" id="editTotal" name="total" required>
                     </div>
 
                     <div class="custom-form-group half-width">
-                        <label for="editTotalPrice">السعر الإجمالي:</label>
-                        <input type="number" id="editTotalPrice" name="totalPrice" required>
+                        <label for="editCash"> الكاش:</label>
+                        <input type="number" id="editCash" name="cash" required>
                     </div>
-
                     <div class="custom-form-group half-width">
-                        <label for="editTax">الضريبة:</label>
-                        <select id="editTax" name="tax" required>
-                            <option value="0">لا</option>
-                            <option value="1">نعم</option>
-                        </select>
+                        <label for="editBank"> البنك:</label>
+                        <input type="number" id="editBank" name="bank" required>
                     </div>
-
-                    <div class="custom-form-group third-width">
-                        <label for="editBranch">الفرع:</label>
-                        <select id="editBranch" name="branch" required>
-                            @if (isset($Branch))
-                                @foreach ($Branch as $b)
-                                    <option value="{{ $b->id }}">{{ $b->branch }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-
-                    <div class="custom-form-group third-width">
-                        <label for="editAccount">الحساب:</label>
-                        <select id="editAccount" name="account" required>
-                            @if (isset($accounts))
-                                @foreach ($accounts as $d1)
-                                    <option value="{{ $d1->id }}">{{ $d1->account }}</option>
-                                @endforeach
-                            @endif
-                        </select>
+                    <div class="custom-form-group half-width">
+                        <label for="editOut"> المصروفات:</label>
+                        <input type="number" id="editOut" name="out" required>
                     </div>
                     <div class="custom-form-group third-width">
                         <label for="date">التاريخ:</label>
                         <input type="date" id="date" name="date" required>
                     </div>
-                    <div class="custom-form-group third-width">
-                        <label for="editItem">الصنف:</label>
-                        <select id="editItem" name="item" required>
-                            @if (isset($items))
-                                @foreach ($items as $d)
-                                    <option value="{{ $d->id }}">{{ $d->item }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
                 </div>
-
                 <div class="custom-form-group">
                     <button type="submit">حفظ التعديلات</button>
                 </div>
@@ -224,12 +201,18 @@
 
             // تعبئة النموذج بالبيانات الحالية
             document.getElementById('id').value = cells[0].innerText;
-            document.getElementById('editDescription').value = cells[1].innerText;
-            document.getElementById('editItem').value = cells[2].innerText;
-            document.getElementById('editBranch').value = cells[3].innerText;
-            document.getElementById('editAccount').value = cells[4].innerText;
-            document.getElementById('editTotalPrice').value = cells[5].innerText;
-            document.getElementById('editTax').value = cells[6].innerText;
+            const itemText = cells[1].innerText;
+            const itemSelect = document.getElementById('editCasher');
+            for (let i = 0; i < itemSelect.options.length; i++) {
+                if (itemSelect.options[i].text === itemText) {
+                    itemSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            document.getElementById('editTotal').value = cells[2].innerText;
+            document.getElementById('editCash').value = cells[3].innerText;
+            document.getElementById('editBank').value = cells[4].innerText;
+            document.getElementById('editOut').value = cells[5].innerText;
 
             document.getElementById('editModal').style.display = 'block';
         }
