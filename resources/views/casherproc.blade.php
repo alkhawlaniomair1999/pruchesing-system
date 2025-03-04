@@ -225,7 +225,7 @@
         function confirmDelete(id) {
             if (confirm('هل أنت متأكد أنك تريد حذف هذا السجل؟')) {
                 // إذا تم التأكيد، قم بتوجيه المستخدم إلى الراوت الخاص بالحذف
-                window.location.href = '/details/destroy/' + id;
+                window.location.href = '/casher_proc/destroy/' + id;
             }
         }
     </script>
