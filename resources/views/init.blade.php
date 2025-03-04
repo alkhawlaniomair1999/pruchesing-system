@@ -240,7 +240,7 @@
 
                             <td class="action-buttons">
                                 <button class="edit-btn"
-                                    onclick="openModal({id: '{{ $c12->id }}', casher: '{{ $c12->casher }}'}, 'casher')">تعديل<i
+                                    onclick="openModal({id: '{{ $c12->id }}', casher: '{{ $c12->casher }}', branch: '{{ $b2->branch}}'}, 'casher')">تعديل<i
                                         class="fa-solid fa-pen-to-square"></i></button>
                                 <button class="delete-btn"
                                     onclick="confirmDelete({{ $c12->id }},'/casher/destroy/')">حذف<i
@@ -425,6 +425,7 @@
             <input type="text" id="categoryNewName" name="newName" placeholder="أدخل الاسم الجديد" required>
 
 <label for="casherOldbranch">الفرع السابق:</label>
+
             <input type="text" id="casherOldbranch" name="oldbranch" value="${record.branch}" disabled>
             <label for="casherNewName">الفرع الجديد:</label>
             <div class="custom-form-group half-width">

@@ -54,9 +54,12 @@ class CasherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,  $casher)
+    public function update(Request $request)
     {
-        //
+        $cash['casher']=$request->newName;
+        $cash['branch_id']=$request->branch;
+        cashers::where('id',$request->id)->update($cash);
+        return redirect()->back();
     }
 
     /**
