@@ -10,6 +10,7 @@ use App\Http\Controllers\DetailsController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\CasherController;
 use App\Http\Controllers\CasherProcController;
+use App\Http\Controllers\SuppliersController;
 
 
 
@@ -62,6 +63,9 @@ Route::get('/casher/destroy/{id}', [CasherController::class, 'destroy'])->name('
 Route::get('/casher_proc',[CasherProcController::class,'index'])->name('casher_proc.index');
 Route::post('/casher_proc', [CasherProcController::class, 'store'])->name('casher_proc.store');
 
+Route::post('/supplier', [SuppliersController::class, 'store'])->name('supplier.store');
+Route::post('/supplier/update', [SuppliersController::class, 'update'])->name('supplier.update');
+Route::get('/supplier/destroy{id}', [SuppliersController::class, 'destroy'])->name('supplier.destroy');
 
 
 

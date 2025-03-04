@@ -115,6 +115,7 @@
         <button class="edit-btn" onclick="openModal1('account_add')">إضافة حساب<i class=" fa fa-plus-square"></i></button>
         <button class="edit-btn" onclick="openModal1('category_add')">إضافة صنف<i class="fa fa-plus-square"></i></button>
         <button class="edit-btn" onclick="openModal1('cashir_add')">إضافة كاشير<i class="fa fa-plus-square"></i></button>
+        <button class="edit-btn" onclick="openModal1('supplier_add')">إضافة مورد<i class="fa fa-plus-square"></i></button>
 
     </div>
 
@@ -221,24 +222,69 @@
             </thead>
             <tbody>
                 @if (isset($casher))
-                    @foreach ($casher as $c11)
+                    @foreach ($casher as $c12)
                         <tr>
-                            <td>{{ $c11->id }}</td>
-                            <td>{{ $c11->casher }} </td>
-                            <td>
-                                @foreach ($branchs as $b1)
-                                    @if ($b1->id == $c11->branch_id)
-                                        {{ $b1->branch }}
-                                    @endif
-                                @endforeach
+                            <td>{{ $c12->id }}</td>
+                            <td>{{ $c12->casher }} </td>
+                            
+                        @foreach ($branchs as $b2 )
+                        @if ($b2->id== $c12->branch_id)
+                        <td>{{ $b2->branch }}</td>
+                        
+                        @endif
+                        @endforeach
 
-                            </td>
+
+                            
+
+
                             <td class="action-buttons">
                                 <button class="edit-btn"
-                                    onclick="openModal({id: '{{ $c11->id }}', name: '{{ $c11->casher }}'}, 'casher')">تعديل<i
+                                    onclick="openModal({id: '{{ $c12->id }}', casher: '{{ $c12->casher }}'}, 'casher')">تعديل<i
                                         class="fa-solid fa-pen-to-square"></i></button>
                                 <button class="delete-btn"
-                                    onclick="confirmDelete({{ $c11->id }},'/casher/destroy/')">حذف<i
+                                    onclick="confirmDelete({{ $c12->id }},'/casher/destroy/')">حذف<i
+                                        class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
+        <div class="pagination" id="casher-pagination"></div>
+
+<!-- نهاية الكاشيرات -->
+
+<!-- الموردين -->
+<input type="text" class="search-input" placeholder="بحث في الموردين..."
+            onkeyup="searchTable(this, 'suppliers-table')">
+        <table id="suppliers-table">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0, 'suppliers-table')">الرقم</th>
+                    <th onclick="sortTable(1, 'suppliers-table')">الاسم</th>
+                    <th onclick="sortTable(2, 'suppliers-table')">المدين</th>
+                    <th onclick="sortTable(3, 'suppliers-table')">الدائن</th>
+                    <th onclick="sortTable(4, 'suppliers-table')">الرصيد</th>
+
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (isset($suppliers))
+                    @foreach ($suppliers as $c11)
+                        <tr>
+                            <td>{{ $c11->id }}</td>
+                            <td>{{ $c11->supplier }} </td>
+                            <td>{{ $c11->debt }}</td>
+                            <td>{{ $c11->credit }}</td>
+                            <td>{{ $c11->balance }}</td>
+                            <td class="action-buttons">
+                                <button class="edit-btn"
+                                    onclick="openModal({id: '{{ $c11->id }}', name: '{{ $c11->supplier }}'}, 'supplier')">تعديل<i
+                                        class="fa-solid fa-pen-to-square"></i></button>
+                                <button class="delete-btn"
+                                    onclick="confirmDelete({{ $c11->id }},'/supplier/destroy/')">حذف<i
                                         class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
@@ -249,6 +295,9 @@
         <div class="pagination" id="casher-pagination"></div>
 
 
+
+
+<!--                             الاصناااااااااااااااااااااف -->
 
         <input type="text" class="search-input" placeholder="بحث في الأصناف..."
             onkeyup="searchTable(this, 'categories-table')">
@@ -393,6 +442,24 @@
           </form>
         `;
             }
+// تعديييلللللللل بيانات المورد
+            else if (type === "supplier") {
+                formHtml = `
+          <form id="editForm" action="{{ route('supplier.update') }}" method="POST">
+            @csrf
+            <h2>تعديل بيانات المورد</h2>
+            <input type="text" id="supplierid" name="id" value="${record.id}" hidden>
+            <label for="supplier_oldname">الاسم السابق:</label>
+            <input type="text" id="supplier_oldname" name="oldName" value="${record.name}" disabled>
+            <label for="supplier_newname">الاسم الجديد:</label>
+            <input type="text" id="supplier_newname" name="newName" placeholder="أدخل الاسم الجديد" required>
+            <button type="submit">حفظ التعديلات</button>
+          </form>
+        `;
+            }
+
+
+
 
 
 
@@ -537,7 +604,29 @@
             </form>
         `;
             }
-
+            else if (type === "supplier_add") {
+                formHtml = `
+           <h3>إضافة مورد</h3>
+            <form action="{{ route('supplier.store') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                <div class="custom-form-group third-width">
+                    <label for="supplier">اسم المورد</label>
+                    
+                    <input type="text" id="supplier" name="supplier" required>
+                    <label for="debt">المدين:</label>
+                     <input type="flaot" id="debt" name="debt" required>
+          <label for="credit">الدائن:</label>
+                     <input type="flaot" id="credit" name="credit" required>
+                    </div>
+                    
+                </div>
+                <div class="custom-form-group third-width">
+                    <button type="submit">إضافة</button>
+                    </div>
+            </form>
+        `;
+            }
 
 
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\cashers;
+use App\Models\Suppliers;
 use Illuminate\Http\Request;
 use App\Models\accounts;
 use App\Models\items;
@@ -17,6 +18,7 @@ class initController extends Controller
         $data = items::All();
         $data1=accounts::All();
         $casher=cashers::All();
-        return view('init',['data'=>$data ,'data1'=>$data1,'branchs'=>$branchs,'casher'=>$casher]);
+        $suppliers=Suppliers::All();
+        return view('init',['data'=>$data ,'data1'=>$data1,'branchs'=>$branchs,'casher'=>$casher,'suppliers'=>$suppliers]);
     }
 }

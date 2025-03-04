@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\accounts;
-use App\Models\items;
+use App\Models\Suppliers;
 use Illuminate\Http\Request;
 
-class ItemsController extends Controller
+class SuppliersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -29,19 +28,18 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->category_name;
-        items::create([
-            'item' => $data,
-        ]);
+        $data['supplier']=$request->supplier;
+        $data['debt']=$request->debt;
+        $data['credit']=$request->credit;
+        $data['balance']=$request->debt-$request->credit;
+        Suppliers::create($data);
         return redirect()->back();
-        //
     }
-    
 
     /**
      * Display the specified resource.
      */
-    public function show(items $accounts)
+    public function show(Suppliers $suppliers)
     {
         //
     }
@@ -49,7 +47,7 @@ class ItemsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(items $accounts)
+    public function edit(Suppliers $suppliers)
     {
         //
     }
@@ -57,23 +55,19 @@ class ItemsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, Suppliers $suppliers)
     {
-        $b1['item']=$request->newName;
-        items::where('id',$request->id)->update($b1);
+        $s1['supplier']=$request->newName;
+        Suppliers::where('id',$request->id)->update($s1);
         return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-
-
-        public function destroy($id)
-        {
-            items::where('id',$id)->delete();
-            return redirect()->back();
-        }
-        
+    public function destroy($id)
+    {
+        Suppliers::where('id',$id)->delete();
+        return redirect()->back();
     }
-
+}
