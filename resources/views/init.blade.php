@@ -182,7 +182,13 @@
                             <td>{{ $c->debt }}</td>
                             <td>{{ $c->credit }}</td>
                             <td>{{ $c->balance }}</td>
-                            <td>{{ $c->type }}</td>
+                            <td>
+                                @if ($c->type == 'box')
+                                    صندوق
+                                @else
+                                    بنك
+                                @endif
+                            </td>
 
                             <td class="action-buttons">
                                 <button class="edit-btn"
@@ -221,7 +227,7 @@
                             <td>{{ $c11->casher }} </td>
                             <td>
                                 @foreach ($branchs as $b1)
-                                    @if ($b1->id == $b->branch_id)
+                                    @if ($b1->id == $c11->branch_id)
                                         {{ $b1->branch }}
                                     @endif
                                 @endforeach
