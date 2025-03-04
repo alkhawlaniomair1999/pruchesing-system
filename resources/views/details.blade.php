@@ -209,7 +209,9 @@
 
 
                         <td>{{ $d->price }}</td>
-                        <td>{{ $d->date }}</td>
+                        <td>
+                            {{ $d->date }}
+                        </td>
                         <td class="action-buttons">
                             <button class="edit-btn" onclick="openModal(this)">تعديل<i
                                     class="fa-solid fa-pen-to-square"></i></button>
@@ -308,15 +310,50 @@
             // تعبئة النموذج بالبيانات الحالية
             document.getElementById('id').value = cells[0].innerText;
             document.getElementById('editDescription').value = cells[1].innerText;
-            document.getElementById('editItem').value = cells[2].innerText;
-            document.getElementById('editBranch').value = cells[3].innerText;
-            document.getElementById('editAccount').value = cells[4].innerText;
+
+            // تعيين القيمة الافتراضية لعنصر "select" الخاص بالصنف
+            const itemText = cells[2].innerText;
+            const itemSelect = document.getElementById('editItem');
+            for (let i = 0; i < itemSelect.options.length; i++) {
+                if (itemSelect.options[i].text === itemText) {
+                    itemSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            // تعيين القيمة الافتراضية لعنصر "select" الخاص بالفرع
+            const branchText = cells[3].innerText;
+            const branchSelect = document.getElementById('editBranch');
+            for (let i = 0; i < branchSelect.options.length; i++) {
+                if (branchSelect.options[i].text === branchText) {
+                    branchSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            // تعيين القيمة الافتراضية لعنصر "select" الخاص بالحساب
+            const accountText = cells[4].innerText;
+            const accountSelect = document.getElementById('editAccount');
+            for (let i = 0; i < accountSelect.options.length; i++) {
+                if (accountSelect.options[i].text === accountText) {
+                    accountSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
             document.getElementById('editTotalPrice').value = cells[5].innerText;
-            document.getElementById('editTax').value = cells[6].innerText;
+
+            // تعيين القيمة الافتراضية لعنصر "select" الخاص بالضريبة
+            const taxText = cells[6].innerText.trim();
+            const taxSelect = document.getElementById('editTax');
+            taxSelect.value = (taxText === 'نعم') ? '1' : '0';
+
+            // تعيين التاريخ كقيمة افتراضية
+            const dateText = cells[8].innerText; // افترض أن التاريخ في العمود التاسع
+            document.getElementById('date').value = dateText;
 
             document.getElementById('editModal').style.display = 'block';
         }
-
         // إغلاق النموذج المنبثق
         function closeModal() {
             document.getElementById('editModal').style.display = 'none';
@@ -344,7 +381,5 @@
                 button.textContent = "+"; // تغيير النص إلى "+"
             }
         }
-
-        // تعيين تاريخ اليوم كالقيمة الافتراضية لحقل التاريخ
     </script>
 @endsection
