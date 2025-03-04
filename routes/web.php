@@ -65,7 +65,7 @@ Route::post('/casher_proc', [CasherProcController::class, 'store'])->name('cashe
 
 Route::post('/supplier', [SuppliersController::class, 'store'])->name('supplier.store');
 Route::post('/supplier/update', [SuppliersController::class, 'update'])->name('supplier.update');
-Route::get('/supplier/destroy{id}', [SuppliersController::class, 'destroy'])->name('supplier.destroy');
+Route::get('/supplier/destroy/{id}', [SuppliersController::class, 'destroy'])->name('supplier.destroy');
 
 
 
