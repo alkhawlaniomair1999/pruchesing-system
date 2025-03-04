@@ -256,10 +256,10 @@
                     break;
                 }
             }
-            document.getElementById('editTotal').value = cells[2].innerText;
-            document.getElementById('editCash').value = cells[3].innerText;
-            document.getElementById('editBank').value = cells[4].innerText;
-            document.getElementById('editOut').value = cells[5].innerText;
+            document.getElementById('editTotal').value = cells[3].innerText;
+            document.getElementById('editCash').value = cells[4].innerText;
+            document.getElementById('editBank').value = cells[5].innerText;
+            document.getElementById('editOut').value = cells[6].innerText;
 
             document.getElementById('editModal').style.display = 'block';
         }
