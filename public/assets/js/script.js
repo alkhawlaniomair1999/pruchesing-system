@@ -95,6 +95,19 @@ document.querySelectorAll('select').forEach(select => {
     });
 });
 
+function toggleForm() {
+    var form = document.getElementById("detailsForm");
+    var button = document.getElementById("toggleButton");
+
+    if (form.style.display === "none") {
+        form.style.display = "block";
+        button.textContent = "-"; // تغيير النص إلى "-"
+    } else {
+        form.style.display = "none";
+        button.textContent = "+"; // تغيير النص إلى "+"
+    }
+}
+
 var today = new Date();
 var dateField = document.getElementById('date');
 dateField.value = today.toISOString().split('T')[0];

@@ -44,11 +44,52 @@
         text-decoration: none;
         cursor: pointer;
     }
+
+    #myForm {
+        display: block;
+    }
+
+    #toggleButton {
+        font-size: 2em;
+        /* حجم الخط كبير */
+        font-weight: bold;
+        /* خط عريض */
+        background: none;
+        /* بدون خلفية */
+        border: none;
+        /* بدون حدود */
+        cursor: pointer;
+        /* مؤشر الفأرة */
+        outline: none;
+        /* إزالة التحديد */
+        width: 50px;
+        /* عرض الزر */
+        height: 50px;
+        /* ارتفاع الزر */
+        display: flex;
+    }
+
+    #toggleButton:focus {
+        outline: none;
+        /* إزالة التحديد عند التركيز */
+    }
+
+    .custom-form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0px;
+        height: 30px;
+    }
 </style>
 
 @section('main')
     <div class="custom-form-container">
-        <h2 class="custom-form-title">نموذج إضافة عمليات كاشير</h2>
+        <div class="custom-form-header">
+            <button type="button" id="toggleButton" onclick="toggleForm()">-</button>
+            <h2 class="custom-form-title">نموذج إضافة عمليات كاشير</h2>
+            <p></p>
+        </div>
         <form id="detailsForm" action="{{ route('casher_proc.store') }}" method="POST">
             @csrf
             <div class="custom-form-fields">
@@ -99,12 +140,13 @@
             <tr>
                 <th onclick="sortTable(0, 'categories-table')">الرقم</th>
                 <th onclick="sortTable(1, 'categories-table')">الكاشير</th>
-                <th onclick="sortTable(2, 'categories-table')">الإجمالي</th>
-                <th onclick="sortTable(3, 'categories-table')">البنك</th>
-                <th onclick="sortTable(4, 'categories-table')">الكاش</th>
-                <th onclick="sortTable(5, 'categories-table')">المصروفات</th>
-                <th onclick="sortTable(6, 'categories-table')">عجز/زياده</th>
-                <th onclick="sortTable(6, 'categories-table')">التاريخ</th>
+                <th onclick="sortTable(2, 'categories-table')">الفرع</th>
+                <th onclick="sortTable(3, 'categories-table')">الإجمالي</th>
+                <th onclick="sortTable(4, 'categories-table')">البنك</th>
+                <th onclick="sortTable(5, 'categories-table')">الكاش</th>
+                <th onclick="sortTable(6, 'categories-table')">المصروفات</th>
+                <th onclick="sortTable(7, 'categories-table')">عجز/زياده</th>
+                <th onclick="sortTable(8, 'categories-table')">التاريخ</th>
                 <th>العمليات</th>
             </tr>
         </thead>
@@ -116,6 +158,11 @@
                         @foreach ($casher as $i)
                             @if ($i->id == $d->casher_id)
                                 <td>{{ $i->casher }}</td>
+                                @foreach ($branch as $b)
+                                    @if ($b->id == $i->branch_id)
+                                        <td>{{ $b->branch }}</td>
+                                    @endif
+                                @endforeach
                             @endif
                         @endforeach
                         <td>{{ $d->total }}</td>

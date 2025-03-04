@@ -268,7 +268,12 @@
                         <select id="editAccount" name="account" required>
                             @if (isset($accounts))
                                 @foreach ($accounts as $d1)
-                                    <option value="{{ $d1->id }}">{{ $d1->account }}</option>
+                                    @foreach ($Branch as $b1)
+                                        @if ($b1->id == $d1->branch_id)
+                                            <option value="{{ $d1->id }}">{{ $d1->account }}({{ $b1->branch }})
+                                            </option>
+                                        @endif
+                                    @endforeach
                                 @endforeach
                             @endif
                         </select>
@@ -363,22 +368,6 @@
             if (confirm('هل أنت متأكد أنك تريد حذف هذا السجل؟')) {
                 // إذا تم التأكيد، قم بتوجيه المستخدم إلى الراوت الخاص بالحذف
                 window.location.href = '/details/destroy/' + id;
-            }
-        }
-
-
-
-
-        function toggleForm() {
-            var form = document.getElementById("detailsForm");
-            var button = document.getElementById("toggleButton");
-
-            if (form.style.display === "none") {
-                form.style.display = "block";
-                button.textContent = "-"; // تغيير النص إلى "-"
-            } else {
-                form.style.display = "none";
-                button.textContent = "+"; // تغيير النص إلى "+"
             }
         }
     </script>
