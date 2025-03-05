@@ -7,18 +7,20 @@
     تقارير
 @endsection
 @section('main')
-<style>
-    select {
+    <style>
+        select {
             padding: 10px;
             font-size: 16px;
             border-radius: 4px;
             border: 1px solid #ccc;
             background-color: #fff;
-            appearance: none; /* إخفاء السهم */
+            appearance: none;
+            /* إخفاء السهم */
             background-position: right 10px center;
             background-repeat: no-repeat;
         }
     </style>
+    <h2>تقرير التسجيل اليومي الشهري</h2>
     <form action="{{ route('reports.monthly') }}" method="post">
         @csrf
         <label for="month">اختر الشهر:</label>
@@ -36,6 +38,6 @@
         </select>
         <button type="submit" class="edit-btn"> عرض التقرير<i class=""></i></button>
 
-        
+
     </form>
 @endsection

@@ -98,7 +98,12 @@
                     <select id="casher" name="casher" required>
                         @if (isset($casher))
                             @foreach ($casher as $ca)
-                                <option value="{{ $ca->id }}">{{ $ca->casher }}</option>
+                                @foreach ($branch as $b)
+                                    @if ($b->id == $ca->branch_id)
+                                        <option value="{{ $ca->id }}">{{ $ca->casher }} ({{ $b->branch }})
+                                        </option>
+                                    @endif
+                                @endforeach
                             @endforeach
                         @endif
                     </select>
@@ -201,7 +206,12 @@
                         <select id="editCasher" name="casher_id" required>
                             @if (isset($casher))
                                 @foreach ($casher as $ca)
-                                    <option value="{{ $ca->id }}">{{ $ca->casher }}</option>
+                                    @foreach ($branch as $b)
+                                        @if ($b->id == $ca->branch_id)
+                                            <option value="{{ $ca->id }}">{{ $ca->casher }} ({{ $b->branch }})
+                                            </option>
+                                        @endif
+                                    @endforeach
                                 @endforeach
                             @endif
                         </select>
