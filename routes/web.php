@@ -54,6 +54,8 @@ Route::middleware('auth')->group(function () {
 //التقارير
 Route::get('/reports',[ReportsController::class,'index'])->name('reports.index');
 Route::post('/reports/monthly', [ReportsController::class, 'monthly'])->name('reports.monthly');
+Route::post('/reports/casher', [ReportsController::class, 'casher'])->name('reports.casher');
+
 //الكاشير
 Route::post('/casher', [CasherController::class, 'store'])->name('casher.store');
 Route::post('/casher/update', [CasherController::class, 'update'])->name('casher.update');
