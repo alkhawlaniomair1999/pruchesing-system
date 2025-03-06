@@ -547,8 +547,8 @@
                     <label for="branch">الفرع:</label>
                     <select id="branch" name="branch" required>                   
                         @if (isset($branchs))
-                            @foreach ($branchs as $b)
-                                <option value="{{ $b->id }}">{{ $b->branch }}</option>
+                            @foreach ($branchs as $bc)
+                                <option value="{{ $bc->id }}">{{ $bc->branch }}</option>
                             @endforeach
                         @endif
                     </select>  
