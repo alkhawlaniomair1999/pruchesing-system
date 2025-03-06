@@ -166,6 +166,7 @@ footer {
 }
 
 .form-group input {
+    font-size:larger;
     flex: 1;
     padding: 8px;
     border: 1px solid #ddd;
@@ -212,12 +213,40 @@ table {
 }
 
 th {
-    background-color: #4169E1;
+    background-color: #5a71e2;
     /* Changed to a darker, calmer blue color */
     color: white;
     padding: 10px;
     text-align: right;
     cursor: pointer;
+    border:1px #0b0c0f;
+}
+@media print {
+    .sidebar ,.print_btn {
+        margin: 0%;
+        padding: 0;
+      display: none !important;
+    }
+  }
+  .print_btn{
+    font-size: larger;
+    color:white;
+width: 100px;
+height: 30px;
+padding: 5px;
+background-color: #007bff;
+border-radius: 5px;
+border: none;
+  }
+  .print_btn i{
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.print_btn:hover{
+    background-color: #6134e8;
+
+
+
 }
 
 td {
@@ -285,9 +314,9 @@ tr:nth-child(odd) {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    background-color: #4169E1;
+    background-color: #0b0c0f;
     /* Changed to a darker, calmer blue color */
-    color: white;
+    color: rgb(185, 35, 35);
     transition: background-color 0.3s;
 }
 
@@ -362,7 +391,8 @@ tr:nth-child(odd) {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px;
+
+    font-size:larger;
     appearance: none;
     background-color: #f9f9f9;
     transition: border-color 0.3s;
