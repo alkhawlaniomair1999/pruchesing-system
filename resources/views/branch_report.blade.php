@@ -11,9 +11,7 @@
 
 
     <h2>تقرير شهر: 
-   
-
-@switch( $month )
+    @switch( $month )
     @case(1)
         يناير
         @break
@@ -53,9 +51,20 @@
     @default
         رقم الشهر غير صحيح
 @endswitch
-    
-    {{ $month }}-{{ $year }}   للموظف: {{ $c->casher }}</h2>
-    <table>
+</h2>
+<p>عدد أيام الشهر: {{ $daysInMonth }}</p>
+@php
+    $sum_total=0;
+    $sum_bank=0;
+    $sum_cash=0;
+    $sum_out=0;
+    $sum_plus=0;
+@endphp
+
+
+
+
+<table>
         <thead>
             <tr>
                 <th>التاريخ</th>
@@ -68,64 +77,31 @@
 
         </thead>
         <tbody>
-@php
-    $sum_total=0;
-    $sum_bank=0;
-    $sum_cash=0;
-    $sum_out=0;
-    $sum_plus=0;
-@endphp
-
-
-            @if (isset($casher_proc))
-                @foreach ($casher_proc as $cp)
+        
+        @if (isset($operations))
+                @foreach ($operations as $op)
                    
                     <tr>
-                        <td>{{ $cp->date }}</td>
 
-                        <td>{{ $cp->total }}</td>
-                
-                        <td>{{ $cp->bank }}</td>
-                        <td>{{ $cp->cash }}</td>
-                        <td>{{ $cp->out }}</td>
-                        <td>{{ $cp->plus }}</td>
+                        <td>{{ $op->date}}</td>
+                        <td>{{ $op->total }}</td>
+
+                        <td>{{ $op->bank }}</td>
+                        <td>{{ $op->cash }}</td>
+                        <td>{{ $op->out }}</td>
+                        <td>{{ $op->plus }}</td>
 
 
             </tr>
-@php
-    $sum_total+=$cp->total;
-    $sum_bank+=$cp->bank;
-    $sum_cash+=$cp->cash;
-    $sum_out+=$cp->out;
-    $sum_plus+=$cp->plus;
-@endphp
+            @endforeach
+            {{ $operations->links() }}
+            @endif
 
+        
 
-@endforeach
-@endif
-
-<tfoot>
-<tr>
-    <th>الاجمالي:</th>
-<th>{{$sum_total}}</th>
-<th>{{$sum_bank}}</th>
-<th>{{$sum_cash}}</th>
-<th>{{$sum_out}}</th>
-<th>{{$sum_plus}}</th>
-
-
-</tr>
-
-
-</tfoot>
-
-
-        </tbody>
-    </table>
+</tbody>
+</table>
 
 
 
-
-
-
-@endsection
+    @endsection

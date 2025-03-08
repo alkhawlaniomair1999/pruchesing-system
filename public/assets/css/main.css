@@ -222,7 +222,7 @@ th {
     border:1px #0b0c0f;
 }
 @media print {
-    .sidebar ,.print_btn {
+    .sidebar ,.print_btn,header {
         margin: 0%;
         padding: 0;
       display: none !important;

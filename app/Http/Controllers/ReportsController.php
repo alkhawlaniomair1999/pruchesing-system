@@ -9,6 +9,7 @@ use App\Models\details;
 use App\Models\items;
 use App\Models\cashers;
 use App\Models\casher_procs;
+use Carbon\Carbon;
 
 class ReportsController extends Controller
 {
@@ -46,16 +47,39 @@ class ReportsController extends Controller
     }
 
 
+public function branch(Request $request)
+{
+    $branchId = $request->input('branch');
+    $month = $request->input('month');
+    $year = $request->input('year');
 
+    // حساب عدد أيام الشهر
+    $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
 
+    $operations = casher_procs::whereHas('casher', function ($query) use ($branchId) {
+        $query->whereHas('branch', function ($subQuery) use ($branchId) {
+            $subQuery->where('branch_id', $branchId);
+        });
+    })
+    ->whereYear('date', $year)
+    ->whereMonth('date', $month)
+    ->paginate(1000);
 
-
-
-
-
-
-
-
-
+    return view('branch_report', compact('operations', 'month', 'year', 'daysInMonth'));
 }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 

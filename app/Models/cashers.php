@@ -11,4 +11,9 @@ class cashers extends Model
     use HasFactory;
 
     protected $fillable = ['casher','branch_id', 'updated_at', 'created_at'];
+    public function branch()
+{
+    return $this->belongsTo(Branch::class);
+}
+
 }
