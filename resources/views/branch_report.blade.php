@@ -83,18 +83,17 @@
                    
                     <tr>
 
-                        <td>{{ $op->date}}</td>
-                        <td>{{ $op->total }}</td>
+                        <td>{{ $op->operation_date}}</td>
+                        <td>{{ $op->total_sum }}</td>
 
-                        <td>{{ $op->bank }}</td>
-                        <td>{{ $op->cash }}</td>
-                        <td>{{ $op->out }}</td>
-                        <td>{{ $op->plus }}</td>
+                        <td>{{ $op->bank_sum}}</td>
+                        <td>{{ $op->cash_sum }}</td>
+                        <td>{{ $op->out_sum  }}</td>
+                        <td>{{ $op->plus_sum }}</td>
 
 
             </tr>
             @endforeach
-            {{ $operations->links() }}
             @endif
 
         

@@ -10,6 +10,7 @@ use App\Models\items;
 use App\Models\cashers;
 use App\Models\casher_procs;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
@@ -56,20 +57,33 @@ public function branch(Request $request)
     // حساب عدد أيام الشهر
     $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
 
-    $operations = casher_procs::whereHas('casher', function ($query) use ($branchId) {
+
+    $operations = casher_procs::select(
+        DB::raw('DATE(date) as operation_date'),
+        DB::raw('SUM(total) as total_sum'),
+        DB::raw('SUM(cash) as cash_sum'),
+        DB::raw('SUM(`out`) as out_sum'), // إضافة backticks حول out
+        DB::raw('SUM(bank) as bank_sum'),
+
+        DB::raw('SUM(plus) as plus_sum')
+    )
+    ->whereHas('casher', function ($query) use ($branchId) {
         $query->whereHas('branch', function ($subQuery) use ($branchId) {
             $subQuery->where('branch_id', $branchId);
         });
     })
     ->whereYear('date', $year)
     ->whereMonth('date', $month)
-    ->paginate(1000);
+    ->groupBy('operation_date')
+    ->get();
 
     return view('branch_report', compact('operations', 'month', 'year', 'daysInMonth'));
 }
 
 
     }
+
+    
 
 
 
