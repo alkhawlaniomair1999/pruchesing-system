@@ -6,82 +6,7 @@
 @section('page')
     التسجيل اليومي
 @endsection
-<style>
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgb(0, 0, 0);
-        background-color: rgba(0, 0, 0, 0.4);
-        padding-top: 60px;
-    }
 
-    .modal-content {
-        background-color: #fefefe;
-        margin: 5% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 500px;
-        border-radius: 8px;
-    }
-
-    .close {
-        color: #aaa;
-        float: left;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    #myForm {
-        display: block;
-    }
-
-    #toggleButton {
-        font-size: 2em;
-        /* حجم الخط كبير */
-        font-weight: bold;
-        /* خط عريض */
-        background: none;
-        /* بدون خلفية */
-        border: none;
-        /* بدون حدود */
-        cursor: pointer;
-        /* مؤشر الفأرة */
-        outline: none;
-        /* إزالة التحديد */
-        width: 50px;
-        /* عرض الزر */
-        height: 50px;
-        /* ارتفاع الزر */
-        display: flex;
-    }
-
-    #toggleButton:focus {
-        outline: none;
-        /* إزالة التحديد عند التركيز */
-    }
-
-    .custom-form-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0px;
-        height: 30px;
-    }
-</style>
 
 @section('main')
     <div class="custom-form-container">
@@ -93,17 +18,26 @@
         <form id="detailsForm" action="{{ route('details.store') }}" method="POST">
             @csrf
             <div class="custom-form-fields">
-                <div class="custom-form-group full-width">
+                <div class="custom-form-group third-width">
                     <label for="description">التفصيل:</label>
                     <input type="text" id="description" name="detail" required>
                 </div>
 
-                <div class="custom-form-group half-width">
+                <div class="custom-form-group fourth-width">
                     <label for="totalPrice">السعر الإجمالي:</label>
-                    <input type="number" id="totalPrice" name="totalPrice" required>
+                    <input type="float" id="totalPrice" name="totalPrice" required>
                 </div>
-
-                <div class="custom-form-group half-width">
+                <div class="custom-form-group fourth-width">
+                    <label for="item">الصنف:</label>
+                    <select id="item" name="item" required>
+                        @if (isset($items))
+                            @foreach ($items as $d)
+                                <option value="{{ $d->id }}">{{ $d->item }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+                <div class="custom-form-group fourth-width">
                     <label for="tax">الضريبة:</label>
                     <select id="tax" name="tax" required>
                         <option value="0">لا</option>
@@ -111,7 +45,7 @@
                     </select>
                 </div>
 
-                <div class="custom-form-group third-width">
+                <div class="custom-form-group fourth-width">
                     <label for="branch">الفرع:</label>
                     <select id="branch" name="branch" required>
                         @if (isset($Branch))
@@ -121,7 +55,7 @@
                         @endif
                     </select>
                 </div>
-
+                
                 <div class="custom-form-group third-width">
                     <label for="account">الحساب:</label>
                     <select id="account" name="account" required>
@@ -137,20 +71,11 @@
                         @endif
                     </select>
                 </div>
-                <div class="custom-form-group third-width">
+                <div class="custom-form-group fourth-width">
                     <label for="date">التاريخ:</label>
                     <input type="date" id="date" name="date" required>
                 </div>
-                <div class="custom-form-group third-width">
-                    <label for="item">الصنف:</label>
-                    <select id="item" name="item" required>
-                        @if (isset($items))
-                            @foreach ($items as $d)
-                                <option value="{{ $d->id }}">{{ $d->item }}</option>
-                            @endforeach
-                        @endif
-                    </select>
-                </div>
+                
             </div>
 
             <div class="custom-form-group">
@@ -158,6 +83,7 @@
             </div>
         </form>
     </div>
+    
     <h2>جدول عرض البيانات</h2>
     <input type="text" class="search-input" placeholder="بحث في الأصناف..."
         onkeyup="searchTable(this, 'categories-table')">

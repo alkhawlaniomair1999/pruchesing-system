@@ -6,83 +6,6 @@
 @section('page')
     عمليات الكاشيرات
 @endsection
-<style>
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgb(0, 0, 0);
-        background-color: rgba(0, 0, 0, 0.4);
-        padding-top: 60px;
-    }
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: 5% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 500px;
-        border-radius: 8px;
-    }
-
-    .close {
-        color: #aaa;
-        float: left;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    #myForm {
-        display: block;
-    }
-
-    #toggleButton {
-        font-size: 2em;
-        /* حجم الخط كبير */
-        font-weight: bold;
-        /* خط عريض */
-        background: none;
-        /* بدون خلفية */
-        border: none;
-        /* بدون حدود */
-        cursor: pointer;
-        /* مؤشر الفأرة */
-        outline: none;
-        /* إزالة التحديد */
-        width: 50px;
-        /* عرض الزر */
-        height: 50px;
-        /* ارتفاع الزر */
-        display: flex;
-    }
-
-    #toggleButton:focus {
-        outline: none;
-        /* إزالة التحديد عند التركيز */
-    }
-
-    .custom-form-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0px;
-        height: 30px;
-    }
-</style>
-
 @section('main')
     <div class="custom-form-container">
         <div class="custom-form-header">
@@ -90,10 +13,10 @@
             <h2 class="custom-form-title">نموذج إضافة عمليات كاشير</h2>
             <p></p>
         </div>
-        <form id="detailsForm" action="{{ route('casher_proc.store') }}" method="POST">
+        <form id="detailsForm" action="{{ route('casher_proc.store') }}" method="POST" >
             @csrf
             <div class="custom-form-fields">
-                <div class="custom-form-group half-width">
+                <div class="custom-form-group third-width">
                     <label for="casher">الكاشير:</label>
                     <select id="casher" name="casher" required>
                         @if (isset($casher))
@@ -108,24 +31,24 @@
                         @endif
                     </select>
                 </div>
-                <div class="custom-form-group half-width">
+                <div class="custom-form-group fourth-width">
                     <label for="total">الاجمالي:</label>
-                    <input type="number" id="total" name="total" required>
+                    <input type="float" id="total" name="total" required>
                 </div>
 
-                <div class="custom-form-group half-width">
+                <div class="custom-form-group fourth-width">
                     <label for="cash">الكاش:</label>
-                    <input type="number" id="cash" name="cash" required>
+                    <input type="float" id="cash" name="cash" required>
                 </div>
-                <div class="custom-form-group half-width">
+                <div class="custom-form-group fourth-width">
                     <label for="bank">البنك:</label>
-                    <input type="number" id="bank" name="bank" required>
+                    <input type="float" id="bank" name="bank" required>
                 </div>
-                <div class="custom-form-group half-width">
+                <div class="custom-form-group fourth-width">
                     <label for="out">المصروفات :</label>
-                    <input type="number" id="out" name="out" required>
+                    <input type="float" id="out" name="out" required>
                 </div>
-                <div class="custom-form-group third-width">
+                <div class="custom-form-group fourth-width">
                     <label for="date">التاريخ:</label>
                     <input type="date" id="date" name="date" required>
                 </div>

@@ -51,8 +51,20 @@
     @default
         رقم الشهر غير صحيح
 @endswitch
+:
+{{ $year }}
+-للفرع:
+@if (isset($branch))
+@foreach ($branch as $ba)
+
+@if( $ba->id == $branchId )
+
+{{ $ba->branch }}
+@endif
+@endforeach
+
+@endif
 </h2>
-<p>عدد أيام الشهر: {{ $daysInMonth }}</p>
 @php
     $sum_total=0;
     $sum_bank=0;
@@ -93,8 +105,30 @@
 
 
             </tr>
+@php
+    $sum_total+=$op->total_sum;
+    $sum_bank+=$op->bank_sum;
+    $sum_cash+=$op->cash_sum;
+    $sum_out+=$op->out_sum ;
+    $sum_plus+=$op->plus_sum;
+@endphp
+
             @endforeach
             @endif
+            <tfoot>
+<tr>
+    <th>الاجمالي:</th>
+<th>{{$sum_total}}</th>
+<th>{{$sum_bank}}</th>
+<th>{{$sum_cash}}</th>
+<th>{{$sum_out}}</th>
+<th>{{$sum_plus}}</th>
+
+
+</tr>
+
+
+</tfoot>
 
         
 

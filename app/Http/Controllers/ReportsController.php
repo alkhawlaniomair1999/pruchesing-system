@@ -76,8 +76,8 @@ public function branch(Request $request)
     ->whereMonth('date', $month)
     ->groupBy('operation_date')
     ->get();
-
-    return view('branch_report', compact('operations', 'month', 'year', 'daysInMonth'));
+$branch=Branch::All();
+    return view('branch_report', compact('operations', 'month', 'year', 'daysInMonth','branch','branchId'));
 }
 
 

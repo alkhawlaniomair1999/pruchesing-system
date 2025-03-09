@@ -68,9 +68,13 @@ Route::post('/casher_proc', [CasherProcController::class, 'store'])->name('cashe
 Route::post('/casher_proc/update', [CasherProcController::class, 'update'])->name('casher_proc.update');
 Route::get('/casher_proc/destroy/{id}', [CasherProcController::class, 'destroy'])->name('casher_proc.destroy');
 
-Route::post('/supplier', [SuppliersController::class, 'store'])->name('supplier.store');
+Route::post('/supplier/store', [SuppliersController::class, 'store'])->name('supplier.store');
 Route::post('/supplier/update', [SuppliersController::class, 'update'])->name('supplier.update');
 Route::get('/supplier/destroy/{id}', [SuppliersController::class, 'destroy'])->name('supplier.destroy');
+
+
+// التوريد
+Route::get('/supplier', [SuppliersController::class, 'index'])->name('supplier.index');
 
 
 
