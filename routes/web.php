@@ -56,6 +56,7 @@ Route::get('/reports',[ReportsController::class,'index'])->name('reports.index')
 Route::post('/reports/monthly', [ReportsController::class, 'monthly'])->name('reports.monthly');
 Route::post('/reports/casher', [ReportsController::class, 'casher'])->name('reports.casher');
 Route::post('/reports/branch', [ReportsController::class, 'branch'])->name('reports.branch');
+Route::post('/reports/total', [ReportsController::class, 'total'])->name('reports.total');
 
 //الكاشير
 Route::post('/casher', [CasherController::class, 'store'])->name('casher.store');

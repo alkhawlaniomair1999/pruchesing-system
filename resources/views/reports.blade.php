@@ -8,8 +8,9 @@
 @endsection
 @section('main')
 
+    <button class="print_btn" onclick="window.print()">طباعة<i class="fa-solid fa-print"></i></button>
 
-    <h2>تقرير الشهر: {{ $month }}/{{ $year }}</h2>
+    <h2>تقرير شهر: {{ $month }}/{{ $year }}</h2>
     <table>
         <thead>
             <tr>
@@ -57,8 +58,10 @@
                     </tr>
                 @endforeach
             @endif
+        </tbody>
+        <tfoot>
             <tr>
-                <td>الاجمالي: </td>
+                <th>الاجمالي: </th>
                 @php
                     $total = 0;
                 @endphp
@@ -69,7 +72,7 @@
                         @endphp
                     @endforeach
                 @endif
-                <td>{{ $total }}</td>
+                <th>{{ $total }}</th>
                 @if (isset($branches))
                     @foreach ($branches as $b)
                         @php
@@ -84,12 +87,12 @@
                                 @endif
                             @endforeach
                         @endif
-                        <td>{{ $total }}</td>
+                        <th>{{ $total }}</th>
                     @endforeach
                 @endif
             </tr>
+        </tfoot>
 
-        </tbody>
     </table>
 
 

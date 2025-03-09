@@ -80,8 +80,30 @@ $branch=Branch::All();
     return view('branch_report', compact('operations', 'month', 'year', 'daysInMonth','branch','branchId'));
 }
 
+public function total(Request $request)
+{
+    $month = $request->input('month');
+    $year = $request->input('year');
 
-    }
+    // حساب عدد أيام الشهر
+    $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
+
+
+    $operations = casher_procs::select(
+        DB::raw('DATE(date) as operation_date'),
+        DB::raw('SUM(total) as total_sum'),
+        DB::raw('SUM(cash) as cash_sum'),
+        DB::raw('SUM(`out`) as out_sum'), // إضافة backticks حول out
+        DB::raw('SUM(bank) as bank_sum'),
+        DB::raw('SUM(plus) as plus_sum')
+    )
+    ->whereYear('date', $year)
+    ->whereMonth('date', $month)
+    ->groupBy('operation_date')
+    ->get();
+    return view('total_report', compact('operations', 'month', 'year', 'daysInMonth'));
+}
+}
 
     
 
