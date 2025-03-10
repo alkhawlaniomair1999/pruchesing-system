@@ -1,20 +1,19 @@
 <div class="sidebar" id="sidebar">
     <h3>القائمة الجانبية</h3>
+
+    <img src="{{ asset('assets/img/1.png') }}" alt="User Image" class="user-image">
+    <p class="welcome-message"> مرحبا: {{ Auth::user()->name }}</p>
     <ul>
-        <li> مرحبا: {{ Auth::user()->name }}<br> </li>
-        <li>
-            <hr>
-        </li>
-        <li><a href="{{ url('init') }}" class="fa-solid fa-gear">التهيئة </a></li>
-        <li><a href="{{ url('supplier') }}" class="fa-solid fa-">التوريد  </a></li>
+        <li><br></li>
+        <li><a href="{{ url('init') }}"> <i class="fa-solid fa-gear"></i>التهيئة </a></li>
+        <li><a href="{{ url('supplier') }}"><i class="fa-solid fa-truck"></i>التوريد </a></li>
+        <li><a href="{{ url('details') }}"><i class="fa-solid fa-calendar-check"></i>التسجيل اليومي </a></li>
+        <li><a href="{{ url('casher_proc') }}"><i class="fa-solid fa-cash-register"></i>عمليات الكاشير </a></li>
 
-        
-        <li><a href="{{ url('details') }}" class="fa-solid fa-">التسجيل اليومي </a></li>
-        <li><a href="{{ url('casher_proc') }}" class="fa-solid fa-">عمليات الكاشير  </a></li>
-
-        <li><a href="{{ url('reports') }}" class="fa fa-info-circle">التقارير </a></li>
-        <li><a href="#" class="fa-solid fa-circle-user">المستخدمين </a></li>
-        <li><a href="{{ url('logout') }}"class="fa-solid fa-right-from-bracket">خروج </a></li>
+        <li><a href="{{ url('reports') }}"><i class="fa fa-info-circle"></i>التقارير </a></li>
+        <li><a href="#"><i class="fa-solid fa-circle-user"></i>المستخدمين </a></li>
+        <li><br><br><br></li>
+        <li><a href="{{ url('logout') }}"><i class="fa-solid fa-right-from-bracket"></i>خروج </a></li>
 
     </ul>
 </div>
