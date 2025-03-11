@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Suppliers;
+use App\Models\accounts;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 
 class SuppliersController extends Controller
@@ -12,13 +14,10 @@ class SuppliersController extends Controller
      */
     public function index()
     {
-
-
-
-
-
-
-        return view('supply');
+        $suppliers=Suppliers::all();
+        $accounts=accounts::all();
+        $Branch=Branch::all();
+        return view('supply',compact('suppliers','accounts','Branch'));
     }
 
     /**
@@ -75,5 +74,38 @@ class SuppliersController extends Controller
     {
         Suppliers::where('id',$id)->delete();
         return redirect()->back();
+    }
+
+    public function det(Request $request)
+    {
+        $supplier = Suppliers::where('id', $request->supplier)->first();
+        $sp['debt'] = $supplier->debt + $request->price;
+        $sp['balance'] = $supplier->balance + $request->price;
+        Suppliers::where('id',$request->supplier)->update($sp);
+        if ($request->paymentType == 'cash') {
+            $account = accounts::where('id', $request->account)->first();
+            $ac['credit'] = $account->credit + $request->price;
+            $ac['balance'] = $account->balance - $request->price;
+            accounts::where('id', $request->account)->update($ac);
+            $supplier = Suppliers::where('id', $request->supplier)->first();
+            $sp['credit'] = $supplier->credit + $request->price;
+            $sp['balance'] = $supplier->balance - $request->price;
+            Suppliers::where('id',$request->supplier)->update($sp);
+        }
+        return redirect()->back();
+
+    }
+    public function det2(Request $request)
+    {
+        $supplier = Suppliers::where('id', $request->supplier)->first();
+        $sp['credit'] = $supplier->credit + $request->price;
+        $sp['balance'] = $supplier->balance - $request->price;
+        Suppliers::where('id',$request->supplier)->update($sp);
+        $account = accounts::where('id',$request->account)->first();
+        $ac['credit'] = $account->credit + $request->price;
+        $ac['balance'] = $account->balance - $request->price;
+        accounts::where('id',$request->account)->update($ac);
+        return redirect()->back();
+
     }
 }

@@ -643,11 +643,6 @@ tr:nth-child(odd) {
 
 /* الديتلز التسجيل اليومي */
 
-
-
-
-
-
 .close:hover,
 .close:focus {
     color: black;
@@ -657,4 +652,9 @@ tr:nth-child(odd) {
 
 #myForm {
     display: block;
+}
+
+.custom-form-group.half-width {
+    display: flex;
+    width: 40%;
 }

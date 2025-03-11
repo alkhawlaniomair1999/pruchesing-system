@@ -107,6 +107,20 @@ function toggleForm() {
         button.textContent = "+"; // تغيير النص إلى "+"
     }
 }
+function toggleAccountField() {
+    var paymentType = document.getElementById('paymentType').value;
+    var accountField = document.getElementById('accountField');
+    if (paymentType === 'cash') {
+        accountField.style.display = 'block';
+    } else {
+        accountField.style.display = 'none';
+    }
+}
+
+// Initialize the form with the correct state
+document.addEventListener('DOMContentLoaded', function () {
+    toggleAccountField();
+});
 
 var today = new Date();
 var dateField = document.getElementById('date');

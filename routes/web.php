@@ -76,7 +76,8 @@ Route::get('/supplier/destroy/{id}', [SuppliersController::class, 'destroy'])->n
 
 // التوريد
 Route::get('/supplier', [SuppliersController::class, 'index'])->name('supplier.index');
-
+Route::post('/supplier/det', [SuppliersController::class, 'det'])->name('supplier.det');
+Route::post('/supplier/det2', [SuppliersController::class, 'det2'])->name('supplier.det2');
 
 
 });
