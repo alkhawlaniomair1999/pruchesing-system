@@ -1,10 +1,9 @@
 <div class="sidebar" id="sidebar">
     <h3>القائمة الجانبية</h3>
 
-    <img src="{{ asset('assets/img/1.png') }}" alt="User Image" class="user-image">
     <p class="welcome-message"> مرحبا: {{ Auth::user()->name }}</p>
     <ul>
-        <li><br></li>
+        <li></li>
         <li><a href="{{ url('init') }}"> <i class="fa-solid fa-gear"></i>التهيئة </a></li>
         <li><a href="{{ url('supplier') }}"><i class="fa-solid fa-truck"></i>التوريد </a></li>
         <li><a href="{{ url('details') }}"><i class="fa-solid fa-calendar-check"></i>التسجيل اليومي </a></li>
