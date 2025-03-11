@@ -113,9 +113,27 @@ function toggleAccountField() {
     if (paymentType === 'cash') {
         accountField.style.display = 'block';
     } else {
-        accountField.style.display = 'none';
+        accountField.classList.remove('customStyle');
     }
 }
+
+// function toggleAccountField() {
+//     var paymentType = document.getElementById('paymentType').value;
+//     var accountField = document.getElementById('accountField');
+//     if (paymentType ==='cash') {
+//         accountField.classList.add('custom-form-group third-width');
+
+//     } else if(paymentType ==='credit') {
+//         accountField.classList.add('acc_hide');
+
+
+//     }
+// }
+
+
+
+
+
 
 // Initialize the form with the correct state
 document.addEventListener('DOMContentLoaded', function () {

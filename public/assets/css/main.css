@@ -472,7 +472,10 @@ tr:nth-child(odd) {
     .custom-form-group.half-width {
         flex: 1 1 calc(50% - 10px);
     }
+.acc_hide{
+display: none;
 
+}
     .custom-form-group.third-width {
         flex: 1 1 calc(33.33% - 10px);
     }
