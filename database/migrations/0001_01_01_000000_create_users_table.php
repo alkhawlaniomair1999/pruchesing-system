@@ -20,11 +20,11 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-        // إنشاء مستخدم افتراضي
-    DB::table('users')->insert([
+     // إنشاء مستخدم افتراضي أثناء عملية الهجرة
+     DB::table('users')->insert([
         'name' => 'Admin',
         'email' => 'admin@example.com',
-        'password' => Hash::make('password'), // كلمة مرور مشفرة
+        'password' => Hash::make('admin1111'), // كلمة مرور مشفرة
         'created_at' => now(),
         'updated_at' => now(),
     ]);
