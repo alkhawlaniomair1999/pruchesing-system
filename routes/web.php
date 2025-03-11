@@ -11,6 +11,7 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\CasherController;
 use App\Http\Controllers\CasherProcController;
 use App\Http\Controllers\SuppliersController;
+use App\Http\Controllers\UserController;
 
 
 
@@ -79,6 +80,15 @@ Route::get('/supplier', [SuppliersController::class, 'index'])->name('supplier.i
 Route::get('/supplier/pay', [SuppliersController::class, 'pay'])->name('supplier.pay');
 Route::post('/supplier/det', [SuppliersController::class, 'det'])->name('supplier.det');
 Route::post('/supplier/det2', [SuppliersController::class, 'det2'])->name('supplier.det2');
+
+
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
+Route::post('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
+Route::get('/users/destroy/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+
+
 
 
 });

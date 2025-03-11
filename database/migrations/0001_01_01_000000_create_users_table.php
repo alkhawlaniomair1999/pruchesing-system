@@ -20,6 +20,14 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+        // إنشاء مستخدم افتراضي
+    DB::table('users')->insert([
+        'name' => 'Admin',
+        'email' => 'admin@example.com',
+        'password' => Hash::make('password'), // كلمة مرور مشفرة
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();

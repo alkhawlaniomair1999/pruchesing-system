@@ -11,7 +11,7 @@
         <li><a href="{{ url('casher_proc') }}"><i class="fa-solid fa-cash-register"></i>عمليات الكاشير </a></li>
 
         <li><a href="{{ url('reports') }}"><i class="fa fa-info-circle"></i>التقارير </a></li>
-        <li><a href="#"><i class="fa-solid fa-circle-user"></i>المستخدمين </a></li>
+        <li><a href="{{url('users')  }}"><i class="fa-solid fa-circle-user"></i>المستخدمين </a></li>
         <li><br><br></li>
         <li><a href="{{ url('logout') }}"><i class="fa-solid fa-right-from-bracket"></i>خروج </a></li>
 
