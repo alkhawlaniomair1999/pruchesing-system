@@ -19,6 +19,13 @@ class SuppliersController extends Controller
         $Branch=Branch::all();
         return view('supply',compact('suppliers','accounts','Branch'));
     }
+    public function pay()
+    {
+        $suppliers=Suppliers::all();
+        $accounts=accounts::all();
+        $Branch=Branch::all();
+        return view('pay',compact('suppliers','accounts','Branch'));
+    }
 
     /**
      * Show the form for creating a new resource.
