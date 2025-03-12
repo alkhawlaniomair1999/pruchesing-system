@@ -34,7 +34,7 @@
                         @endif
                     </select>
                 </div>
-                <div class="custom-form-group third-width">
+                <div class="custom-form-group fourth-width">
                     <label for="account"> حساب:</label>
                     <select id="account" name="account">
                         @if (isset($accounts))
@@ -49,7 +49,7 @@
                         @endif
                     </select>
                 </div>
-                <div class="custom-form-group third-width">
+                <div class="custom-form-group fourth-width">
                     <label for="date">التاريخ:</label>
                     <input type="date" id="date" name="date" required>
                 </div>

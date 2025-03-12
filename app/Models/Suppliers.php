@@ -11,4 +11,10 @@ class Suppliers extends Model
 
     protected $fillable = ['supplier','debt','credit' ,'balance','updated_at', 'created_at'];
 
+    public function supplyDetails()
+    {
+        return $this->hasMany(SupplyDetail::class, 'supplier_id');
+    }
+    
+
 }

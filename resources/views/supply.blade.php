@@ -13,29 +13,29 @@
             <h2 class="custom-form-title">نموذج إضافة قيد</h2>
             <p></p>
         </div>
-        <form id="detailsForm" action="{{ route('supplier.det') }}" method="POST">
+        <form id="detailsForm" action="{{ route('supplier.storeSupply') }}" method="POST">
             @csrf
             <div class="custom-form-fields">
                 <div class="custom-form-group third-width">
                     <label for="description">التفصيل:</label>
-                    <input type="text" id="description" name="detail" required>
+                    <input type="text" id="description" name="details" required>
                 </div>
 
                 <div class="custom-form-group fourth-width">
                     <label for="price">المبلغ:</label>
-                    <input type="float" id="price" name="price" required>
+                    <input type="float" id="price" name="amount" required>
                 </div>
 
                 <div class="custom-form-group third-width">
                     <label for="paymentType">نوع السند:</label>
-                    <select id="paymentType" name="paymentType" onchange="toggleAccountField()" required>
+                    <select id="paymentType" name="payment_type" onchange="toggleAccountField()" required>
                         <option value="cash">نقد</option>
                         <option value="credit">آجل</option>
                     </select>
                 </div>
                 <div class="custom-form-group third-width">
                     <label for="supplier"> حساب المورد:</label>
-                    <select id="supplier" name="supplier" required>
+                    <select id="supplier" name="supplier_id" required>
                         @if (isset($suppliers))
                             @foreach ($suppliers as $supplier)
                                 <option value="{{ $supplier->id }}">{{ $supplier->supplier }}</option>
@@ -46,7 +46,7 @@
 
                 <div class="custom-form-group third-width" id="accountField">
                     <label for="account"> حساب:</label>
-                    <select id="account" name="account">
+                    <select id="account" name="account_name">
                         @if (isset($accounts))
                             @foreach ($accounts as $d1)
                                 @foreach ($Branch as $b1)
@@ -79,12 +79,13 @@
             <tr>
                 <th onclick="sortTable(0, 'pro-table')">الرقم</th>
                 <th onclick="sortTable(1, 'pro-table')">التفصيل</th>
-                <th onclick="sortTable(4, 'pro-table')">الحساب</th>
-                <th onclick="sortTable(5, 'pro-table')"> المدين</th>
-                <th onclick="sortTable(6, 'pro-table')">الدائن</th>
-                <th onclick="sortTable(7, 'pro-table')">رصيد الحساب </th>
-                <th onclick="sortTable(8, 'pro-table')">التاريخ</th>
-                <th onclick="sortTable(9, 'pro-table')">الإجراءات</th>
+                <th onclick="sortTable(4, 'pro-table')">المورد</th>
+                <th onclick="sortTable(5, 'pro-table')"> المبلغ</th>
+                <th onclick="sortTable(6, 'pro-table')">الدفع</th>
+                <th onclick="sortTable(6, 'pro-table')">الحساب</th>
+
+                <th onclick="sortTable(7, 'pro-table')"> التاريخ </th>
+                <th onclick="sortTable(8, 'pro-table')">الإجراءات</th>
             </tr>
         </thead>
         <tbody>
@@ -92,29 +93,25 @@
                 @foreach ($proc as $p)
                     <tr>
                         <td>{{ $p->id }}</td>
-                        <td>{{ $p->detail }}</td>
-                        @if ($p->acc_type == 'account')
-                            @foreach ($accounts as $a)
-                                @if ($a->id == $p->account_id)
-                                    <td>{{ $a->account }}</td>
+                        <td>{{ $p->details }}</td>
+                        
+                            @foreach ($suppliers as $a)
+                                @if ($a->id == $p->supplier_id)
+                                    <td>{{ $a->supplier }}</td>
                                 @endif
                             @endforeach
-                        @elseif ($p->acc_type == 'supplier')
-                            @foreach ($suppliers as $s)
-                                @if ($s->id == $p->account_id)
-                                    <td>{{ $s->supplier }}</td>
-                                @endif
-                            @endforeach
-                        @endif
-                        <td>{{ $p->debt }}</td>
-                        <td>{{ $p->credit }}</td>
-                        <td>{{ $p->balance }}</td>
-                        <td>{{ $p->date }}</td>
+                        
+                        <td>{{ $p->amount }}</td>
+                        <td>{{ $p->payment_type }}</td>
+                        <td>{{ $p->account_name }}</td>
+
+                        <td>{{ $p->created_at }}</td>
                         <td class="action-buttons">
                             <button class="edit-btn" onclick="openModal(this)">تعديل<i
                                     class="fa-solid fa-pen-to-square"></i></button>
-                            <button class="delete-btn" onclick="confirmDelete({{ $p->id }})">حذف<i
-                                    class="fa-solid fa-trash"></i></button>
+                                    <button class="delete-btn"
+                                    onclick="confirmDelete({{ $p->id }},'/supplier/deleteSupply/')">حذف<i class="fa-solid fa-trash"></i></button>
+               
                         </td>
                     </tr>
                 @endforeach
@@ -123,3 +120,14 @@
     </table>
     <div class="pagination" id="pro-pagination"></div>
 @endsection
+
+<script>
+
+function confirmDelete(id, pa) {
+            if (confirm('هل أنت متأكد أنك تريد حذف هذا السجل؟')) {
+                // إذا تم التأكيد، قم بتوجيه المستخدم إلى الراوت الخاص بالحذف
+                window.location.href = pa + id;
+            }
+        }
+
+        </script>

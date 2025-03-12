@@ -10,4 +10,10 @@ class accounts extends Model
     use HasFactory;
 
     protected $fillable = ['account','debt','credit' ,'balance','type','branch_id','updated_at', 'created_at'];
+    public function financialOperations()
+    {
+        return $this->morphMany(FinancialOperation::class, 'related');
+    }
+    
+
 }
