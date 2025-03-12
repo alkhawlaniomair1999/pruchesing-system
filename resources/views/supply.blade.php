@@ -71,4 +71,55 @@
         </form>
     </div>
     <br><br>
-   @endsection
+
+    <h2>جدول عرض البيانات</h2>
+    <input type="text" class="search-input" placeholder="بحث في السندات..." onkeyup="searchTable(this, 'pro-table')">
+    <table id="pro-table">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0, 'pro-table')">الرقم</th>
+                <th onclick="sortTable(1, 'pro-table')">التفصيل</th>
+                <th onclick="sortTable(4, 'pro-table')">الحساب</th>
+                <th onclick="sortTable(5, 'pro-table')"> المدين</th>
+                <th onclick="sortTable(6, 'pro-table')">الدائن</th>
+                <th onclick="sortTable(7, 'pro-table')">رصيد الحساب </th>
+                <th onclick="sortTable(8, 'pro-table')">التاريخ</th>
+                <th onclick="sortTable(9, 'pro-table')">الإجراءات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (isset($proc))
+                @foreach ($proc as $p)
+                    <tr>
+                        <td>{{ $p->id }}</td>
+                        <td>{{ $p->detail }}</td>
+                        @if ($p->acc_type == 'account')
+                            @foreach ($accounts as $a)
+                                @if ($a->id == $p->account_id)
+                                    <td>{{ $a->account }}</td>
+                                @endif
+                            @endforeach
+                        @elseif ($p->acc_type == 'supplier')
+                            @foreach ($suppliers as $s)
+                                @if ($s->id == $p->account_id)
+                                    <td>{{ $s->supplier }}</td>
+                                @endif
+                            @endforeach
+                        @endif
+                        <td>{{ $p->debt }}</td>
+                        <td>{{ $p->credit }}</td>
+                        <td>{{ $p->balance }}</td>
+                        <td>{{ $p->date }}</td>
+                        <td class="action-buttons">
+                            <button class="edit-btn" onclick="openModal(this)">تعديل<i
+                                    class="fa-solid fa-pen-to-square"></i></button>
+                            <button class="delete-btn" onclick="confirmDelete({{ $p->id }})">حذف<i
+                                    class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                @endforeach
+            @endif
+        </tbody>
+    </table>
+    <div class="pagination" id="pro-pagination"></div>
+@endsection
