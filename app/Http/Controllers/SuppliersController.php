@@ -131,7 +131,7 @@ public function storeSupply(Request $request)
             'user_id' => auth()->id(),
         ]);
 
-        $supply->account_name = $account->account;
+        $supply->account_name = $request->account_name;
     } else if ($request->payment_type == 'credit') {
         $supplier = Suppliers::find($request->supplier_id);
         $supplier->debt += $request->amount;
