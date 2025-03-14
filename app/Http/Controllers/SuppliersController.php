@@ -106,12 +106,18 @@ public function storeSupply(Request $request)
     $supply->details = $request->details;
 
     if ($request->payment_type == 'cash') {
-        $account = Accounts::where('account', $request->account_name)->first();
+        $account = Accounts::where('id', $request->account_name)->first();
         $balanceBefore = $account->balance;
 
         // تحديث الحساب
-        $account->balance += $request->amount;
+        $account->credit += $request->amount;
+        $account->balance -= $request->amount;
         $account->save();
+        // تحديث حساب المورد
+        $supplier = Suppliers::where('id',$request->supplier_id)->first();
+        $supplier->debt += $request->amount;
+        $supplier->credit += $request->amount;
+        $supplier->save();
 
         // تسجيل العملية في جدول "العمليات المالية"
         FinancialOperation::create([
@@ -128,6 +134,7 @@ public function storeSupply(Request $request)
         $supply->account_name = $account->account;
     } else if ($request->payment_type == 'credit') {
         $supplier = Suppliers::find($request->supplier_id);
+        $supplier->debt += $request->amount;
         $supplier->balance += $request->amount;
         $supplier->save();
 
