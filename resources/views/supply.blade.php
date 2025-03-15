@@ -79,13 +79,13 @@
             <tr>
                 <th onclick="sortTable(0, 'pro-table')">الرقم</th>
                 <th onclick="sortTable(1, 'pro-table')">التفصيل</th>
-                <th onclick="sortTable(4, 'pro-table')">المورد</th>
-                <th onclick="sortTable(5, 'pro-table')"> المبلغ</th>
-                <th onclick="sortTable(6, 'pro-table')">الدفع</th>
-                <th onclick="sortTable(6, 'pro-table')">الحساب</th>
+                <th onclick="sortTable(2, 'pro-table')">المورد</th>
+                <th onclick="sortTable(3, 'pro-table')"> المبلغ</th>
+                <th onclick="sortTable(4, 'pro-table')">الدفع</th>
+                <th onclick="sortTable(5, 'pro-table')">الحساب</th>
 
-                <th onclick="sortTable(7, 'pro-table')"> التاريخ </th>
-                <th onclick="sortTable(8, 'pro-table')">الإجراءات</th>
+                <th onclick="sortTable(6, 'pro-table')"> التاريخ </th>
+                <th onclick="sortTable(7, 'pro-table')">الإجراءات</th>
             </tr>
         </thead>
         <tbody>
@@ -105,6 +105,8 @@
                         <td>{{ $p->payment_type }}</td>
                         <td>{{ $p->account_name }}</td>
 
+                        
+
                         <td>{{ $p->created_at }}</td>
                         <td class="action-buttons">
                             <button class="edit-btn" onclick="openModal(this)">تعديل<i
@@ -118,16 +120,26 @@
             @endif
         </tbody>
     </table>
-    <div class="pagination" id="pro-pagination"></div>
-@endsection
+
+<!-- HTML للنموذج المنبثق -->
+
+
+
+
+
+
 
 <script>
-
-function confirmDelete(id, pa) {
+      
+      function confirmDelete(id, pa) {
             if (confirm('هل أنت متأكد أنك تريد حذف هذا السجل؟')) {
                 // إذا تم التأكيد، قم بتوجيه المستخدم إلى الراوت الخاص بالحذف
                 window.location.href = pa + id;
             }
         }
+    </script>
+        
 
-        </script>
+
+@endsection
+     

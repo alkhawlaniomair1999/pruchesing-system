@@ -160,68 +160,89 @@ public function storeSupply(Request $request)
 }
 
 
-
-    public function updateSupply(Request $request, $id)
+public function updateSupply(Request $request, $id)
 {
-    $supply = SupplyDetail::find($id);
+    $supply = SupplyDetail::findOrFail($id);
 
-    // استرجاع القيم الأصلية
-    $originalPaymentType = $supply->payment_type;
-    $originalAmount = $supply->amount;
-    $originalAccountName = $supply->account_name;
+    // التحقق من المدخلات
+    $request->validate([
+        'supplier_id' => 'required|exists:suppliers,id',
+        'amount' => 'required|numeric|min:0',
+        'payment_type' => 'required|in:cash,credit',
+        'details' => 'nullable|string',
+        'account_name' => 'required_if:payment_type,cash|exists:accounts,id',
+    ]);
+
+    // تحديث بيانات التوريد
+    $supply->supplier_id = $request->supplier_id;
+    $supply->details = $request->details;
 
     if ($request->payment_type == 'cash') {
-        $account = Accounts::find($request->account_id);
+        $account = Accounts::findOrFail($request->account_name);
         $balanceBefore = $account->balance;
 
-        if ($originalPaymentType == 'credit') {
-            // إذا كانت العملية الأصلية آجلة، قم بتحديث المورد
-            $supplier = Suppliers::find($supply->supplier_id);
-            $supplier->balance -= $originalAmount;
-            $supplier->save();
-        } else if ($originalAccountName != $account->name) {
-            // إذا تغير الحساب
-            $oldAccount = Accounts::where('name', $originalAccountName)->first();
-            $oldAccount->balance -= $originalAmount;
-            $oldAccount->save();
-        }
-
-        // تحديث الحساب الجديد
-        $account->balance += $request->amount;
+        // تحديث الحساب
+        $account->credit -= $supply->amount; // إزالة القيمة القديمة
+        $account->balance += $supply->amount; // استعادة الرصيد القديم
+        $account->credit += $request->amount; // إضافة القيمة الجديدة
+        $account->balance -= $request->amount; // خصم القيمة الجديدة
         $account->save();
 
-        // تحديث العملية في جدول "العمليات المالية"
-        FinancialOperation::where('related_id', $account->id)
-            ->where('related_type', 'Account')
-            ->where('operation_type', 'توريد نقداً')
-            ->update([
-                'debit' => $request->amount,
-                'balance' => $account->balance,
-                'details' => 'تم تعديل توريد نقدي',
-            ]);
+        // تحديث المورد
+        $supplier = Suppliers::findOrFail($request->supplier_id);
+        $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
+        $supplier->credit -= $supply->amount; // إزالة القيمة القديمة
+        $supplier->debt += $request->amount; // إضافة القيمة الجديدة
+        $supplier->credit += $request->amount; // إضافة القيمة الجديدة
+        $supplier->save();
 
-        $supply->account_name = $account->name;
+        // تسجيل العملية في جدول "العمليات المالية"
+        FinancialOperation::create([
+            'related_id' => $account->id,
+            'related_type' => 'Account',
+            'operation_type' => 'تعديل توريد نقداً',
+            'debit' => $request->amount,
+            'credit' => 0,
+            'balance' => $account->balance,
+            'details' => 'تعديل توريد من المورد ID: ' . $request->supplier_id,
+            'user_id' => auth()->id(),
+        ]);
+
+        $supply->account_name = $request->account_name;
     } else if ($request->payment_type == 'credit') {
-        $supplier = Suppliers::find($supply->supplier_id);
-        $supplier->balance += $request->amount;
+        $supplier = Suppliers::findOrFail($request->supplier_id);
+
+        // تحديث المورد
+        $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
+        $supplier->balance -= $supply->amount; // إزالة القيمة القديمة
+        $supplier->debt += $request->amount; // إضافة القيمة الجديدة
+        $supplier->balance += $request->amount; // إضافة القيمة الجديدة
         $supplier->save();
 
         $supply->account_name = null;
 
-        if ($originalPaymentType == 'cash') {
-            $account = Accounts::where('name', $originalAccountName)->first();
-            $account->balance -= $originalAmount;
-            $account->save();
-        }
+        // تسجيل العملية في جدول "العمليات المالية"
+        FinancialOperation::create([
+            'related_id' => $supplier->id,
+            'related_type' => 'Supplier',
+            'operation_type' => 'تعديل توريد آجلاً',
+            'debit' => 0,
+            'credit' => $request->amount,
+            'balance' => $supplier->balance,
+            'details' => 'تعديل توريد آجلاً',
+            'user_id' => auth()->id(),
+        ]);
     }
 
+    // تحديث بيانات التوريد
     $supply->amount = $request->amount;
     $supply->payment_type = $request->payment_type;
-    $supply->details = $request->details;
     $supply->save();
 
-    return redirect()->route('supplies.index')->with('success', 'تم تعديل التوريد بنجاح.');
+    return redirect()->back()->with('success', 'تم تعديل بيانات التوريد بنجاح.');
 }
+
+
 
 
 public function deleteSupply($id)
