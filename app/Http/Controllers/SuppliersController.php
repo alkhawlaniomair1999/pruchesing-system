@@ -277,10 +277,10 @@ public function updateSupply(Request $request)
            // تحديث المورد
            if($supply->supplier_id == $request->supplier_id){
             $supplier = Suppliers::findOrFail($request->supplier_id);
-            $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
             $supplier->credit -= $supply->amount; // إزالة القيمة القديمة
             $supplier->debt += $request->amount; // إضافة القيمة الجديدة
             $supplier->credit += $request->amount; // إضافة القيمة الجديدة
+            $supplier->balance += $request->amount;
             $supplier->save();
             }
             else{
@@ -318,8 +318,8 @@ public function updateSupply(Request $request)
             $supplier = Suppliers::findOrFail($request->supplier_id);
             $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
             $supplier->credit -= $supply->amount; // إزالة القيمة القديمة
-            $supplier->debt += $request->amount; // إضافة القيمة الجديدة
             $supplier->credit += $request->amount; // إضافة القيمة الجديدة
+            $supplier->balance -=$request->amount;
             $supplier->save();
             }
             else{
@@ -336,7 +336,7 @@ public function updateSupply(Request $request)
             FinancialOperation::create([
                 'related_id' => $account->id,
                 'related_type' => 'Account',
-                'operation_type' => 'تعديل توريد نقداً',
+                'operation_type' => 'تعديل توريد اجل',
                 'debit' => $request->amount,
                 'credit' => 0,
                 'balance' => $account->balance,
@@ -344,7 +344,7 @@ public function updateSupply(Request $request)
                 'user_id' => auth()->id(),
             ]);
     
-            $supply->account_name = $request->account_name;
+            $supply->account_name = null;
     }
     // تحديث بيانات التوريد
     $supply->amount = $request->amount;
@@ -362,12 +362,17 @@ public function deleteSupply($id)
     $supply = SupplyDetail::find($id);
 
     if ($supply->payment_type == 'cash') {
-        $account = Accounts::where('account', $supply->account_name)->first();
+        $account = Accounts::where('id', $supply->account_name)->first();
 
         // تحديث الحساب
-        $account->balance -= $supply->amount;
+        $account->credit -=$supply->amount;        
+        $account->balance += $supply->amount;
         $account->save();
-
+        $supplier = Suppliers::find($supply->supplier_id);
+        // تحديث المورد
+        $supplier->debt -= $supply->amount;
+        $supplier->credit -= $supply->amount;
+        $supplier->save();
         // حذف العملية من جدول "العمليات المالية"
         FinancialOperation::where('related_id', $account->id)
             ->where('related_type', 'Account')
@@ -377,6 +382,7 @@ public function deleteSupply($id)
         $supplier = Suppliers::find($supply->supplier_id);
 
         // تحديث المورد
+        $supplier->debt -= $supply->amount;
         $supplier->balance -= $supply->amount;
         $supplier->save();
     }
