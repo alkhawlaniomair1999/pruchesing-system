@@ -79,6 +79,7 @@ Route::get('/supplier/destroy/{id}', [SuppliersController::class, 'destroy'])->n
 Route::get('/supplier', [SuppliersController::class, 'index'])->name('supplier.index');
 Route::get('/supplier/pay', [SuppliersController::class, 'pay'])->name('supplier.pay');
 Route::post('/supplier/storeSupply', [SuppliersController::class, 'storeSupply'])->name('supplier.storeSupply');
+Route::post('/supplier/updateSupply', [SuppliersController::class, 'updateSupply'])->name('supplier.updateSupply');
 Route::post('/supplier/det2', [SuppliersController::class, 'det2'])->name('supplier.det2');
 Route::get('/supplier/deleteSupply/{id}', [SuppliersController::class, 'deleteSupply'])->name('supplier.deleteSupply');
 

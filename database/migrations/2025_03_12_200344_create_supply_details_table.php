@@ -18,6 +18,7 @@ return new class extends Migration
         $table->string('payment_type'); // نوع الدفع (نقداً أو آجلاً)
         $table->text('details')->nullable(); // تفاصيل إضافية
         $table->string('account_name')->nullable(); // اسم الحساب (إذا كان نقداً)
+        $table->date('date');
         $table->timestamps(); // تاريخ الإضافة والتعديل
     });
 }

@@ -105,6 +105,7 @@ public function storeSupply(Request $request)
     $supply->amount = $request->amount;
     $supply->payment_type = $request->payment_type;
     $supply->details = $request->details;
+    $supply->date = $request->date;
 
     if ($request->payment_type == 'cash') {
         $account = Accounts::where('id', $request->account_name)->first();
@@ -160,9 +161,9 @@ public function storeSupply(Request $request)
 }
 
 
-public function updateSupply(Request $request, $id)
+public function updateSupply(Request $request)
 {
-    $supply = SupplyDetail::findOrFail($id);
+    $supply = SupplyDetail::findOrFail($request->id);
 
     // التحقق من المدخلات
     $request->validate([
@@ -176,8 +177,10 @@ public function updateSupply(Request $request, $id)
     // تحديث بيانات التوريد
     $supply->supplier_id = $request->supplier_id;
     $supply->details = $request->details;
+    $supply->date = $request->date;
 
     if ($request->payment_type == 'cash') {
+        if($supply->account_name == $request->account_name){
         $account = Accounts::findOrFail($request->account_name);
         $balanceBefore = $account->balance;
 
@@ -187,15 +190,37 @@ public function updateSupply(Request $request, $id)
         $account->credit += $request->amount; // إضافة القيمة الجديدة
         $account->balance -= $request->amount; // خصم القيمة الجديدة
         $account->save();
-
+        }
+        else{
+            $account = Accounts::findOrFail($supply->account_name);
+            $balanceBefore = $account->balance;
+            $account->credit -= $supply->amount; // إزالة القيمة القديمة
+            $account->balance += $supply->amount; 
+            $account->save();
+            $account = Accounts::findOrFail($request->account_name);
+            $account->credit += $request->amount; // إضافة القيمة الجديدة
+            $account->balance -= $request->amount; // خصم القيمة الجديدة
+            $account->save();
+        }
         // تحديث المورد
+        if($supply->supplier_id == $request->supplier_id){
         $supplier = Suppliers::findOrFail($request->supplier_id);
         $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
         $supplier->credit -= $supply->amount; // إزالة القيمة القديمة
         $supplier->debt += $request->amount; // إضافة القيمة الجديدة
         $supplier->credit += $request->amount; // إضافة القيمة الجديدة
         $supplier->save();
-
+        }
+        else{
+            $supplier = Suppliers::findOrFail($supply->supplier_id);
+            $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
+            $supplier->credit -= $supply->amount; // إزالة القيمة القديمة
+            $supplier->save();
+            $supplier = Suppliers::findOrFail($request->supplier_id);
+            $supplier->debt += $request->amount; // إضافة القيمة الجديدة
+            $supplier->credit += $request->amount; // إضافة القيمة الجديدة
+            $supplier->save();
+        }
         // تسجيل العملية في جدول "العمليات المالية"
         FinancialOperation::create([
             'related_id' => $account->id,
@@ -210,14 +235,24 @@ public function updateSupply(Request $request, $id)
 
         $supply->account_name = $request->account_name;
     } else if ($request->payment_type == 'credit') {
-        $supplier = Suppliers::findOrFail($request->supplier_id);
-
-        // تحديث المورد
-        $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
-        $supplier->balance -= $supply->amount; // إزالة القيمة القديمة
-        $supplier->debt += $request->amount; // إضافة القيمة الجديدة
-        $supplier->balance += $request->amount; // إضافة القيمة الجديدة
-        $supplier->save();
+        if($supply->supplier_id == $request->supplier_id){
+            $supplier = Suppliers::findOrFail($request->supplier_id);
+            $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
+            $supplier->credit -= $supply->amount; // إزالة القيمة القديمة
+            $supplier->debt += $request->amount; // إضافة القيمة الجديدة
+            $supplier->credit += $request->amount; // إضافة القيمة الجديدة
+            $supplier->save();
+            }
+            else{
+                $supplier = Suppliers::findOrFail($supply->supplier_id);
+                $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
+                $supplier->credit -= $supply->amount; // إزالة القيمة القديمة
+                $supplier->save();
+                $supplier = Suppliers::findOrFail($request->supplier_id);
+                $supplier->debt += $request->amount; // إضافة القيمة الجديدة
+                $supplier->credit += $request->amount; // إضافة القيمة الجديدة
+                $supplier->save();
+            }
 
         $supply->account_name = null;
 

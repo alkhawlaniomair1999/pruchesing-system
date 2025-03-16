@@ -15,6 +15,7 @@ class SupplyDetail extends Model
         'payment_type',   // نوع الدفع (نقداً أو آجلاً)
         'details',        // تفاصيل إضافية
         'account_name',   // اسم الحساب إذا كان الدفع نقداً
+        'date',
     ];
 
     // العلاقة مع المورد
