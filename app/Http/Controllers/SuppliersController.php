@@ -178,7 +178,7 @@ public function updateSupply(Request $request)
     $supply->supplier_id = $request->supplier_id;
     $supply->details = $request->details;
     $supply->date = $request->date;
-
+    if($supply->payment_type == $request->payment_type){
     if ($request->payment_type == 'cash') {
         if($supply->account_name == $request->account_name){
         $account = Accounts::findOrFail($request->account_name);
@@ -268,7 +268,84 @@ public function updateSupply(Request $request)
             'user_id' => auth()->id(),
         ]);
     }
-
+    }
+    elseif($request->payment_type == 'cash'){
+        $account = Accounts::findOrFail($request->account_name);
+        $account->credit += $request->amount; // إضافة القيمة الجديدة
+        $account->balance -= $request->amount; // خصم القيمة الجديدة
+        $account->save();
+           // تحديث المورد
+           if($supply->supplier_id == $request->supplier_id){
+            $supplier = Suppliers::findOrFail($request->supplier_id);
+            $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
+            $supplier->credit -= $supply->amount; // إزالة القيمة القديمة
+            $supplier->debt += $request->amount; // إضافة القيمة الجديدة
+            $supplier->credit += $request->amount; // إضافة القيمة الجديدة
+            $supplier->save();
+            }
+            else{
+                $supplier = Suppliers::findOrFail($supply->supplier_id);
+                $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
+                $supplier->credit -= $supply->amount; // إزالة القيمة القديمة
+                $supplier->save();
+                $supplier = Suppliers::findOrFail($request->supplier_id);
+                $supplier->debt += $request->amount; // إضافة القيمة الجديدة
+                $supplier->credit += $request->amount; // إضافة القيمة الجديدة
+                $supplier->save();
+            }
+            // تسجيل العملية في جدول "العمليات المالية"
+            FinancialOperation::create([
+                'related_id' => $account->id,
+                'related_type' => 'Account',
+                'operation_type' => 'تعديل توريد نقداً',
+                'debit' => $request->amount,
+                'credit' => 0,
+                'balance' => $account->balance,
+                'details' => 'تعديل توريد من المورد ID: ' . $request->supplier_id,
+                'user_id' => auth()->id(),
+            ]);
+    
+            $supply->account_name = $request->account_name;
+    }
+    else{
+        $account = Accounts::findOrFail($supply->account_name);
+            $balanceBefore = $account->balance;
+            $account->credit -= $supply->amount; // إزالة القيمة القديمة
+            $account->balance += $supply->amount; 
+            $account->save();
+             // تحديث المورد
+        if($supply->supplier_id == $request->supplier_id){
+            $supplier = Suppliers::findOrFail($request->supplier_id);
+            $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
+            $supplier->credit -= $supply->amount; // إزالة القيمة القديمة
+            $supplier->debt += $request->amount; // إضافة القيمة الجديدة
+            $supplier->credit += $request->amount; // إضافة القيمة الجديدة
+            $supplier->save();
+            }
+            else{
+                $supplier = Suppliers::findOrFail($supply->supplier_id);
+                $supplier->debt -= $supply->amount; // إزالة القيمة القديمة
+                $supplier->credit -= $supply->amount; // إزالة القيمة القديمة
+                $supplier->save();
+                $supplier = Suppliers::findOrFail($request->supplier_id);
+                $supplier->debt += $request->amount; // إضافة القيمة الجديدة
+                $supplier->credit += $request->amount; // إضافة القيمة الجديدة
+                $supplier->save();
+            }
+            // تسجيل العملية في جدول "العمليات المالية"
+            FinancialOperation::create([
+                'related_id' => $account->id,
+                'related_type' => 'Account',
+                'operation_type' => 'تعديل توريد نقداً',
+                'debit' => $request->amount,
+                'credit' => 0,
+                'balance' => $account->balance,
+                'details' => 'تعديل توريد من المورد ID: ' . $request->supplier_id,
+                'user_id' => auth()->id(),
+            ]);
+    
+            $supply->account_name = $request->account_name;
+    }
     // تحديث بيانات التوريد
     $supply->amount = $request->amount;
     $supply->payment_type = $request->payment_type;
