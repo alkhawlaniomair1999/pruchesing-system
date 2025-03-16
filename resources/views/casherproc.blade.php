@@ -93,12 +93,12 @@
                                 @endforeach
                             @endif
                         @endforeach
-                        <td>{{ $d->total }}</td>
+                        <td>{{ number_format($d->total, 1) }}</td>
 
-                        <td>{{ $d->bank }}</td>
-                        <td>{{ $d->cash }}</td>
-                        <td>{{ $d->out }}</td>
-                        <td>{{ $d->plus }}</td>
+                        <td>{{number_format($d->bank, 1)  }}</td>
+                        <td>{{number_format($d->cash, 1)  }}</td>
+                        <td>{{number_format($d->out, 1)  }}</td>
+                        <td>{{number_format($d->plus, 1)  }}</td>
                         <td>{{ $d->date }}</td>
 
 

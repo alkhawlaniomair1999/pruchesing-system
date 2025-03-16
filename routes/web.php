@@ -12,6 +12,7 @@ use App\Http\Controllers\CasherController;
 use App\Http\Controllers\CasherProcController;
 use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PayController;
 
 
 
@@ -89,6 +90,9 @@ Route::post('/users/store', [UserController::class, 'store'])->name('users.store
 Route::post('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
 Route::get('/users/destroy/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
+// السنداتتتتتت
+Route::post('/pay/storepay', [PayController::class, 'storepay'])->name('pay.storepay');
+Route::get('/pay', [PayController::class, 'index'])->name('pay.index');
 
 
 

@@ -123,7 +123,7 @@
                                 <td>{{ $a->account }}</td>
                             @endif
                         @endforeach
-                        <td>{{ $d->total }}</td>
+                        <td>{{number_format($d->total, 2)  }}</td>
 
                         @if ($d->tax == 1)
                             <td>نعم</td>
@@ -134,7 +134,7 @@
                         @endif
 
 
-                        <td>{{ $d->price }}</td>
+                        <td>{{ number_format($d->price, 2) }}</td>
                         <td>
                             {{ $d->date }}
                         </td>
