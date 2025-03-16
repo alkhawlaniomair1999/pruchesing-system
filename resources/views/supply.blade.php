@@ -103,21 +103,20 @@
 
                         <td>{{ $p->amount }}</td>
                         <td>
-                        @if($p->payment_type === 'cash')
-                            نقداً
-                        @elseif($p->payment_type === 'credit')
-                        آجل
-                        @else
-                            غير محدد
-                        @endif
-                    </td>
+                            @if ($p->payment_type === 'cash')
+                                نقداً
+                            @elseif($p->payment_type === 'credit')
+                                آجل
+                            @else
+                                غير محدد
+                            @endif
+                        </td>
 
                         <td>
                             @if (isset($accounts))
                                 @foreach ($accounts as $ac)
                                     @if ($p->account_name == $ac->id)
                                         {{ $ac->account }}
-                                       
                                     @endif
                                 @endforeach
                             @endif
@@ -166,12 +165,12 @@
                         <input type="text" id="editAmount" name="amount" required>
                     </div>
                     <div class="custom-form-group third-width">
-                    <label for="paymentType">نوع السند:</label>
-                    <select id="paymentType" name="payment_type" required>
-                        <option value="cash">نقد</option>
-                        <option value="credit">آجل</option>
-                    </select>
-                </div>
+                        <label for="payType">نوع السند:</label>
+                        <select id="payType" name="payment_type" required>
+                            <option value="cash">نقد</option>
+                            <option value="credit">آجل</option>
+                        </select>
+                    </div>
 
                     <div class="custom-form-group third-width">
                         <label for="editAccount">الحساب:</label>
@@ -223,8 +222,14 @@
                 }
             }
             document.getElementById('editAmount').value = cells[3].innerText;
-            document.getElementById('editPayType').value = cells[4].innerText;
-
+            const payTypeText = cells[4].innerText;
+            const payTypeSelect = document.getElementById('payType');
+            for (let i = 0; i < payTypeSelect.options.length; i++) {
+                if (payTypeSelect.options[i].text === payTypeText) {
+                    payTypeSelect.selectedIndex = i;
+                    break;
+                }
+            }
             // تعيين القيمة الافتراضية لعنصر "select" الخاص بالحساب
             const accountText = cells[5].innerText;
             const accountSelect = document.getElementById('editAccount');
