@@ -102,12 +102,22 @@
                         @endforeach
 
                         <td>{{ $p->amount }}</td>
-                        <td>{{ $p->payment_type }}</td>
+                        <td>
+                        @if($p->payment_type === 'cash')
+                            نقداً
+                        @elseif($p->payment_type === 'credit')
+                        آجل
+                        @else
+                            غير محدد
+                        @endif
+                    </td>
+
                         <td>
                             @if (isset($accounts))
                                 @foreach ($accounts as $ac)
                                     @if ($p->account_name == $ac->id)
                                         {{ $ac->account }}
+                                       
                                     @endif
                                 @endforeach
                             @endif
@@ -156,9 +166,12 @@
                         <input type="text" id="editAmount" name="amount" required>
                     </div>
                     <div class="custom-form-group third-width">
-                        <label for="editPayType">طريقة الدفع:</label>
-                        <input type="text" id="editPayType" name="payment_type" required>
-                    </div>
+                    <label for="paymentType">نوع السند:</label>
+                    <select id="paymentType" name="payment_type" required>
+                        <option value="cash">نقد</option>
+                        <option value="credit">آجل</option>
+                    </select>
+                </div>
 
                     <div class="custom-form-group third-width">
                         <label for="editAccount">الحساب:</label>
