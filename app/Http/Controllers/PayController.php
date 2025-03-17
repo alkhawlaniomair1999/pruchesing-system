@@ -67,7 +67,9 @@ class PayController extends Controller
         return redirect()->back()->with('success', 'تمت إضافة السند بنجاح!');
     }
     
+    public function updatePay(Request $request){
 
+    }
     
 
     public function show(string $id)
