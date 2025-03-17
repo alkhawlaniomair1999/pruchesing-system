@@ -97,7 +97,7 @@
                         <td class="action-buttons">
                             <button class="edit-btn" onclick="openModal(this)">تعديل<i
                                     class="fa-solid fa-pen-to-square"></i></button>
-                            <button class="delete-btn" onclick="confirmDelete({{ $p->id }})">حذف<i
+                            <button class="delete-btn" onclick="confirmDelete({{ $p->id }},'/pay/destroy/')">حذف<i
                                     class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
