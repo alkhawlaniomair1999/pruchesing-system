@@ -67,73 +67,74 @@ class PayController extends Controller
         return redirect()->back()->with('success', 'تمت إضافة السند بنجاح!');
     }
     
-    public function updatePay(Request $request){
-         // التحقق من صحة البيانات
-    $validatedData = $request->validate([
-        'supplier' => 'required|exists:suppliers,id',
-        'account' => 'required|exists:accounts,id',
-        'amount' => 'required|numeric|min:0',
-        'date' => 'required|date',
-        'details' => 'required|string',
-    ]);
-
-    // جلب السند الحالي
-    $payment = Payment::findOrFail($request->id);
-
-    // حساب الفرق في المبلغ
-    $amountDifference = $validatedData['amount'] - $payment->amount;
-
-    // إذا تغير المورد، قم بإعادة القيم إلى المورد القديم
-    if ($payment->supplier != $validatedData['supplier']) {
-        $oldSupplier = Suppliers::findOrFail($payment->supplier);
-        $oldSupplier->debt -= $payment->amount;
-        $oldSupplier->balance -= $payment->amount;
-        $oldSupplier->save();
-
-        // تحديث المورد الجديد
-        $newSupplier = Suppliers::findOrFail($validatedData['supplier']);
-        $newSupplier->debt += $validatedData['amount'];
-        $newSupplier->balance += $validatedData['amount'];
-        $newSupplier->save();
-    } else {
-        // إذا لم يتغير المورد، فقط قم بتحديث القيم بناءً على الفرق
-        $supplier = Suppliers::findOrFail($validatedData['supplier']);
-        $supplier->debt += $amountDifference;
-        $supplier->balance += $amountDifference;
-        $supplier->save();
-    }
-
-    // إذا تغير الحساب، قم بإعادة القيم إلى الحساب القديم
-    if ($payment->account != $validatedData['account']) {
-        $oldAccount = accounts::findOrFail($payment->account);
-        $oldAccount->credit -= $payment->amount;
-        $oldAccount->balance += $payment->amount;
-        $oldAccount->save();
-
-        // تحديث الحساب الجديد
-        $newAccount = accounts::findOrFail($validatedData['account']);
-        $newAccount->credit += $validatedData['amount'];
-        $newAccount->balance -= $validatedData['amount'];
-        $newAccount->save();
-    } else {
-        // إذا لم يتغير الحساب، فقط قم بتحديث القيم بناءً على الفرق
-        $account = accounts::findOrFail($validatedData['account']);
-        $account->credit += $amountDifference;
-        $account->balance -= $amountDifference;
-        $account->save();
-    }
-
-    // تحديث السند
-    $payment->update([
-        'supplier' => $validatedData['supplier'],
-        'account' => $validatedData['account'],
-        'amount' => $validatedData['amount'],
-        'date' => $validatedData['date'],
-        'details' => $validatedData['details'],
-    ]);
-
-    // الرد بالنجاح
-    return redirect()->back()->with('success', 'تم تعديل السند بنجاح!');
+    public function updatePay(Request $request)
+    {
+        // التحقق من صحة البيانات
+        $validatedData = $request->validate([
+            'supplier' => 'required|exists:suppliers,id',
+            'account' => 'required|exists:accounts,id',
+            'amount' => 'required|numeric|min:0',
+            'date' => 'required|date',
+            'details' => 'required|string',
+        ]);
+    
+        // جلب السند الحالي
+        $payment = Payment::findOrFail($request->id);
+    
+        // حساب الفرق في المبلغ
+        $amountDifference = $validatedData['amount'] - $payment->amount;
+    
+        // إذا تغير المورد، قم بإعادة القيم إلى المورد القديم
+        if ($payment->supplier != $validatedData['supplier']) {
+            $oldSupplier = Suppliers::findOrFail($payment->supplier);
+            $oldSupplier->debt -= $payment->amount;
+            $oldSupplier->balance -= $payment->amount;
+            $oldSupplier->save();
+    
+            // تحديث المورد الجديد
+            $newSupplier = Suppliers::findOrFail($validatedData['supplier']);
+            $newSupplier->debt += $validatedData['amount'];
+            $newSupplier->balance += $validatedData['amount'];
+            $newSupplier->save();
+        } else {
+            // إذا لم يتغير المورد، فقط قم بتحديث القيم بناءً على الفرق
+            $supplier = Suppliers::findOrFail($validatedData['supplier']);
+            $supplier->debt += $amountDifference;
+            $supplier->balance += $amountDifference;
+            $supplier->save();
+        }
+    
+        // إذا تغير الحساب، قم بإعادة القيم إلى الحساب القديم
+        if ($payment->account != $validatedData['account']) {
+            $oldAccount = accounts::findOrFail($payment->account);
+            $oldAccount->credit -= $payment->amount;
+            $oldAccount->balance += $payment->amount;
+            $oldAccount->save();
+    
+            // تحديث الحساب الجديد
+            $newAccount = accounts::findOrFail($validatedData['account']);
+            $newAccount->credit += $validatedData['amount'];
+            $newAccount->balance -= $validatedData['amount'];
+            $newAccount->save();
+        } else {
+            // إذا لم يتغير الحساب، فقط قم بتحديث القيم بناءً على الفرق
+            $account = accounts::findOrFail($validatedData['account']);
+            $account->credit += $amountDifference;
+            $account->balance -= $amountDifference;
+            $account->save();
+        }
+    
+        // تحديث السند
+        $payment->update([
+            'supplier' => $validatedData['supplier'],
+            'account' => $validatedData['account'],
+            'amount' => $validatedData['amount'],
+            'date' => $validatedData['date'],
+            'details' => $validatedData['details'],
+        ]);
+    
+        // الرد بالنجاح
+        return redirect()->back()->with('success', 'تم تعديل السند بنجاح!');
     }
     
 

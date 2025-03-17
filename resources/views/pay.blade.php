@@ -123,7 +123,7 @@
 
                     <div class="custom-form-group third-width">
                         <label for="editSupplier">المورد :</label>
-                        <select id="editSupplier" name="supplier_id" required>
+                        <select id="editSupplier" name="supplier" required>
                             @if (isset($suppliers))
                                 @foreach ($suppliers as $s)
                                     <option value="{{ $s->id }}">{{ $s->supplier }}</option>
@@ -138,7 +138,7 @@
 
                     <div class="custom-form-group third-width">
                         <label for="editAccount">الحساب:</label>
-                        <select id="editAccount" name="account_name" required>
+                        <select id="editAccount" name="account" required>
                             @if (isset($accounts))
                                 @foreach ($accounts as $d1)
                                     @foreach ($Branch as $b1)
