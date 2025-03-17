@@ -45,4 +45,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function operations()
+{
+    return $this->hasMany(SystemOperation::class, 'user_id');
+}
+
 }

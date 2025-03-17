@@ -83,6 +83,7 @@ Route::post('/supplier/storeSupply', [SuppliersController::class, 'storeSupply']
 Route::post('/supplier/updateSupply', [SuppliersController::class, 'updateSupply'])->name('supplier.updateSupply');
 Route::post('/supplier/det2', [SuppliersController::class, 'det2'])->name('supplier.det2');
 Route::get('/supplier/deleteSupply/{id}', [SuppliersController::class, 'deleteSupply'])->name('supplier.deleteSupply');
+Route::get('/supplier/printSupply/{id}', [SuppliersController::class, 'printSupply'])->name('supplier.printSupply');
 
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -95,6 +96,7 @@ Route::post('/pay/storepay', [PayController::class, 'storepay'])->name('pay.stor
 Route::get('/pay', [PayController::class, 'index'])->name('pay.index');
 Route::post('/pay/updatePay', [PayController::class, 'updatePay'])->name('pay.updatePay');
 Route::get('/pay/destroy/{id}', [PayController::class, 'destroy'])->name('pay.destroy');
+Route::get('/pay/printpay/{id}', [PayController::class, 'printpay'])->name('pay.printpay');
 
 
 

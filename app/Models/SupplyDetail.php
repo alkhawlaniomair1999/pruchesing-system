@@ -27,5 +27,10 @@ class SupplyDetail extends Model
 {
     return $this->belongsTo(Suppliers::class);
 }
+public function account()
+{
+    return $this->belongsTo(Accounts::class, 'account_name', 'id');
+}
+
 
 }

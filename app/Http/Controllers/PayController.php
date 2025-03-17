@@ -186,4 +186,19 @@ class PayController extends Controller
     // الرد بالنجاح
     return redirect()->back()->with('success', 'تم حذف السند بنجاح!');
     }
+
+    public function printpay($id)
+    {
+        $suppliers=Suppliers::all();
+        $accounts=accounts::all();
+        $pay = Payment::with(['supplier', 'account'])->findOrFail($id); // جلب بيانات التوريد مع المورد والحساب
+    
+        return view('print.print_pay', compact('pay','suppliers','accounts'));
+    }
+
+
+
+
 }
+
+

@@ -128,7 +128,11 @@
                             <button class="delete-btn"
                                 onclick="confirmDelete({{ $p->id }},'/supplier/deleteSupply/')">حذف<i
                                     class="fa-solid fa-trash"></i></button>
+                                    <button class="btn btn-success" onclick="window.location.href='/supplier/printSupply/{{ $p->id }}'">
+    طباعة <i class="fa-solid fa-print"></i>
+</button>
 
+                                    
                         </td>
                     </tr>
                 @endforeach

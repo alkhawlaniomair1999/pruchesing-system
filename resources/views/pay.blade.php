@@ -99,7 +99,10 @@
                                     class="fa-solid fa-pen-to-square"></i></button>
                             <button class="delete-btn" onclick="confirmDelete({{ $p->id }},'/pay/destroy/')">حذف<i
                                     class="fa-solid fa-trash"></i></button>
-                        </td>
+                                    <button class="btn btn-success" onclick="window.location.href='/pay/printpay/{{ $p->id }}'">
+                                    طباعة <i class="fa-solid fa-print"></i>
+                       
+                                </td>
                     </tr>
                 @endforeach
             @endif

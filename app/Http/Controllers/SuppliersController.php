@@ -21,19 +21,37 @@ class SuppliersController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $suppliers=Suppliers::all();
-        $accounts=accounts::all();
-        $Branch=Branch::all();
-        $proc=SupplyDetail::all();
-        return view('supply',compact('suppliers','accounts','Branch','proc'));
-    }
+{
+    // جلب البيانات من الجداول
+    $suppliers = Suppliers::all();
+    $accounts = accounts::all();
+    $Branch = Branch::all();
+    $proc = SupplyDetail::all();
+
+    SystemOperation::create([
+        'user_id' => auth()->id(), 
+        'operation_type' => 'عرض ',  
+        'details' => 'عرض صفحة قائمة التوريد',
+    ]);
+
+    // عرض الصفحة مع البيانات
+    return view('supply', compact('suppliers', 'accounts', 'Branch', 'proc'));
+}
+
     public function pay()
     {
         $suppliers=Suppliers::all();
         $accounts=accounts::all();
         $Branch=Branch::all();
         $proc=SupplyDetail::all();
+
+        SystemOperation::create([
+            'user_id' => auth()->id(), 
+            'operation_type' => 'عرض ',  
+            'details' => 'عرض صفحة  السندات',
+        ]);
+
+
         return view('pay',compact('suppliers','accounts','Branch','proc'));
     }
 
@@ -55,6 +73,12 @@ class SuppliersController extends Controller
         $data['credit']=$request->credit;
         $data['balance']=$request->debt-$request->credit;
         Suppliers::create($data);
+        SystemOperation::create([
+            'user_id' => auth()->id(), 
+            'operation_type' => 'اضافة ',  
+            'details' => '   اضافة مورد جديد',
+        ]);
+
         return redirect()->back();
     }
 
@@ -81,6 +105,12 @@ class SuppliersController extends Controller
     {
         $s1['supplier']=$request->newName;
         Suppliers::where('id',$request->id)->update($s1);
+        SystemOperation::create([
+            'user_id' => auth()->id(), 
+            'operation_type' => 'تعديل ',  
+            'details' => '   تعديل مورد   ',
+        ]);
+
         return redirect()->back();
     }
 
@@ -90,6 +120,13 @@ class SuppliersController extends Controller
     public function destroy($id)
     {
         Suppliers::where('id',$id)->delete();
+
+        SystemOperation::create([
+            'user_id' => auth()->id(), 
+            'operation_type' => 'حذف ',  
+            'details' => '   حذف مورد   ',
+        ]);
+
         return redirect()->back();
     }
 
@@ -115,8 +152,9 @@ public function storeSupply(Request $request)
         $account->credit += $request->amount;
         $account->balance -= $request->amount;
         $account->save();
+
         // تحديث حساب المورد
-        $supplier = Suppliers::where('id',$request->supplier_id)->first();
+        $supplier = Suppliers::where('id', $request->supplier_id)->first();
         $supplier->debt += $request->amount;
         $supplier->credit += $request->amount;
         $supplier->save();
@@ -157,8 +195,19 @@ public function storeSupply(Request $request)
 
     $supply->save();
 
+    // تسجيل العملية في جدول عمليات النظام
+    SystemOperation::create([
+        'user_id' => auth()->id(),
+        'operation_type' => 'إضافة',
+        'details' => 'إضافة عملية توريد - المورد: ' . $request->supplier_id . 
+                     ', المبلغ: ' . $request->amount . 
+                     ', نوع الدفع: ' . $request->payment_type,
+        'status' => 'successful', // حالة العملية
+    ]);
+
     return redirect()->back();
 }
+
 
 
 public function updateSupply(Request $request)
@@ -393,7 +442,15 @@ public function deleteSupply($id)
 
 
 
+    public function printSupply($id)
+{
+    $supply = SupplyDetail::with(['supplier', 'account'])->findOrFail($id); // جلب بيانات التوريد مع المورد والحساب
 
+    // عرض صفحة الطباعة
+    return view('print.print_supply', compact('supply'));
+}
+
+    
 
 
 
