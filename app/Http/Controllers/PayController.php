@@ -53,14 +53,14 @@ class PayController extends Controller
     
         // 2. تحديث المورد
         $supplier = Suppliers::findOrFail($validatedData['supplier']);
-        $supplier->debt -= $validatedData['amount'];
-        $supplier->balance -= $validatedData['amount'];
+        $supplier->debt += $validatedData['amount'];
+        $supplier->balance += $validatedData['amount'];
         $supplier->save();
     
         // 3. تحديث الحساب
         $account = accounts::findOrFail($validatedData['account']);
         $account->credit += $validatedData['amount'];
-        $account->balance += $validatedData['amount'];
+        $account->balance -= $validatedData['amount'];
         $account->save();
     
         // الرد بالنجاح
