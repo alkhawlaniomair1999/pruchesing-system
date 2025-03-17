@@ -1,4 +1,5 @@
-<?namespace App\Http\Controllers;
+<?php
+namespace App\Http\Controllers;
 
 use App\Models\cashers;
 use App\Models\Suppliers;
