@@ -9,6 +9,17 @@
 
 
 @section('main')
+    @if (session('success'))
+        <div class="alert alert-success" id="success-alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger" id="error-alert">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="custom-form-container">
         <div class="custom-form-header">
             <button type="button" id="toggleButton" onclick="toggleForm()">-</button>
@@ -55,7 +66,7 @@
                         @endif
                     </select>
                 </div>
-                
+
                 <div class="custom-form-group third-width">
                     <label for="account">الحساب:</label>
                     <select id="account" name="account" required>
@@ -75,7 +86,7 @@
                     <label for="date">التاريخ:</label>
                     <input type="date" id="date" name="date" required>
                 </div>
-                
+
             </div>
 
             <div class="custom-form-group">
@@ -83,7 +94,7 @@
             </div>
         </form>
     </div>
-    
+
     <h2>جدول عرض البيانات</h2>
     <input type="text" class="search-input" placeholder="بحث في الأصناف..."
         onkeyup="searchTable(this, 'categories-table')">
@@ -123,7 +134,7 @@
                                 <td>{{ $a->account }}</td>
                             @endif
                         @endforeach
-                        <td>{{number_format($d->total, 2)  }}</td>
+                        <td>{{ number_format($d->total, 2) }}</td>
 
                         @if ($d->tax == 1)
                             <td>نعم</td>

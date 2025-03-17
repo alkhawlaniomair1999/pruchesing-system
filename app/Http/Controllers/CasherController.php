@@ -1,73 +1,64 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\cashers;
 use Illuminate\Http\Request;
+use Exception;
 
 class CasherController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        // تنفيذ الكود هنا
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        // تنفيذ الكود هنا
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $cash['casher'] = $request->casher;
-        $cash['branch_id'] = $request->branch;
+        try {
+            $cash['casher'] = $request->casher;
+            $cash['branch_id'] = $request->branch;
 
-        cashers::create($cash);
-        return redirect()->back();
+            cashers::create($cash);
+            return redirect()->back()->with('success', 'تم إنشاء الكاشير بنجاح!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حدث خطأ أثناء إنشاء الكاشير.');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show( $casher)
+    public function show($casher)
     {
-        //
+        // تنفيذ الكود هنا
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit( $casher)
+    public function edit($casher)
     {
-        //
+        // تنفيذ الكود هنا
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request)
     {
-        $cash['casher']=$request->newName;
-        $cash['branch_id']=$request->branch;
-        cashers::where('id',$request->id)->update($cash);
-        return redirect()->back();
+        try {
+            $cash['casher'] = $request->newName;
+            $cash['branch_id'] = $request->branch;
+            cashers::where('id', $request->id)->update($cash);
+            return redirect()->back()->with('success', 'تم تحديث الكاشير بنجاح!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حدث خطأ أثناء تحديث الكاشير.');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy( $id)
+    public function destroy($id)
     {
-        cashers::where('id',$id)->delete();
-            return redirect()->back();
+        try {
+            cashers::where('id', $id)->delete();
+            return redirect()->back()->with('success', 'تم حذف الكاشير بنجاح!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حدث خطأ أثناء حذف الكاشير.');
+        }
     }
 }

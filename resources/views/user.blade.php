@@ -111,13 +111,23 @@
     }
 </style>
 @section('main')
+    @if (session('success'))
+        <div class="alert alert-success" id="success-alert">
+            {{ session('success') }}
+        </div>
+    @endif
 
+    @if (session('error'))
+        <div class="alert alert-danger" id="error-alert">
+            {{ session('error') }}
+        </div>
+    @endif
 
-   <!-- resources/views/users/index.blade.php -->
+    <!-- resources/views/users/index.blade.php -->
 
     <h1>قائمة المستخدمين</h1>
     <button onclick="openModal1('user_add')">إضافة مستخدم جديد</button>
-<br></br>
+    <br></br>
     <table>
         <thead>
             <tr>
@@ -127,35 +137,35 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($users as $user)
+            @foreach ($users as $user)
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
-                    
-                <td class="action-buttons">
-                                <button class="edit-btn"
-                             onclick="openModal({id: '{{ $user->id }}', name: '{{ $user->name }}',email:'{{ $user->email }}'}, 'user')">تعديل<i
-                                        class="fa-solid fa-pen-to-square"></i></button>    
-                                                   
-                                        <button class="delete-btn"
-                                    onclick="confirmDelete({{ $user->id }},'/users/destroy/')">حذف<i class="fa-solid fa-trash"></i></button>
-               
-                                    
-                                    </td>
-                                                                     
-                               
-               
-                   </tr>
+
+                    <td class="action-buttons">
+                        <button class="edit-btn"
+                            onclick="openModal({id: '{{ $user->id }}', name: '{{ $user->name }}',email:'{{ $user->email }}'}, 'user')">تعديل<i
+                                class="fa-solid fa-pen-to-square"></i></button>
+
+                        <button class="delete-btn" onclick="confirmDelete({{ $user->id }},'/users/destroy/')">حذف<i
+                                class="fa-solid fa-trash"></i></button>
+
+
+                    </td>
+
+
+
+                </tr>
             @endforeach
         </tbody>
     </table>
 
     <div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div id="modalFormContent"></div>
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalFormContent"></div>
+        </div>
     </div>
-</div>
 
 
 
@@ -171,32 +181,32 @@
     <div id="toast"></div>
 
     @if (session('status'))
-    <div style="color: green;">{{ session('status') }}</div>
-@elseif (session('error'))
-    <div style="color: red;">{{ session('error') }}</div>
-@endif
-@if ($errors->any())
-    <div style="color: red;">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+        <div style="color: green;">{{ session('status') }}</div>
+    @elseif (session('error'))
+        <div style="color: red;">{{ session('error') }}</div>
+    @endif
+    @if ($errors->any())
+        <div style="color: red;">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-    
-<script>
-    const modal = document.getElementById("myModal");
-    const closeBtn = document.querySelector(".close");
-    const modalFormContent = document.getElementById("modalFormContent");
 
-    /**
-     * دالة فتح النافذة واستدعاء النموذج المناسب لتعديل بيانات المستخدم.
-     * @param {Object} user - يحتوي على بيانات المستخدم {id, name, email}.
-     */
-    function openModal(user) {
-        const formHtml = `
+    <script>
+        const modal = document.getElementById("myModal");
+        const closeBtn = document.querySelector(".close");
+        const modalFormContent = document.getElementById("modalFormContent");
+
+        /**
+         * دالة فتح النافذة واستدعاء النموذج المناسب لتعديل بيانات المستخدم.
+         * @param {Object} user - يحتوي على بيانات المستخدم {id, name, email}.
+         */
+        function openModal(user) {
+            const formHtml = `
             <form id="editForm" action="/users/update/${user.id}" method="POST">
                 @csrf
                 <h2>تعديل بيانات المستخدم</h2>
@@ -211,40 +221,40 @@
                 <button type="submit">حفظ التعديلات</button>
             </form>
         `;
-        modalFormContent.innerHTML = formHtml;
-        modal.style.display = "block";
-    }
-
-    // دالة إغلاق النافذة
-    function closeModal() {
-        modal.style.display = "none";
-        modalFormContent.innerHTML = "";
-    }
-
-    // دالة إظهار رسالة التوست
-    function showToast(message) {
-        const toast = document.getElementById("toast");
-        toast.innerText = message;
-        toast.style.display = "block";
-        setTimeout(() => {
-            toast.style.display = "none";
-        }, 2000);
-    }
-
-    // إضافة حدث الإغلاق للنافذة
-    closeBtn.onclick = closeModal;
-    window.onclick = function (event) {
-        if (event.target === modal) {
-            closeModal();
+            modalFormContent.innerHTML = formHtml;
+            modal.style.display = "block";
         }
-    };
+
+        // دالة إغلاق النافذة
+        function closeModal() {
+            modal.style.display = "none";
+            modalFormContent.innerHTML = "";
+        }
+
+        // دالة إظهار رسالة التوست
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            toast.style.display = "block";
+            setTimeout(() => {
+                toast.style.display = "none";
+            }, 2000);
+        }
+
+        // إضافة حدث الإغلاق للنافذة
+        closeBtn.onclick = closeModal;
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
 
 
 
-    function openModal1(type) {
-    let formHtml = "";
-    if (type === "user_add") {
-        formHtml = `
+        function openModal1(type) {
+            let formHtml = "";
+            if (type === "user_add") {
+                formHtml = `
             <h3>إضافة مستخدم جديد</h3>
             <form method="POST" action="{{ route('users.store') }}">
                 @csrf
@@ -267,39 +277,35 @@
                 <button type="submit">إضافة</button>
             </form>
         `;
-    }
+            }
 
-    // تعبئة المودال بالمحتوى وعرضه
-    const modalFormContent = document.getElementById("modalFormContent");
-    modalFormContent.innerHTML = formHtml;
-    const modal = document.getElementById("myModal");
-    modal.style.display = "block";
-}
+            // تعبئة المودال بالمحتوى وعرضه
+            const modalFormContent = document.getElementById("modalFormContent");
+            modalFormContent.innerHTML = formHtml;
+            const modal = document.getElementById("myModal");
+            modal.style.display = "block";
+        }
 
-// إغلاق المودال عند النقر على زر الإغلاق
-function closeModal() {
-    const modal = document.getElementById("myModal");
-    modal.style.display = "none";
-    const modalFormContent = document.getElementById("modalFormContent");
-    modalFormContent.innerHTML = "";
-}
+        // إغلاق المودال عند النقر على زر الإغلاق
+        function closeModal() {
+            const modal = document.getElementById("myModal");
+            modal.style.display = "none";
+            const modalFormContent = document.getElementById("modalFormContent");
+            modalFormContent.innerHTML = "";
+        }
 
 
 
-function confirmDelete(id, pa) {
+        function confirmDelete(id, pa) {
             if (confirm('هل أنت متأكد أنك تريد حذف هذا السجل؟')) {
                 // إذا تم التأكيد، قم بتوجيه المستخدم إلى الراوت الخاص بالحذف
                 window.location.href = pa + id;
             }
         }
-
-
-</script>
+    </script>
 
 
 
 
 
 @endsection
-
-    

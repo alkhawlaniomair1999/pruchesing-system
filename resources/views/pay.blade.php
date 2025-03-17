@@ -7,6 +7,17 @@
     التوريد
 @endsection
 @section('main')
+    @if (session('success'))
+        <div class="alert alert-success" id="success-alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger" id="error-alert">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="custom-form-container">
         <div class="custom-form-header">
             <button type="button" id="toggleButton" onclick="toggleForm()">-</button>
@@ -99,10 +110,11 @@
                                     class="fa-solid fa-pen-to-square"></i></button>
                             <button class="delete-btn" onclick="confirmDelete({{ $p->id }},'/pay/destroy/')">حذف<i
                                     class="fa-solid fa-trash"></i></button>
-                                    <button class="btn btn-success" onclick="window.location.href='/pay/printpay/{{ $p->id }}'">
-                                    طباعة <i class="fa-solid fa-print"></i>
-                       
-                                </td>
+                            <button class="btn btn-success"
+                                onclick="window.location.href='/pay/printpay/{{ $p->id }}'">
+                                طباعة <i class="fa-solid fa-print"></i>
+
+                        </td>
                     </tr>
                 @endforeach
             @endif

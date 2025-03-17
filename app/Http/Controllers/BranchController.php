@@ -1,73 +1,63 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use Illuminate\Http\Request;
+use Exception;
 
 class BranchController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        // تنفيذ الكود هنا
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        // تنفيذ الكود هنا
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $data = $request->branch_name;
-        Branch::create([
-            'branch' => $data,
-        ]);
-        return redirect()->back();
+        try {
+            $data = $request->branch_name;
+            Branch::create([
+                'branch' => $data,
+            ]);
+            return redirect()->back()->with('success', 'تم إنشاء الفرع بنجاح!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حدث خطأ أثناء إنشاء الفرع.');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Branch $branch)
     {
-        //
+        // تنفيذ الكود هنا
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Branch $branch)
     {
-        //
+        // تنفيذ الكود هنا
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request)
     {
-        $b1['branch']=$request->newName;
-        
-        Branch::where('id',$request->id)->update($b1);
-        return redirect()->back();
+        try {
+            $b1['branch'] = $request->newName;
+            Branch::where('id', $request->id)->update($b1);
+            return redirect()->back()->with('success', 'تم تحديث الفرع بنجاح!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حدث خطأ أثناء تحديث الفرع.');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        Branch::where('id',$id)->delete();
-        return redirect()->back();
+        try {
+            Branch::where('id', $id)->delete();
+            return redirect()->back()->with('success', 'تم حذف الفرع بنجاح!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حدث خطأ أثناء حذف الفرع.');
         }
+    }
 }

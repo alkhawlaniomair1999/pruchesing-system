@@ -109,6 +109,17 @@
     }
 </style>
 @section('main')
+    @if (session('success'))
+        <div class="alert alert-success" id="success-alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger" id="error-alert">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="container">
         <button class="edit-btn" onclick="openModal1('branch_add')">إضافة فرع<i class="fa fa-plus-square"></i></button>
 
@@ -226,21 +237,20 @@
                         <tr>
                             <td>{{ $c12->id }}</td>
                             <td>{{ $c12->casher }} </td>
-                            
-                        @foreach ($branchs as $b2 )
-                        @if ($b2->id== $c12->branch_id)
-                        <td>{{ $b2->branch }}</td>
-                        
-                        @endif
-                        @endforeach
+
+                            @foreach ($branchs as $b2)
+                                @if ($b2->id == $c12->branch_id)
+                                    <td>{{ $b2->branch }}</td>
+                                @endif
+                            @endforeach
 
 
-                            
+
 
 
                             <td class="action-buttons">
                                 <button class="edit-btn"
-                                    onclick="openModal({id: '{{ $c12->id }}', casher: '{{ $c12->casher }}', branch: '{{ $b2->branch}}'}, 'casher')">تعديل<i
+                                    onclick="openModal({id: '{{ $c12->id }}', casher: '{{ $c12->casher }}', branch: '{{ $b2->branch }}'}, 'casher')">تعديل<i
                                         class="fa-solid fa-pen-to-square"></i></button>
                                 <button class="delete-btn"
                                     onclick="confirmDelete({{ $c12->id }},'/casher/destroy/')">حذف<i
@@ -253,10 +263,10 @@
         </table>
         <div class="pagination" id="casher-pagination"></div>
 
-<!-- نهاية الكاشيرات -->
+        <!-- نهاية الكاشيرات -->
 
-<!-- الموردين -->
-<input type="text" class="search-input" placeholder="بحث في الموردين..."
+        <!-- الموردين -->
+        <input type="text" class="search-input" placeholder="بحث في الموردين..."
             onkeyup="searchTable(this, 'suppliers-table')">
         <table id="suppliers-table">
             <thead>
@@ -297,7 +307,7 @@
 
 
 
-<!--                             الاصناااااااااااااااااااااف -->
+        <!--                             الاصناااااااااااااااااااااف -->
 
         <input type="text" class="search-input" placeholder="بحث في الأصناف..."
             onkeyup="searchTable(this, 'categories-table')">
@@ -443,7 +453,7 @@
           </form>
         `;
             }
-// تعديييلللللللل بيانات المورد
+            // تعديييلللللللل بيانات المورد
             else if (type === "supplier") {
                 formHtml = `
           <form id="editForm" action="{{ route('supplier.update') }}" method="POST">
@@ -604,8 +614,7 @@
                     </div>
             </form>
         `;
-            }
-            else if (type === "supplier_add") {
+            } else if (type === "supplier_add") {
                 formHtml = `
            <h3>إضافة مورد</h3>
             <form action="{{ route('supplier.store') }}" method="POST">

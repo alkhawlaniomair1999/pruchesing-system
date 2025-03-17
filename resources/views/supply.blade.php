@@ -7,6 +7,17 @@
     التوريد
 @endsection
 @section('main')
+    @if (session('success'))
+        <div class="alert alert-success" id="success-alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger" id="error-alert">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="custom-form-container">
         <div class="custom-form-header">
             <button type="button" id="toggleButton" onclick="toggleForm()">-</button>
@@ -101,7 +112,7 @@
                             @endif
                         @endforeach
 
-                        <td>{{number_format( $p->amount, 2) }}</td>
+                        <td>{{ number_format($p->amount, 2) }}</td>
                         <td>
                             @if ($p->payment_type === 'cash')
                                 نقداً
@@ -128,11 +139,12 @@
                             <button class="delete-btn"
                                 onclick="confirmDelete({{ $p->id }},'/supplier/deleteSupply/')">حذف<i
                                     class="fa-solid fa-trash"></i></button>
-                                    <button class="btn btn-success" onclick="window.location.href='/supplier/printSupply/{{ $p->id }}'">
-    طباعة <i class="fa-solid fa-print"></i>
-</button>
+                            <button class="btn btn-success"
+                                onclick="window.location.href='/supplier/printSupply/{{ $p->id }}'">
+                                طباعة <i class="fa-solid fa-print"></i>
+                            </button>
 
-                                    
+
                         </td>
                     </tr>
                 @endforeach

@@ -7,13 +7,24 @@
     عمليات الكاشيرات
 @endsection
 @section('main')
+    @if (session('success'))
+        <div class="alert alert-success" id="success-alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger" id="error-alert">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="custom-form-container">
         <div class="custom-form-header">
             <button type="button" id="toggleButton" onclick="toggleForm()">-</button>
             <h2 class="custom-form-title">نموذج إضافة عمليات كاشير</h2>
             <p></p>
         </div>
-        <form id="detailsForm" action="{{ route('casher_proc.store') }}" method="POST" >
+        <form id="detailsForm" action="{{ route('casher_proc.store') }}" method="POST">
             @csrf
             <div class="custom-form-fields">
                 <div class="custom-form-group third-width">
@@ -95,10 +106,10 @@
                         @endforeach
                         <td>{{ number_format($d->total, 1) }}</td>
 
-                        <td>{{number_format($d->bank, 1)  }}</td>
-                        <td>{{number_format($d->cash, 1)  }}</td>
-                        <td>{{number_format($d->out, 1)  }}</td>
-                        <td>{{number_format($d->plus, 1)  }}</td>
+                        <td>{{ number_format($d->bank, 1) }}</td>
+                        <td>{{ number_format($d->cash, 1) }}</td>
+                        <td>{{ number_format($d->out, 1) }}</td>
+                        <td>{{ number_format($d->plus, 1) }}</td>
                         <td>{{ $d->date }}</td>
 
 

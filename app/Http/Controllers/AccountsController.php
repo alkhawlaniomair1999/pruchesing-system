@@ -1,83 +1,72 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\accounts;
 use Illuminate\Http\Request;
+use Exception;
 
 class AccountsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        // تنفيذ الكود هنا
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        // تنفيذ الكود هنا
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $data = $request->account_name;
-        $d_branch = $request->branch;
-        $d_type = $request->type;
-        accounts::create([
-            'account' => $data,
-            'debt'=>0,
-            'credit'=>0,
-            'balance'=>0,
-            'branch_id'=>$d_branch,
-            'type'=>$d_type,
-
-        ]);
-        return redirect()->back();
-        //
+        try {
+            $data = $request->account_name;
+            $d_branch = $request->branch;
+            $d_type = $request->type;
+            accounts::create([
+                'account' => $data,
+                'debt' => 0,
+                'credit' => 0,
+                'balance' => 0,
+                'branch_id' => $d_branch,
+                'type' => $d_type,
+            ]);
+            return redirect()->back()->with('success', 'تم إنشاء الحساب بنجاح!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حدث خطأ أثناء إنشاء الحساب.');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(accounts $accounts)
     {
-        //
+        // تنفيذ الكود هنا
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(accounts $accounts)
     {
-        //
+        // تنفيذ الكود هنا
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request)
     {
-        $b1['account']=$request->newName;
-        $b1['type']=$request->type;
+        try {
+            $b1['account'] = $request->newName;
+            $b1['type'] = $request->type;
 
-        accounts::where('id',$request->id)->update($b1);
-        return redirect()->back();
+            accounts::where('id', $request->id)->update($b1);
+            return redirect()->back()->with('success', 'تم تحديث الحساب بنجاح!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حدث خطأ أثناء تحديث الحساب.');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        accounts::where('id', $id)->delete();
-        return redirect()->back();
+        try {
+            accounts::where('id', $id)->delete();
+            return redirect()->back()->with('success', 'تم حذف الحساب بنجاح!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حدث خطأ أثناء حذف ��لحساب.');
+        }
     }
 }
