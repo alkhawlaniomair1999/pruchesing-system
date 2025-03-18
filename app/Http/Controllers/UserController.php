@@ -81,11 +81,10 @@ class UserController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:users,name'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'name' => ['required', 'string', 'max:255', 'unique:users,name,' . $id],
+            'email' => ['required', 'email', 'unique:users,email,' . $id],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ], [
-            // رسائل الخطأ المخصصة
             'name.required' => 'اسم المستخدم مطلوب.',
             'name.unique' => 'اسم المستخدم موجود بالفعل.',
             'email.required' => 'البريد الإلكتروني مطلوب.',
@@ -94,6 +93,7 @@ class UserController extends Controller
             'password.min' => 'يجب أن تكون كلمة المرور 8 أحرف على الأقل.',
             'password.confirmed' => 'تأكيد كلمة المرور غير متطابق.',
         ]);
+        
     
         $user = User::findOrFail($id);
     
