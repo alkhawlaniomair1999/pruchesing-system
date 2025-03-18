@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SystemOperation;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\accounts;
 use App\Models\Branch;
@@ -11,6 +13,7 @@ use App\Models\cashers;
 use App\Models\casher_procs;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Event\Runtime\OperatingSystem;
 
 class ReportsController extends Controller
 {
@@ -20,6 +23,14 @@ class ReportsController extends Controller
         $branches = Branch::all();
         
         return view('month_report',['cashers'=>$cashers,'branches'=>$branches]);
+       
+    }
+
+    public function opreation_sys()
+    {
+        $users = User::all();
+        $opreations = SystemOperation::all();
+        return view('opreatin_sys',['opreations'=>$opreations,'users'=>$users]);
        
     }
 

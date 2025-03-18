@@ -127,6 +127,9 @@
 
     <h1>قائمة المستخدمين</h1>
     <button onclick="openModal1('user_add')">إضافة مستخدم جديد</button>
+    <button  onclick="window.location.href='{{ url('reports/opreation_sys') }}'">
+    عمليات المستخدمين <i class="fa-solid fa-arrow"></i>
+</button>
     <br></br>
     <table>
         <thead>
