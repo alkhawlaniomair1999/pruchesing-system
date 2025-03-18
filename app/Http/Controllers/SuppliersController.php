@@ -277,8 +277,8 @@ class SuppliersController extends Controller
             } else if ($supply->payment_type == 'credit') {
                 $supplier = Suppliers::find($supply->supplier_id);
 
-                $supplier->debt -= $supply->amount;
-                $supplier->balance -= $supply->amount;
+                $supplier->credit -= $supply->amount;
+                $supplier->balance += $supply->amount;
                 $supplier->save();
             }
 
