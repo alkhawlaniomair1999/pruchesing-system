@@ -93,7 +93,7 @@
         }
     </style>
 <button class="print_btn" onclick="window.print()">طباعة<i class="fa-solid fa-print"></i></button>
-<button class="print_btn" onclick="window.location.href='{{ url('supplier') }}'">
+<button class="print_btn" onclick="window.location.href='{{ url('pay') }}'">
     عودة <i class="fa-solid fa-arrow-right"></i>
 </button>
 <br>

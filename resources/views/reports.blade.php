@@ -9,7 +9,9 @@
 @section('main')
 
     <button class="print_btn" onclick="window.print()">طباعة<i class="fa-solid fa-print"></i></button>
-
+    <button class="print_btn" onclick="window.location.href='{{ url('reports') }}'">
+    عودة <i class="fa-solid fa-arrow-right"></i>
+</button>
     <h2>تقرير شهر: {{ $month }}/{{ $year }}</h2>
     <table>
         <thead>

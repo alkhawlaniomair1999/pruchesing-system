@@ -1,10 +1,10 @@
 @extends('include.app')
 @section('title')
-    التقارير
+    المستخدمين
 @endsection
 
 @section('page')
-    تقارير
+    إدارة المستخدمين
 @endsection
 <style>
     .modal {
