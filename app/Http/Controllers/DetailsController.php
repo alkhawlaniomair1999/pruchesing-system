@@ -54,7 +54,7 @@ class DetailsController extends Controller
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'إضافة',
-                'details' => 'إضافة تفاصيل - العنصر: ' . Items::find($request->item)->name . ', الفرع: ' . Branch::find($request->branch)->name . ', الحساب: ' . $acc->name . ', المبلغ: ' . $request->totalPrice,
+                'details' => 'إضافة تفاصيل - العنصر: ' . Items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . $acc->account . ', المبلغ: ' . $request->totalPrice,
                 'status' => 'successful',
             ]);
 
@@ -115,7 +115,7 @@ class DetailsController extends Controller
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'تعديل',
-                'details' => 'تعديل تفاصيل - العنصر: ' . Items::find($request->item)->name . ', الفرع: ' . Branch::find($request->branch)->name . ', الحساب: ' . Accounts::find($request->account)->name . ', المبلغ: ' . $request->totalPrice,
+                'details' => 'تعديل تفاصيل - العنصر: ' . Items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . Accounts::find($request->account)->account . ', المبلغ: ' . $request->totalPrice,
                 'status' => 'successful',
             ]);
 
@@ -141,7 +141,7 @@ class DetailsController extends Controller
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'حذف',
-                'details' => 'حذف تفاصيل - العنصر: ' . Items::find($c1['item_id'])->name . ', الفرع: ' . Branch::find($c1['branch_id'])->name . ', الحساب: ' . $ce->name . ', المبلغ: ' . $c1['total'],
+                'details' => 'حذف تفاصيل - العنصر: ' . Items::find($c1['item_id'])->item . ', الفرع: ' . Branch::find($c1['branch_id'])->branch . ', الحساب: ' . $ce->account . ', المبلغ: ' . $c1['total'],
                 'status' => 'successful',
             ]);
 
