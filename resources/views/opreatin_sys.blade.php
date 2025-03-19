@@ -126,18 +126,19 @@
     <!-- resources/views/users/index.blade.php -->
 
     <h1>قائمة عمليات المستخدمين على النظام</h1>
-    
-    <br></br>
-    <table>
-        <thead>
-            <tr>
-                <th>رقم</th>
-                <th>نوع العملية </th>
-                <th>التفاصيل  </th>
-                <th> المستخدم </th>
-                <th> الوقت </th>
 
-            </tr>
+    <br></br>
+
+    <input type="text" class="search-input" placeholder="بحث في العمليات..." onkeyup="searchTable(this, 'sys-table')">
+    <table id="sys-table">
+        <tr>
+            <th onclick="sortTable(0, 'sys-table')">رقم</th>
+            <th onclick="sortTable(1, 'sys-table')">نوع العملية </th>
+            <th onclick="sortTable(2, 'sys-table')">التفاصيل </th>
+            <th onclick="sortTable(3, 'sys-table')"> المستخدم </th>
+            <th onclick="sortTable(4, 'sys-table')"> الوقت </th>
+
+        </tr>
         </thead>
         <tbody>
             @foreach ($opreations as $op)
@@ -146,29 +147,29 @@
                     <td>{{ $op->operation_type }}</td>
                     <td>{{ $op->details }}</td>
                     @if (isset($users))
-                    @foreach ($users as $user)
-@if ($user->id == $op->user_id)
-<td>{{ $user->name }}</td>
-@endif
-                    @endforeach
+                        @foreach ($users as $user)
+                            @if ($user->id == $op->user_id)
+                                <td>{{ $user->name }}</td>
+                            @endif
+                        @endforeach
                     @endif
-                    
+
                     <td>{{ $op->created_at }}</td>
 
-                
+
                 </tr>
             @endforeach
         </tbody>
     </table>
 
-   
 
 
 
-    
+
+
 
     <!-- عنصر التوست (Toast) الذي سيظهر في أعلى الشاشة -->
-    
+
 
     @if (session('status'))
         <div style="color: green;">{{ session('status') }}</div>
@@ -186,7 +187,7 @@
     @endif
 
 
-    
+
 
 
 

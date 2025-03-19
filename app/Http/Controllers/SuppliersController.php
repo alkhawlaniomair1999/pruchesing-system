@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Suppliers;
-use App\Models\accounts;
+use App\Models\Accounts;
 use App\Models\Branch;
 use App\Models\sys_procs;
 use App\Models\SupplyDetail;
@@ -17,15 +17,9 @@ class SuppliersController extends Controller
     {
         try {
             $suppliers = Suppliers::all();
-            $accounts = accounts::all();
+            $accounts = Accounts::all();
             $Branch = Branch::all();
             $proc = SupplyDetail::all();
-
-            SystemOperation::create([
-                'user_id' => auth()->id(),
-                'operation_type' => 'عرض ',
-                'details' => 'عرض صفحة قائمة التوريد',
-            ]);
 
             return view('supply', compact('suppliers', 'accounts', 'Branch', 'proc'));
         } catch (Exception $e) {
@@ -37,15 +31,9 @@ class SuppliersController extends Controller
     {
         try {
             $suppliers = Suppliers::all();
-            $accounts = accounts::all();
+            $accounts = Accounts::all();
             $Branch = Branch::all();
             $proc = SupplyDetail::all();
-
-            SystemOperation::create([
-                'user_id' => auth()->id(),
-                'operation_type' => 'عرض ',
-                'details' => 'عرض صفحة السندات',
-            ]);
 
             return view('pay', compact('suppliers', 'accounts', 'Branch', 'proc'));
         } catch (Exception $e) {
@@ -65,12 +53,12 @@ class SuppliersController extends Controller
             $data['debt'] = $request->debt;
             $data['credit'] = $request->credit;
             $data['balance'] = $request->debt - $request->credit;
-            Suppliers::create($data);
+            $supplier = Suppliers::create($data);
 
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'اضافة ',
-                'details' => 'اضافة مورد جديد',
+                'details' => 'اضافة مورد جديد: ' . $supplier->supplier,
             ]);
 
             return redirect()->back()->with('success', 'تم إضافة المورد بنجاح!');
@@ -98,7 +86,7 @@ class SuppliersController extends Controller
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'تعديل ',
-                'details' => 'تعديل مورد',
+                'details' => 'تعديل مورد: ' . $request->newName,
             ]);
 
             return redirect()->back()->with('success', 'تم تعديل المورد بنجاح!');
@@ -110,12 +98,14 @@ class SuppliersController extends Controller
     public function destroy($id)
     {
         try {
-            Suppliers::where('id', $id)->delete();
+            $supplier = Suppliers::findOrFail($id);
+            $supplierName = $supplier->supplier;
+            $supplier->delete();
 
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'حذف ',
-                'details' => 'حذف مورد',
+                'details' => 'حذف مورد: ' . $supplierName,
             ]);
 
             return redirect()->back()->with('success', 'تم حذف المورد بنجاح!');
@@ -136,12 +126,12 @@ class SuppliersController extends Controller
 
             if ($request->payment_type == 'cash') {
                 $account = Accounts::where('id', $request->account_name)->first();
+                $branch = Branch::where('id', $account->branch_id)->first();
                 $balanceBefore = $account->balance;
 
                 $account->credit += $request->amount;
                 $account->balance -= $request->amount;
                 $account->save();
-
 
                 FinancialOperation::create([
                     'related_id' => $account->id,
@@ -150,7 +140,9 @@ class SuppliersController extends Controller
                     'debit' => $request->amount,
                     'credit' => 0,
                     'balance' => $account->balance,
-                    'details' => 'توريد من المورد ID: ' . $request->supplier_id,
+                    'details' => 'توريد من المورد: ' . Suppliers::find($request->supplier_id)->supplier .
+                                 ', من الحساب: ' . $account->name .
+                                 ', الفرع: ' . $branch->name,
                     'user_id' => auth()->id(),
                 ]);
 
@@ -170,19 +162,21 @@ class SuppliersController extends Controller
                     'debit' => 0,
                     'credit' => $request->amount,
                     'balance' => $supplier->balance,
-                    'details' => 'توريد آجلاً',
+                    'details' => 'توريد آجلاً من المورد: ' . $supplier->supplier,
                     'user_id' => auth()->id(),
                 ]);
             }
 
             $supply->save();
-
+            $newAccount = Accounts::where('id',$request->account_name)->first();
+            $branchs = Branch::where('id',$newAccount->branch_id)->first();
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'إضافة',
-                'details' => 'إضافة عملية توريد - المورد: ' . $request->supplier_id .
+                'details' => 'إضافة عملية توريد - المورد: ' . Suppliers::find($request->supplier_id)->supplier .
                              ', المبلغ: ' . $request->amount .
-                             ', نوع الدفع: ' . $request->payment_type,
+                             ', نوع الدفع: ' . $request->payment_type .
+                             ($request->payment_type == 'cash' ? ', من الحساب: ' . $newAccount->account . ', الفرع: ' . $branchs->branch : ''),
                 'status' => 'successful',
             ]);
 
@@ -193,71 +187,86 @@ class SuppliersController extends Controller
     }
 
     public function updateSupply(Request $request)
-{
-    try {
-        $supply = SupplyDetail::findOrFail($request->id);
+    {
+        try {
+            $supply = SupplyDetail::findOrFail($request->id);
 
-        $request->validate([
-            'supplier_id' => 'required|exists:suppliers,id',
-            'amount' => 'required|numeric|min:0',
-            'payment_type' => 'required|in:cash,credit',
-            'details' => 'nullable|string',
-            'account_name' => 'required_if:payment_type,cash|exists:accounts,id',
-        ]);
+            $request->validate([
+                'supplier_id' => 'required|exists:suppliers,id',
+                'amount' => 'required|numeric|min:0',
+                'payment_type' => 'required|in:cash,credit',
+                'details' => 'nullable|string',
+                'account_name' => 'required_if:payment_type,cash|exists:accounts,id',
+            ]);
 
-        // استرجاع المورد والحساب السابقين
-        $previousSupplier = Suppliers::findOrFail($supply->supplier_id);
-        $previousAccount = $supply->payment_type == 'cash' ? Accounts::findOrFail($supply->account_name) : null;
+            // استرجاع المورد والحساب السابقين
+            $previousSupplier = Suppliers::findOrFail($supply->supplier_id);
+            $previousAccount = $supply->payment_type == 'cash' ? Accounts::findOrFail($supply->account_name) : null;
 
-        // إعادة السجلات السابقة
-        if ($supply->payment_type == 'cash' && $previousAccount) {
-            $previousAccount->credit -= $supply->amount;
-            $previousAccount->balance += $supply->amount;
-            $previousAccount->save();
-        } elseif ($supply->payment_type == 'credit') {
-            $previousSupplier->balance += $supply->amount;
-            $previousSupplier->credit -= $supply->amount;
-            $previousSupplier->save();
+            // إعادة السجلات السابقة
+            if ($supply->payment_type == 'cash' && $previousAccount) {
+                $previousAccount->credit -= $supply->amount;
+                $previousAccount->balance += $supply->amount;
+                $previousAccount->save();
+            } elseif ($supply->payment_type == 'credit') {
+                $previousSupplier->balance += $supply->amount;
+                $previousSupplier->credit -= $supply->amount;
+                $previousSupplier->save();
+            }
+
+            // تحديث السجلات الجديدة
+            if ($request->payment_type == 'cash') {
+                $newAccount = Accounts::findOrFail($request->account_name);
+                $branch = Branch::where('id', $newAccount->branch_id)->first();
+                $newAccount->credit += $request->amount;
+                $newAccount->balance -= $request->amount;
+                $newAccount->save();
+            } elseif ($request->payment_type == 'credit') {
+                $newSupplier = Suppliers::findOrFail($request->supplier_id);
+                $newSupplier->balance -= $request->amount;
+                $newSupplier->credit += $request->amount;
+                $newSupplier->save();
+            }
+
+            // تحديث تفاصيل التوريد
+            $supply->supplier_id = $request->supplier_id;
+            $supply->amount = $request->amount;
+            $supply->payment_type = $request->payment_type;
+            $supply->details = $request->details;
+            $supply->account_name = $request->payment_type == 'cash' ? $request->account_name : null;
+            $supply->save();
+
+            // إنشاء سجل العملية المالية
+            FinancialOperation::create([
+                'related_id' => $request->payment_type == 'cash' ? $newAccount->id : $newSupplier->id,
+                'related_type' => $request->payment_type == 'cash' ? 'Account' : 'Supplier',
+                'operation_type' => $request->payment_type == 'cash' ? 'تعديل توريد نقداً' : 'تعديل توريد آجلاً',
+                'debit' => $request->payment_type == 'cash' ? $request->amount : 0,
+                'credit' => $request->payment_type == 'credit' ? $request->amount : 0,
+                'balance' => $request->payment_type == 'cash' ? $newAccount->balance : $newSupplier->balance,
+                'details' => 'تعديل توريد من المورد: ' . Suppliers::find($request->supplier_id)->supplier .
+                             ($request->payment_type == 'cash' ? ', من الحساب: ' . $newAccount->name . ', الفرع: ' . $branch->name : ''),
+                'user_id' => auth()->id(),
+            ]);
+            $newAccount = Accounts::where('id',$request->account_name)->first();
+            $branchs = Branch::where('id',$newAccount->branch_id)->first();
+
+            SystemOperation::create([
+                'user_id' => auth()->id(),
+                'operation_type' => 'تعديل',
+                'details' => 'تعديل عملية توريد - المورد: ' . Suppliers::find($request->supplier_id)->supplier .
+                             ', المبلغ: ' . $request->amount .
+                             ', نوع الدفع: ' . $request->payment_type .
+                             ($request->payment_type == 'cash' ? ', من الحساب: ' . $newAccount->account . ', الفرع: ' . $branchs->branch : ''),
+                'status' => 'successful',
+            ]);
+
+            return redirect()->back()->with('success', 'تم تعديل بيانات التوريد بنجاح.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حدث خطأ أثناء تعديل بيانات التوريد.');
         }
-
-        // تحديث السجلات الجديدة
-        if ($request->payment_type == 'cash') {
-            $newAccount = Accounts::findOrFail($request->account_name);
-            $newAccount->credit += $request->amount;
-            $newAccount->balance -= $request->amount;
-            $newAccount->save();
-        } elseif ($request->payment_type == 'credit') {
-            $newSupplier = Suppliers::findOrFail($request->supplier_id);
-            $newSupplier->balance -= $request->amount;
-            $newSupplier->credit += $request->amount;
-            $newSupplier->save();
-        }
-
-        // تحديث تفاصيل التوريد
-        $supply->supplier_id = $request->supplier_id;
-        $supply->amount = $request->amount;
-        $supply->payment_type = $request->payment_type;
-        $supply->details = $request->details;
-        $supply->account_name = $request->payment_type == 'cash' ? $request->account_name : null;
-        $supply->save();
-
-        // إنشاء سجل العملية المالية
-        FinancialOperation::create([
-            'related_id' => $request->payment_type == 'cash' ? $newAccount->id : $newSupplier->id,
-            'related_type' => $request->payment_type == 'cash' ? 'Account' : 'Supplier',
-            'operation_type' => $request->payment_type == 'cash' ? 'تعديل توريد نقداً' : 'تعديل توريد آجلاً',
-            'debit' => $request->payment_type == 'cash' ? $request->amount : 0,
-            'credit' => $request->payment_type == 'credit' ? $request->amount : 0,
-            'balance' => $request->payment_type == 'cash' ? $newAccount->balance : $newSupplier->balance,
-            'details' => 'تعديل توريد من المورد ID: ' . $request->supplier_id,
-            'user_id' => auth()->id(),
-        ]);
-
-        return redirect()->back()->with('success', 'تم تعديل بيانات التوريد بنجاح.');
-    } catch (Exception $e) {
-        return redirect()->back()->with('error', 'حدث خطأ أثناء تعديل بيانات التوريد.');
     }
-}
+
     public function deleteSupply($id)
     {
         try {
@@ -283,6 +292,15 @@ class SuppliersController extends Controller
             }
 
             $supply->delete();
+
+            SystemOperation::create([
+                'user_id' => auth()->id(),
+                'operation_type' => 'حذف',
+                'details' => 'حذف عملية توريد - المورد: ' . Suppliers::find($supply->supplier_id)->supplier .
+                             ', المبلغ: ' . $supply->amount .
+                             ', نوع الدفع: ' . $supply->payment_type,
+                'status' => 'successful',
+            ]);
 
             return redirect()->back()->with('success', 'تم حذف عملية التوريد بنجاح!');
         } catch (Exception $e) {
