@@ -58,34 +58,31 @@ class ReportsController extends Controller
     }
 
 
-public function branch(Request $request)
-{
-    $branchId = $request->input('branch');
-    $month = $request->input('month');
-    $year = $request->input('year');
-
-
-
-    $operations = casher_procs::select(
-        DB::raw('DATE(date) as operation_date'),
-        DB::raw('SUM(total) as total_sum'),
-        DB::raw('SUM(cash) as cash_sum'),
-        DB::raw('SUM(out) as out_sum'), // إضافة backticks حول out
-        DB::raw('SUM(bank) as bank_sum'),
-        DB::raw('SUM(plus) as plus_sum')
-    )
-    ->whereHas('casher', function ($query) use ($branchId) {
-        $query->whereHas('branch', function ($subQuery) use ($branchId) {
-            $subQuery->where('branch_id', $branchId);
-        });
-    })
-    ->whereYear('date', $year)
-    ->whereMonth('date', $month)
-    ->groupBy('operation_date')
-    ->get();
-$branch=Branch::All();
-    return view('branch_report', compact('operations', 'month', 'year','branch','branchId'));
-}
+    public function branch(Request $request)
+    {
+        $branchId = $request->input('branch');
+        $month = $request->input('month');
+        $year = $request->input('year');
+    
+        $operations = casher_procs::select(
+            DB::raw('DATE(date) as operation_date'),
+            DB::raw('SUM(total) as total_sum'),
+            DB::raw('SUM(cash) as cash_sum'),
+            DB::raw('SUM(out) as out_sum'),
+            DB::raw('SUM(bank) as bank_sum'),
+            DB::raw('SUM(plus) as plus_sum')
+        )
+        ->whereHas('casher', function ($query) use ($branchId) {
+            $query->where('branch_id', $branchId);
+        })
+        ->whereYear('date', $year)
+        ->whereMonth('date', $month)
+        ->groupBy('operation_date')
+        ->get();
+    
+        $branches = Branch::all();
+        return view('branch_report', compact('operations', 'month', 'year', 'branches', 'branchId'));
+    }
 
 public function total(Request $request)
 {
