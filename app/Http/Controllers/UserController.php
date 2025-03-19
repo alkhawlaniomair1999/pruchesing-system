@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\SystemOperation;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rules\Password;
@@ -18,7 +18,6 @@ class UserController extends Controller
         $users = User::all();
         return view('user', compact('users'));
     }
-    
 
     /**
      * Show the form for creating a new resource.
@@ -32,32 +31,37 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'name' => ['required', 'string', 'max:255', 'unique:users,name'],
-        'email' => ['required', 'email', 'unique:users,email'],
-        'password' => ['required', 'string', 'min:8', 'confirmed'],
-    ], [
-        // رسائل الخطأ المخصصة
-        'name.required' => 'اسم المستخدم مطلوب.',
-        'name.unique' => 'اسم المستخدم موجود بالفعل.',
-        'email.required' => 'البريد الإلكتروني مطلوب.',
-        'email.unique' => 'البريد الإلكتروني موجود بالفعل.',
-        'password.required' => 'كلمة المرور مطلوبة.',
-        'password.min' => 'يجب أن تكون كلمة المرور 8 أحرف على الأقل.',
-        'password.confirmed' => 'تأكيد كلمة المرور غير متطابق.',
-    ]);
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:users,name'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'name.required' => 'اسم المستخدم مطلوب.',
+            'name.unique' => 'اسم المستخدم موجود بالفعل.',
+            'email.required' => 'البريد الإلكتروني مطلوب.',
+            'email.unique' => 'البريد الإلكتروني موجود بالفعل.',
+            'password.required' => 'كلمة المرور مطلوبة.',
+            'password.min' => 'يجب أن تكون كلمة المرور 8 أحرف على الأقل.',
+            'password.confirmed' => 'تأكيد كلمة المرور غير متطابق.',
+        ]);
 
-    // إضافة المستخدم إذا تم التحقق بنجاح
-    User::create([
-        'name' => $validated['name'],
-        'email' => $validated['email'],
-        'password' => Hash::make($validated['password']),
-    ]);
+        // إضافة المستخدم إذا تم التحقق بنجاح
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
 
-    return redirect()->back()->with('success', 'تمت إضافة المستخدم بنجاح.');
-}
+        SystemOperation::create([
+            'user_id' => auth()->id(),
+            'operation_type' => 'إضافة',
+            'details' => 'إضافة مستخدم جديد: ' . $user->name,
+            'status' => 'successful',
+        ]);
 
+        return redirect()->back()->with('success', 'تمت إضافة المستخدم بنجاح.');
+    }
 
     /**
      * Display the specified resource.
@@ -93,24 +97,27 @@ class UserController extends Controller
             'password.min' => 'يجب أن تكون كلمة المرور 8 أحرف على الأقل.',
             'password.confirmed' => 'تأكيد كلمة المرور غير متطابق.',
         ]);
-        
-    
+
         $user = User::findOrFail($id);
-    
+
         $user->name = $validated['name'];
         $user->email = $validated['email'];
-    
+
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
-    
+
         $user->save();
-    
-        
-    
+
+        SystemOperation::create([
+            'user_id' => auth()->id(),
+            'operation_type' => 'تعديل',
+            'details' => 'تعديل بيانات المستخدم: ' . $user->name,
+            'status' => 'successful',
+        ]);
+
         return redirect()->back()->with('status', 'تم تحديث بيانات المستخدم بنجاح.');
     }
-    
 
     /**
      * Remove the specified resource from storage.
@@ -119,18 +126,24 @@ class UserController extends Controller
     {
         // التحقق من عدد المستخدمين
         $userCount = User::count();
-    
+
         if ($userCount <= 1) {
             return redirect()->back()->with('error', 'لا يمكن حذف المستخدم الأخير في النظام.');
         }
-    
+
         // البحث عن المستخدم وحذفه
         $user = User::findOrFail($id);
-    
+
         // حذف المستخدم
         $user->delete();
-    
+
+        SystemOperation::create([
+            'user_id' => auth()->id(),
+            'operation_type' => 'حذف',
+            'details' => 'حذف المستخدم: ' . $user->name,
+            'status' => 'successful',
+        ]);
+
         return redirect()->back()->with('success', 'تم حذف المستخدم بنجاح.');
     }
-    
 }
