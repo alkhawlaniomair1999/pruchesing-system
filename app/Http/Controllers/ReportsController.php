@@ -65,8 +65,6 @@ public function branch(Request $request)
     $month = $request->input('month');
     $year = $request->input('year');
 
-    // حساب عدد أيام الشهر
-    $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
 
 
     $operations = casher_procs::select(
@@ -88,7 +86,7 @@ public function branch(Request $request)
     ->groupBy('operation_date')
     ->get();
 $branch=Branch::All();
-    return view('branch_report', compact('operations', 'month', 'year', 'daysInMonth','branch','branchId'));
+    return view('branch_report', compact('operations', 'month', 'year','branch','branchId'));
 }
 
 public function total(Request $request)
@@ -96,8 +94,6 @@ public function total(Request $request)
     $month = $request->input('month');
     $year = $request->input('year');
 
-    // حساب عدد أيام الشهر
-    $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
 
 
     $operations = casher_procs::select(
@@ -112,7 +108,7 @@ public function total(Request $request)
     ->whereMonth('date', $month)
     ->groupBy('operation_date')
     ->get();
-    return view('total_report', compact('operations', 'month', 'year', 'daysInMonth'));
+    return view('total_report', compact('operations', 'month', 'year'));
 }
 }
 
