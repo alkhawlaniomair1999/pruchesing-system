@@ -81,7 +81,7 @@ class ReportsController extends Controller
         ->get();
     
         $branches = Branch::all();
-        return view('branch_report', compact('operations', 'month', 'year', 'branches', 'branchId'));
+        return view('branch_report', compact( 'month', 'year', 'branches', 'branchId'));
     }
 
 public function total(Request $request)
