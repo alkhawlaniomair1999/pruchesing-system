@@ -100,20 +100,20 @@
     <div class="invoice">
         <!-- Header Section -->
         <div class="header">
-            <div class="company-info company-info-right">
-                <p>اسم الشركة: شركتك</p>
-                <p>العنوان: 123 شارع رئيسي، المدينة، الدولة</p>
-                <p>الهاتف: +123456789</p>
+        <div class="company-info company-info-right">
+                <h2> مطعم الجمار الرابع لتقديم الوجبات </h2>
+                <p>ابو عريش
+حي الروضة 
+شارع الامير محمد بن ناصر   </p>
                
             </div>
             <div class="logo">
-                <img src="path-to-your-logo.png" alt="شعار الشركة">
+                
                 <h1> توريد </h1>
             </div>
             <div class="company-info company-info-left">
-                <p>Company Name: Your Company</p>
-                <p>Address: 123 Main St, City, Country</p>
-                <p>Phone: +123456789</p>
+                <p>سجل تجاري رقم 5901719945</p>
+                <p>الرقم الضريبي 310767346400003</p>
                 
             </div>
         </div>
