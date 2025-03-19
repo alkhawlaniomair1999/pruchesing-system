@@ -11,7 +11,6 @@ use App\Models\details;
 use App\Models\items;
 use App\Models\cashers;
 use App\Models\casher_procs;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Event\Runtime\OperatingSystem;
 
@@ -71,7 +70,7 @@ public function branch(Request $request)
         DB::raw('DATE(date) as operation_date'),
         DB::raw('SUM(total) as total_sum'),
         DB::raw('SUM(cash) as cash_sum'),
-        DB::raw('SUM(`out`) as out_sum'), // إضافة backticks حول out
+        DB::raw('SUM("out") as out_sum'), // إضافة backticks حول out
         DB::raw('SUM(bank) as bank_sum'),
 
         DB::raw('SUM(plus) as plus_sum')
@@ -100,7 +99,7 @@ public function total(Request $request)
         DB::raw('DATE(date) as operation_date'),
         DB::raw('SUM(total) as total_sum'),
         DB::raw('SUM(cash) as cash_sum'),
-        DB::raw('SUM(`out`) as out_sum'), // إضافة backticks حول out
+        DB::raw('SUM("out") as out_sum'), // إضافة backticks حول out
         DB::raw('SUM(bank) as bank_sum'),
         DB::raw('SUM(plus) as plus_sum')
     )
