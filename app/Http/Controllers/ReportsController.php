@@ -72,7 +72,6 @@ public function branch(Request $request)
         DB::raw('SUM(cash) as cash_sum'),
         DB::raw('SUM(out) as out_sum'), // إضافة backticks حول out
         DB::raw('SUM(bank) as bank_sum'),
-
         DB::raw('SUM(plus) as plus_sum')
     )
     ->whereHas('casher', function ($query) use ($branchId) {
