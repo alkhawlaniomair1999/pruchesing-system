@@ -64,7 +64,7 @@ class ReportsController extends Controller
         $month = $request->input('month');
         $year = $request->input('year');
     
-        $operations = casher_procs::select(
+      /*  $operations = casher_procs::select(
             DB::raw('DATE(date) as operation_date'),
             DB::raw('SUM(total) as total_sum'),
             DB::raw('SUM(cash) as cash_sum'),
@@ -79,7 +79,7 @@ class ReportsController extends Controller
         ->whereMonth('date', $month)
         ->groupBy('operation_date')
         ->get();
-    
+    */
         $branches = Branch::all();
         return view('branch_report', compact( 'month', 'year', 'branches', 'branchId'));
     }
