@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
 setTimeout(function() {
     document.getElementById('success-alert')?.remove();
     document.getElementById('error-alert')?.remove();
-}, 3000);
+}, 5000);
 
 var today = new Date();
 var dateField = document.getElementById('date');
