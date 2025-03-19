@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Suppliers;
-use App\Models\Accounts;
+use App\Models\accounts;
 use App\Models\Branch;
 use App\Models\sys_procs;
 use App\Models\SupplyDetail;
@@ -17,7 +17,7 @@ class SuppliersController extends Controller
     {
         try {
             $suppliers = Suppliers::all();
-            $accounts = Accounts::all();
+            $accounts = accounts::all();
             $Branch = Branch::all();
             $proc = SupplyDetail::all();
 
@@ -31,7 +31,7 @@ class SuppliersController extends Controller
     {
         try {
             $suppliers = Suppliers::all();
-            $accounts = Accounts::all();
+            $accounts = accounts::all();
             $Branch = Branch::all();
             $proc = SupplyDetail::all();
 
@@ -125,7 +125,7 @@ class SuppliersController extends Controller
             $supply->date = $request->date;
 
             if ($request->payment_type == 'cash') {
-                $account = Accounts::where('id', $request->account_name)->first();
+                $account = accounts::where('id', $request->account_name)->first();
                 $branch = Branch::where('id', $account->branch_id)->first();
                 $balanceBefore = $account->balance;
 
@@ -168,7 +168,7 @@ class SuppliersController extends Controller
             }
 
             $supply->save();
-            $newAccount = Accounts::where('id',$request->account_name)->first();
+            $newAccount = accounts::where('id',$request->account_name)->first();
             $branchs = Branch::where('id',$newAccount->branch_id)->first();
             SystemOperation::create([
                 'user_id' => auth()->id(),
@@ -201,7 +201,7 @@ class SuppliersController extends Controller
 
             // استرجاع المورد والحساب السابقين
             $previousSupplier = Suppliers::findOrFail($supply->supplier_id);
-            $previousAccount = $supply->payment_type == 'cash' ? Accounts::findOrFail($supply->account_name) : null;
+            $previousAccount = $supply->payment_type == 'cash' ? accounts::findOrFail($supply->account_name) : null;
 
             // إعادة السجلات السابقة
             if ($supply->payment_type == 'cash' && $previousAccount) {
@@ -216,7 +216,7 @@ class SuppliersController extends Controller
 
             // تحديث السجلات الجديدة
             if ($request->payment_type == 'cash') {
-                $newAccount = Accounts::findOrFail($request->account_name);
+                $newAccount = accounts::findOrFail($request->account_name);
                 $branch = Branch::where('id', $newAccount->branch_id)->first();
                 $newAccount->credit += $request->amount;
                 $newAccount->balance -= $request->amount;
@@ -248,7 +248,7 @@ class SuppliersController extends Controller
                              ($request->payment_type == 'cash' ? ', من الحساب: ' . $newAccount->name . ', الفرع: ' . $branch->name : ''),
                 'user_id' => auth()->id(),
             ]);
-            $newAccount = Accounts::where('id',$request->account_name)->first();
+            $newAccount = accounts::where('id',$request->account_name)->first();
             $branchs = Branch::where('id',$newAccount->branch_id)->first();
 
             SystemOperation::create([
@@ -273,7 +273,7 @@ class SuppliersController extends Controller
             $supply = SupplyDetail::find($id);
 
             if ($supply->payment_type == 'cash') {
-                $account = Accounts::where('id', $supply->account_name)->first();
+                $account = accounts::where('id', $supply->account_name)->first();
 
                 $account->credit -= $supply->amount;
                 $account->balance += $supply->amount;
