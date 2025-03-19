@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Accounts;
-use App\Models\Items;
+use App\Models\accounts;
+use App\Models\items;
 use App\Models\SystemOperation;
 use Illuminate\Http\Request;
 use Exception;
@@ -23,7 +23,7 @@ class ItemsController extends Controller
     {
         try {
             $data = $request->category_name;
-            $item = Items::create([
+            $item = items::create([
                 'item' => $data,
             ]);
 
@@ -40,12 +40,12 @@ class ItemsController extends Controller
         }
     }
 
-    public function show(Items $items)
+    public function show(items $items)
     {
         // تنفيذ الكود هنا
     }
 
-    public function edit(Items $items)
+    public function edit(items $items)
     {
         // تنفيذ الكود هنا
     }
@@ -54,7 +54,7 @@ class ItemsController extends Controller
     {
         try {
             $b1['item'] = $request->newName;
-            Items::where('id', $request->id)->update($b1);
+            items::where('id', $request->id)->update($b1);
 
             SystemOperation::create([
                 'user_id' => auth()->id(),
@@ -72,7 +72,7 @@ class ItemsController extends Controller
     public function destroy($id)
     {
         try {
-            $item = Items::findOrFail($id);
+            $item = items::findOrFail($id);
             $itemName = $item->item;
             $item->delete();
 

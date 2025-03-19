@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Cashers;
+use App\Models\cashers;
 use App\Models\Branch;
 use App\Models\SystemOperation;
 use Illuminate\Http\Request;
@@ -25,7 +25,7 @@ class CasherController extends Controller
             $cash['casher'] = $request->casher;
             $cash['branch_id'] = $request->branch;
             $br = Branch::where('id',$request->branch)->first();
-            $casher = Cashers::create($cash);
+            $casher = cashers::create($cash);
 
             SystemOperation::create([
                 'user_id' => auth()->id(),
@@ -56,7 +56,7 @@ class CasherController extends Controller
             $cash['casher'] = $request->newName;
             $cash['branch_id'] = $request->branch;
             $br = Branch::where('id',$request->branch)->first();
-            Cashers::where('id', $request->id)->update($cash);
+            cashers::where('id', $request->id)->update($cash);
 
             SystemOperation::create([
                 'user_id' => auth()->id(),
@@ -74,7 +74,7 @@ class CasherController extends Controller
     public function destroy($id)
     {
         try {
-            $casher = Cashers::findOrFail($id);
+            $casher = cashers::findOrFail($id);
             $casherName = $casher->casher;
             $casher->delete();
 
