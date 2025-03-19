@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Accounts;
-use App\Models\Payment;
+use App\Models\accounts;
+use App\Models\payment;
 use App\Models\Suppliers;
 use App\Models\Branch;
 use App\Models\SystemOperation;
@@ -15,9 +15,9 @@ class PayController extends Controller
     {
         try {
             $suppliers = Suppliers::all();
-            $accounts = Accounts::all();
+            $accounts = accounts::all();
             $Branch = Branch::all();
-            $proc = Payment::all();
+            $proc = payment::all();
             return view('pay', compact('suppliers', 'accounts', 'Branch', 'proc'));
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء جلب البيانات.');
@@ -40,7 +40,7 @@ class PayController extends Controller
                 'details' => 'required|string',
             ]);
 
-            Payment::create([
+            payment::create([
                 'supplier' => $validatedData['supplier'],
                 'account' => $validatedData['account'],
                 'amount' => $validatedData['amount'],
@@ -53,7 +53,7 @@ class PayController extends Controller
             $supplier->balance += $validatedData['amount'];
             $supplier->save();
 
-            $account = Accounts::findOrFail($validatedData['account']);
+            $account = accounts::findOrFail($validatedData['account']);
             $account->credit += $validatedData['amount'];
             $account->balance -= $validatedData['amount'];
             $account->save();
@@ -82,7 +82,7 @@ class PayController extends Controller
                 'details' => 'required|string',
             ]);
 
-            $payment = Payment::findOrFail($request->id);
+            $payment = payment::findOrFail($request->id);
             $amountDifference = $validatedData['amount'] - $payment->amount;
 
             if ($payment->supplier != $validatedData['supplier']) {
@@ -103,17 +103,17 @@ class PayController extends Controller
             }
 
             if ($payment->account != $validatedData['account']) {
-                $oldAccount = Accounts::findOrFail($payment->account);
+                $oldAccount = accounts::findOrFail($payment->account);
                 $oldAccount->credit -= $payment->amount;
                 $oldAccount->balance += $payment->amount;
                 $oldAccount->save();
 
-                $newAccount = Accounts::findOrFail($validatedData['account']);
+                $newAccount = accounts::findOrFail($validatedData['account']);
                 $newAccount->credit += $validatedData['amount'];
                 $newAccount->balance -= $validatedData['amount'];
                 $newAccount->save();
             } else {
-                $account = Accounts::findOrFail($validatedData['account']);
+                $account = accounts::findOrFail($validatedData['account']);
                 $account->credit += $amountDifference;
                 $account->balance -= $amountDifference;
                 $account->save();
@@ -130,7 +130,7 @@ class PayController extends Controller
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'تعديل',
-                'details' => 'تعديل سند دفع - المورد: ' . Suppliers::find($validatedData['supplier'])->supplier . ', الحساب: ' . Accounts::find($validatedData['account'])->account . ', المبلغ: ' . $validatedData['amount'],
+                'details' => 'تعديل سند دفع - المورد: ' . Suppliers::find($validatedData['supplier'])->supplier . ', الحساب: ' . accounts::find($validatedData['account'])->account . ', المبلغ: ' . $validatedData['amount'],
                 'status' => 'successful',
             ]);
 
@@ -158,14 +158,14 @@ class PayController extends Controller
     public function destroy(string $id)
     {
         try {
-            $payment = Payment::findOrFail($id);
+            $payment = payment::findOrFail($id);
 
             $supplier = Suppliers::findOrFail($payment->supplier);
             $supplier->debt -= $payment->amount;
             $supplier->balance -= $payment->amount;
             $supplier->save();
 
-            $account = Accounts::findOrFail($payment->account);
+            $account = accounts::findOrFail($payment->account);
             $account->credit -= $payment->amount;
             $account->balance += $payment->amount;
             $account->save();
@@ -189,8 +189,8 @@ class PayController extends Controller
     {
         try {
             $suppliers = Suppliers::all();
-            $accounts = Accounts::all();
-            $pay = Payment::with(['supplier', 'account'])->findOrFail($id);
+            $accounts = accounts::all();
+            $pay = payment::with(['supplier', 'account'])->findOrFail($id);
             return view('print.print_pay', compact('pay', 'suppliers', 'accounts'));
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء طباعة السند.');

@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Details;
-use App\Models\Accounts;
+use App\Models\details;
+use App\Models\accounts;
 use App\Models\Branch;
-use App\Models\Items;
+use App\Models\items;
 use App\Models\SystemOperation;
 use Illuminate\Http\Request;
 use Exception;
@@ -14,10 +14,10 @@ class DetailsController extends Controller
     public function index()
     {
         try {
-            $items = Items::all();
+            $items = items::all();
             $Branch = Branch::all();
-            $accounts = Accounts::all();
-            $details = Details::all();
+            $accounts = accounts::all();
+            $details = details::all();
             return view('details', ['items' => $items, 'Branch' => $Branch, 'accounts' => $accounts, 'details' => $details]);
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء جلب البيانات.');
@@ -44,17 +44,17 @@ class DetailsController extends Controller
             } else {
                 $details['price'] = $request->totalPrice;
             }
-            Details::create($details);
+            details::create($details);
 
-            $acc = Accounts::where('id', $request->account)->first();
+            $acc = accounts::where('id', $request->account)->first();
             $credit = $acc['credit'] + $request->totalPrice;
             $balance = $acc['balance'] - $request->totalPrice;
-            Accounts::where('id', $request->account)->update(['credit' => $credit, 'balance' => $balance]);
+            accounts::where('id', $request->account)->update(['credit' => $credit, 'balance' => $balance]);
 
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'إضافة',
-                'details' => 'إضافة تفاصيل - العنصر: ' . Items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . $acc->account . ', المبلغ: ' . $request->totalPrice,
+                'details' => 'إضافة تفاصيل - العنصر: ' . items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . $acc->account . ', المبلغ: ' . $request->totalPrice,
                 'status' => 'successful',
             ]);
 
@@ -64,12 +64,12 @@ class DetailsController extends Controller
         }
     }
 
-    public function show(Details $details)
+    public function show(details $details)
     {
         // تنفيذ الكود هنا
     }
 
-    public function edit(Details $details)
+    public function edit(details $details)
     {
         // تنفيذ الكود هنا
     }
@@ -77,26 +77,26 @@ class DetailsController extends Controller
     public function update(Request $request)
     {
         try {
-            $det = Details::where('id', $request->id)->first();
-            $ce = Accounts::where('id', $det['account_id'])->first();
+            $det = details::where('id', $request->id)->first();
+            $ce = accounts::where('id', $det['account_id'])->first();
             if ($det['account_id'] == $request->account) {
                 $c2 = $ce['credit'] - $det['total'] + $request->totalPrice;
-                Accounts::where('id', $ce['id'])->update(['credit' => $c2]);
-                $acc = Accounts::where('id', $ce['id'])->first();
+                accounts::where('id', $ce['id'])->update(['credit' => $c2]);
+                $acc = accounts::where('id', $ce['id'])->first();
                 $balance = $acc['debt'] - $acc['credit'];
-                Accounts::where('id', $ce['id'])->update(['balance' => $balance]);
+                accounts::where('id', $ce['id'])->update(['balance' => $balance]);
             } else {
                 $c2 = $ce['credit'] - $det['total'];
-                Accounts::where('id', $ce['id'])->update(['credit' => $c2]);
-                $ac = Accounts::where('id', $ce['id'])->first();
+                accounts::where('id', $ce['id'])->update(['credit' => $c2]);
+                $ac = accounts::where('id', $ce['id'])->first();
                 $balance = $ac['debt'] - $ac['credit'];
-                Accounts::where('id', $ce['id'])->update(['balance' => $balance]);
-                $acc = Accounts::where('id', $request->account)->first();
+                accounts::where('id', $ce['id'])->update(['balance' => $balance]);
+                $acc = accounts::where('id', $request->account)->first();
                 $credit = $acc['credit'] + $request->totalPrice;
-                Accounts::where('id', $request->account)->update(['credit' => $credit]);
-                $acc1 = Accounts::where('id', $request->account)->first();
+                accounts::where('id', $request->account)->update(['credit' => $credit]);
+                $acc1 = accounts::where('id', $request->account)->first();
                 $balance = $acc1['debt'] - $acc1['credit'];
-                Accounts::where('id', $request->account)->update(['balance' => $balance]);
+                accounts::where('id', $request->account)->update(['balance' => $balance]);
             }
             $details['detail'] = $request->detail;
             $details['total'] = $request->totalPrice;
@@ -110,12 +110,12 @@ class DetailsController extends Controller
             } else {
                 $details['price'] = $request->totalPrice;
             }
-            Details::where('id', $request->id)->update($details);
+            details::where('id', $request->id)->update($details);
 
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'تعديل',
-                'details' => 'تعديل تفاصيل - العنصر: ' . Items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . Accounts::find($request->account)->account . ', المبلغ: ' . $request->totalPrice,
+                'details' => 'تعديل تفاصيل - العنصر: ' . items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . accounts::find($request->account)->account . ', المبلغ: ' . $request->totalPrice,
                 'status' => 'successful',
             ]);
 
@@ -128,20 +128,20 @@ class DetailsController extends Controller
     public function destroy($id)
     {
         try {
-            $c1 = Details::where('id', $id)->first();
-            $ce = Accounts::where('id', $c1['account_id'])->first();
+            $c1 = details::where('id', $id)->first();
+            $ce = accounts::where('id', $c1['account_id'])->first();
             $c2 = $ce['credit'] - $c1['total'];
             $balance = $ce['balance'] + $c1['total'];
-            Accounts::where('id', $ce['id'])->update(['credit' => $c2]);
-            $ce = Accounts::where('id', $c1['account_id'])->first();
+            accounts::where('id', $ce['id'])->update(['credit' => $c2]);
+            $ce = accounts::where('id', $c1['account_id'])->first();
             $balance = $ce['debt'] - $ce['credit'];
-            Accounts::where('id', $ce['id'])->update(['balance' => $balance]);
-            Details::where('id', $id)->delete();
+            accounts::where('id', $ce['id'])->update(['balance' => $balance]);
+            details::where('id', $id)->delete();
 
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'حذف',
-                'details' => 'حذف تفاصيل - العنصر: ' . Items::find($c1['item_id'])->item . ', الفرع: ' . Branch::find($c1['branch_id'])->branch . ', الحساب: ' . $ce->account . ', المبلغ: ' . $c1['total'],
+                'details' => 'حذف تفاصيل - العنصر: ' . items::find($c1['item_id'])->item . ', الفرع: ' . Branch::find($c1['branch_id'])->branch . ', الحساب: ' . $ce->account . ', المبلغ: ' . $c1['total'],
                 'status' => 'successful',
             ]);
 
