@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\accounts;
-use App\Models\payment;
+use App\Models\Payment;
 use App\Models\Suppliers;
 use App\Models\Branch;
 use App\Models\SystemOperation;
@@ -17,7 +17,7 @@ class PayController extends Controller
             $suppliers = Suppliers::all();
             $accounts = accounts::all();
             $Branch = Branch::all();
-            $proc = payment::all();
+            $proc = Payment::all();
             return view('pay', compact('suppliers', 'accounts', 'Branch', 'proc'));
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء جلب البيانات.');
@@ -40,7 +40,7 @@ class PayController extends Controller
                 'details' => 'required|string',
             ]);
 
-            payment::create([
+            Payment::create([
                 'supplier' => $validatedData['supplier'],
                 'account' => $validatedData['account'],
                 'amount' => $validatedData['amount'],
@@ -82,7 +82,7 @@ class PayController extends Controller
                 'details' => 'required|string',
             ]);
 
-            $payment = payment::findOrFail($request->id);
+            $payment = Payment::findOrFail($request->id);
             $amountDifference = $validatedData['amount'] - $payment->amount;
 
             if ($payment->supplier != $validatedData['supplier']) {
@@ -158,7 +158,7 @@ class PayController extends Controller
     public function destroy(string $id)
     {
         try {
-            $payment = payment::findOrFail($id);
+            $payment = Payment::findOrFail($id);
 
             $supplier = Suppliers::findOrFail($payment->supplier);
             $supplier->debt -= $payment->amount;
@@ -190,7 +190,7 @@ class PayController extends Controller
         try {
             $suppliers = Suppliers::all();
             $accounts = accounts::all();
-            $pay = payment::with(['supplier', 'account'])->findOrFail($id);
+            $pay = Payment::with(['supplier', 'account'])->findOrFail($id);
             return view('print.print_pay', compact('pay', 'suppliers', 'accounts'));
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء طباعة السند.');
