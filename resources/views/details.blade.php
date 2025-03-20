@@ -136,9 +136,9 @@
                         @endforeach
                         <td>{{ number_format($d->total, 2) }}</td>
 
-                        @if ($d->tax == 1)
+                        @if ($d->tax == "True")
                             <td>نعم</td>
-                        @elseif ($d->tax == 0)
+                        @elseif ($d->tax == "False")
                             <td>لا</td>
                         @else
                             <td></td>
@@ -184,8 +184,8 @@
                     <div class="custom-form-group half-width">
                         <label for="editTax">الضريبة:</label>
                         <select id="editTax" name="tax" required>
-                            <option value="0">لا</option>
-                            <option value="1">نعم</option>
+                            <option value="False">لا</option>
+                            <option value="True">نعم</option>
                         </select>
                     </div>
 
@@ -288,7 +288,7 @@
             // تعيين القيمة الافتراضية لعنصر "select" الخاص بالضريبة
             const taxText = cells[6].innerText.trim();
             const taxSelect = document.getElementById('editTax');
-            taxSelect.value = (taxText === 'نعم') ? '1' : '0';
+            taxSelect.value = (taxText === 'نعم') ? 'True' : 'False';
 
             // تعيين التاريخ كقيمة افتراضية
             const dateText = cells[8].innerText; // افترض أن التاريخ في العمود التاسع
