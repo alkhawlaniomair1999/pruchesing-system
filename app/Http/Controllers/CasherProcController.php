@@ -76,7 +76,7 @@ class CasherProcController extends Controller
 
     public function update(Request $request)
     {
-        try {
+       // try {
             $cp = casher_procs::where('id', $request->id)->first();
             $c = cashers::where('id', $cp->casher_id)->first();
             $data['casher_id'] = $request->casher_id;
@@ -144,9 +144,9 @@ class CasherProcController extends Controller
             ]);
 
             return redirect()->back()->with('success', 'تم تحديث العملية بنجاح!');
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'حدث خطأ أثناء تحديث العملية.');
-        }
+      //  } catch (Exception $e) {
+        //    return redirect()->back()->with('error', 'حدث خطأ أثناء تحديث العملية.');
+        //}
     }
 
     public function destroy($id)
