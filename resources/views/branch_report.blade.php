@@ -68,8 +68,8 @@
         :
         {{ $year }}
         -للفرع:
-        @if (isset($branchs))
-            @foreach ($branchs as $ba)
+        @if (isset($branches))
+            @foreach ($branches as $ba)
                 @if ($ba->id == $branchId)
                     {{ $ba->branch }}
                 @endif
