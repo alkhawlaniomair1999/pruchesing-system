@@ -51,8 +51,8 @@
                 <div class="custom-form-group fourth-width">
                     <label for="tax">الضريبة:</label>
                     <select id="tax" name="tax" required>
-                        <option value=0>لا</option>
-                        <option value=1>نعم</option>
+                        <option value="False">لا</option>
+                        <option value="True">نعم</option>
                     </select>
                 </div>
 
