@@ -39,8 +39,8 @@ class DetailsController extends Controller
             $details['account_id'] = $request->account;
             $details['date'] = $request->date;
             $details['tax'] = $request->tax;
-            if ($request->tax == 1) {
-                $details['price'] = $request->totalPrice * (1 - 0.15);
+            if ($request->tax == '1') {
+                $details['price'] = $request->totalPrice * 0.85;
             } else {
                 $details['price'] = $request->totalPrice;
             }
