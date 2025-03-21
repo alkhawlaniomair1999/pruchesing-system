@@ -152,20 +152,20 @@
                     </div>
                     <div class="custom-form-group full-width">
                         <label for="editTotal">الاجمالي:</label>
-                        <input type="text" id="editTotal" name="total" required>
+                        <input type="float" id="editTotal" name="total" required>
                     </div>
 
                     <div class="custom-form-group half-width">
                         <label for="editCash"> الكاش:</label>
-                        <input type="number" id="editCash" name="cash" required>
+                        <input type="float" id="editCash" name="cash" required>
                     </div>
                     <div class="custom-form-group half-width">
                         <label for="editBank"> البنك:</label>
-                        <input type="number" id="editBank" name="bank" required>
+                        <input type="float" id="editBank" name="bank" required>
                     </div>
                     <div class="custom-form-group half-width">
                         <label for="editOut"> المصروفات:</label>
-                        <input type="number" id="editOut" name="out" required>
+                        <input type="float" id="editOut" name="out" required>
                     </div>
                     <div class="custom-form-group third-width">
                         <label for="date">التاريخ:</label>

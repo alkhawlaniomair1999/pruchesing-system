@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('detail');
-            $table->integer('total');
-            $table->boolean('tax');
-            $table->integer('price');
+            $table->float('total');
+            $table->string('tax');
+            $table->float('price');
             $table->date('date');
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('branch_id');

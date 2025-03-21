@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Accounts;
+use App\Models\accounts;
 use App\Models\Branch;
 use App\Models\SystemOperation;
 use Illuminate\Http\Request;
@@ -25,7 +25,7 @@ class AccountsController extends Controller
             $data = $request->account_name;
             $d_branch = $request->branch;
             $d_type = $request->type;
-            $account = Accounts::create([
+            $account = accounts::create([
                 'account' => $data,
                 'debt' => 0,
                 'credit' => 0,
@@ -47,12 +47,12 @@ class AccountsController extends Controller
         }
     }
 
-    public function show(Accounts $accounts)
+    public function show(accounts $accounts)
     {
         // تنفيذ الكود هنا
     }
 
-    public function edit(Accounts $accounts)
+    public function edit(accounts $accounts)
     {
         // تنفيذ الكود هنا
     }
@@ -63,7 +63,7 @@ class AccountsController extends Controller
             $b1['account'] = $request->newName;
             $b1['type'] = $request->type;
 
-            Accounts::where('id', $request->id)->update($b1);
+            accounts::where('id', $request->id)->update($b1);
 
             SystemOperation::create([
                 'user_id' => auth()->id(),
@@ -81,7 +81,7 @@ class AccountsController extends Controller
     public function destroy($id)
     {
         try {
-            $account = Accounts::findOrFail($id);
+            $account = accounts::findOrFail($id);
             $accountName = $account->account;
             $account->delete();
 

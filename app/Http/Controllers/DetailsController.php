@@ -5,6 +5,7 @@ use App\Models\details;
 use App\Models\accounts;
 use App\Models\Branch;
 use App\Models\items;
+use App\Models\SystemOperation;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -38,8 +39,9 @@ class DetailsController extends Controller
             $details['account_id'] = $request->account;
             $details['date'] = $request->date;
             $details['tax'] = $request->tax;
-            if ($request->tax == 1) {
-                $details['price'] = $request->totalPrice * (1 - 0.15);
+            if ($request->tax == "True") {
+                $x = $request->totalPrice * (1-0.15);
+                $details['price'] = $x;
             } else {
                 $details['price'] = $request->totalPrice;
             }
@@ -49,6 +51,13 @@ class DetailsController extends Controller
             $credit = $acc['credit'] + $request->totalPrice;
             $balance = $acc['balance'] - $request->totalPrice;
             accounts::where('id', $request->account)->update(['credit' => $credit, 'balance' => $balance]);
+
+            SystemOperation::create([
+                'user_id' => auth()->id(),
+                'operation_type' => 'إضافة',
+                'details' => 'إضافة تفاصيل - العنصر: ' . items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . $acc->account . ', المبلغ: ' . $request->totalPrice,
+                'status' => 'successful',
+            ]);
 
             return redirect()->back()->with('success', 'تم إنشاء التفاصيل بنجاح!');
         } catch (Exception $e) {
@@ -97,12 +106,21 @@ class DetailsController extends Controller
             $details['account_id'] = $request->account;
             $details['date'] = $request->date;
             $details['tax'] = $request->tax;
-            if ($request->tax == 1) {
-                $details['price'] = $request->totalPrice * (1 - 0.15);
+            if ($request->tax == "True") {
+                $x = $request->totalPrice * (1-0.15);
+                $details['price'] = $x;
             } else {
                 $details['price'] = $request->totalPrice;
             }
             details::where('id', $request->id)->update($details);
+
+            SystemOperation::create([
+                'user_id' => auth()->id(),
+                'operation_type' => 'تعديل',
+                'details' => 'تعديل تفاصيل - العنصر: ' . items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . accounts::find($request->account)->account . ', المبلغ: ' . $request->totalPrice,
+                'status' => 'successful',
+            ]);
+
             return redirect()->back()->with('success', 'تم تحديث التفاصيل بنجاح!');
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء تحديث التفاصيل.');
@@ -121,6 +139,13 @@ class DetailsController extends Controller
             $balance = $ce['debt'] - $ce['credit'];
             accounts::where('id', $ce['id'])->update(['balance' => $balance]);
             details::where('id', $id)->delete();
+
+            SystemOperation::create([
+                'user_id' => auth()->id(),
+                'operation_type' => 'حذف',
+                'details' => 'حذف تفاصيل - العنصر: ' . items::find($c1['item_id'])->item . ', الفرع: ' . Branch::find($c1['branch_id'])->branch . ', الحساب: ' . $ce->account . ', المبلغ: ' . $c1['total'],
+                'status' => 'successful',
+            ]);
 
             return redirect()->back()->with('success', 'تم حذف التفاصيل بنجاح!');
         } catch (Exception $e) {

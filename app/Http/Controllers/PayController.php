@@ -5,6 +5,7 @@ use App\Models\accounts;
 use App\Models\Payment;
 use App\Models\Suppliers;
 use App\Models\Branch;
+use App\Models\SystemOperation;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -56,6 +57,13 @@ class PayController extends Controller
             $account->credit += $validatedData['amount'];
             $account->balance -= $validatedData['amount'];
             $account->save();
+
+            SystemOperation::create([
+                'user_id' => auth()->id(),
+                'operation_type' => 'إضافة',
+                'details' => 'إضافة سند دفع - المورد: ' . $supplier->supplier . ', الحساب: ' . $account->account . ', المبلغ: ' . $validatedData['amount'],
+                'status' => 'successful',
+            ]);
 
             return redirect()->back()->with('success', 'تمت إضافة السند بنجاح!');
         } catch (Exception $e) {
@@ -119,6 +127,13 @@ class PayController extends Controller
                 'details' => $validatedData['details'],
             ]);
 
+            SystemOperation::create([
+                'user_id' => auth()->id(),
+                'operation_type' => 'تعديل',
+                'details' => 'تعديل سند دفع - المورد: ' . Suppliers::find($validatedData['supplier'])->supplier . ', الحساب: ' . accounts::find($validatedData['account'])->account . ', المبلغ: ' . $validatedData['amount'],
+                'status' => 'successful',
+            ]);
+
             return redirect()->back()->with('success', 'تم تعديل السند بنجاح!');
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء تعديل السند.');
@@ -156,6 +171,13 @@ class PayController extends Controller
             $account->save();
 
             $payment->delete();
+
+            SystemOperation::create([
+                'user_id' => auth()->id(),
+                'operation_type' => 'حذف',
+                'details' => 'حذف سند دفع - المورد: ' . $supplier->supplier . ', الحساب: ' . $account->account . ', المبلغ: ' . $payment->amount,
+                'status' => 'successful',
+            ]);
 
             return redirect()->back()->with('success', 'تم حذف السند بنجاح!');
         } catch (Exception $e) {

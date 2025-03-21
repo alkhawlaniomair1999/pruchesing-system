@@ -146,14 +146,15 @@
                     <td>{{ $op->id }}</td>
                     <td>{{ $op->operation_type }}</td>
                     <td>{{ $op->details }}</td>
-                    @if (isset($users))
-                        @foreach ($users as $user)
-                            @if ($user->id == $op->user_id)
-                                <td>{{ $user->name }}</td>
-                            @endif
-                        @endforeach
-                    @endif
-
+                    <td>
+                        @if (isset($users))
+                            @foreach ($users as $user)
+                                @if ($user->id == $op->user_id)
+                                    {{ $user->name }}
+                                @endif
+                            @endforeach
+                        @endif
+                    </td>
                     <td>{{ $op->created_at }}</td>
 
 

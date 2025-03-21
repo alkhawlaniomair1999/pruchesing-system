@@ -5,6 +5,7 @@ use App\Models\casher_procs;
 use App\Models\cashers;
 use App\Models\Branch;
 use App\Models\accounts;
+use App\Models\SystemOperation;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -49,6 +50,13 @@ class CasherProcController extends Controller
             $bank1 = $bank->debt + $request->bank;
             $balance = $bank->balance + $request->bank;
             accounts::where('id', $bank->id)->update(['debt' => $bank1, 'balance' => $balance]);
+            $br = Branch::where('id',$cacher->branch_id)->first();
+            SystemOperation::create([
+                'user_id' => auth()->id(),
+                'operation_type' => 'إضافة',
+                'details' => 'إضافة عملية كاشير - الكاشير: ' . $cacher->casher . ', الفرع: ' . $br->branch . ', المبلغ النقدي: ' . $request->cash . ', المبلغ البنكي: ' . $request->bank,
+                'status' => 'successful',
+            ]);
 
             return redirect()->back()->with('success', 'تم إنشاء العملية بنجاح!');
         } catch (Exception $e) {
@@ -127,6 +135,13 @@ class CasherProcController extends Controller
                     accounts::where('id', $bank->id)->update(['debt' => $bank1, 'balance' => $balance]);
                 }
             }
+            $br = Branch::where('id',$c->branch_id)->first();
+            SystemOperation::create([
+                'user_id' => auth()->id(),
+                'operation_type' => 'تعديل',
+                'details' => 'تعديل عملية كاشير - الكاشير: ' . $c->casher . ', الفرع: ' . $br->branch . ', المبلغ النقدي: ' . $request->cash . ', المبلغ البنكي: ' . $request->bank,
+                'status' => 'successful',
+            ]);
 
             return redirect()->back()->with('success', 'تم تحديث العملية بنجاح!');
         } catch (Exception $e) {
@@ -151,6 +166,14 @@ class CasherProcController extends Controller
             accounts::where('id', $bank->id)->update(['debt' => $bank1, 'balance' => $balance]);
 
             casher_procs::where('id', $id)->delete();
+            $br = Branch::where('id',$c->branch_id)->first();
+            SystemOperation::create([
+                'user_id' => auth()->id(),
+                'operation_type' => 'حذف',
+                'details' => 'حذف عملية كاشير - الكاشير: ' . $c->casher . ', الفرع: ' . $br->branch . ', المبلغ النقدي: ' . $cp->cash . ', المبلغ البنكي: ' . $cp->bank,
+                'status' => 'successful',
+            ]);
+
             return redirect()->back()->with('success', 'تم حذف العملية بنجاح!');
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء حذف العملية.');

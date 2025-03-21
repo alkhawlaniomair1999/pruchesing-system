@@ -11,7 +11,6 @@ use App\Models\details;
 use App\Models\items;
 use App\Models\cashers;
 use App\Models\casher_procs;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Event\Runtime\OperatingSystem;
 
@@ -59,36 +58,31 @@ class ReportsController extends Controller
     }
 
 
-public function branch(Request $request)
+    public function branch(Request $request)
 {
     $branchId = $request->input('branch');
     $month = $request->input('month');
     $year = $request->input('year');
 
-    // حساب عدد أيام الشهر
-    $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
+    $operations = DB::table('casher_procs')
+        ->select(
+            DB::raw('DATE(casher_procs.date) as operation_date'),
+            DB::raw('SUM(casher_procs.total) as total_sum'),
+            DB::raw('SUM(casher_procs.cash) as cash_sum'),
+            DB::raw('SUM(casher_procs.out) as out_sum'),
+            DB::raw('SUM(casher_procs.bank) as bank_sum'),
+            DB::raw('SUM(casher_procs.plus) as plus_sum')
+        )
+        ->join('cashers', 'casher_procs.casher_id', '=', 'cashers.id')
+        ->join('branches', 'cashers.branch_id', '=', 'branches.id')
+        ->where('branches.id', $branchId)
+        ->whereYear('casher_procs.date', $year)
+        ->whereMonth('casher_procs.date', $month)
+        ->groupBy('operation_date')
+        ->get();
 
-
-    $operations = casher_procs::select(
-        DB::raw('DATE(date) as operation_date'),
-        DB::raw('SUM(total) as total_sum'),
-        DB::raw('SUM(cash) as cash_sum'),
-        DB::raw('SUM(`out`) as out_sum'), // إضافة backticks حول out
-        DB::raw('SUM(bank) as bank_sum'),
-
-        DB::raw('SUM(plus) as plus_sum')
-    )
-    ->whereHas('casher', function ($query) use ($branchId) {
-        $query->whereHas('branch', function ($subQuery) use ($branchId) {
-            $subQuery->where('branch_id', $branchId);
-        });
-    })
-    ->whereYear('date', $year)
-    ->whereMonth('date', $month)
-    ->groupBy('operation_date')
-    ->get();
-$branch=Branch::All();
-    return view('branch_report', compact('operations', 'month', 'year', 'daysInMonth','branch','branchId'));
+    $branches = Branch::all();
+    return view('branch_report', compact('operations', 'month', 'year', 'branches', 'branchId'));
 }
 
 public function total(Request $request)
@@ -96,15 +90,13 @@ public function total(Request $request)
     $month = $request->input('month');
     $year = $request->input('year');
 
-    // حساب عدد أيام الشهر
-    $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
 
 
     $operations = casher_procs::select(
         DB::raw('DATE(date) as operation_date'),
         DB::raw('SUM(total) as total_sum'),
         DB::raw('SUM(cash) as cash_sum'),
-        DB::raw('SUM(`out`) as out_sum'), // إضافة backticks حول out
+        DB::raw('SUM(out) as out_sum'), // إضافة backticks حول out
         DB::raw('SUM(bank) as bank_sum'),
         DB::raw('SUM(plus) as plus_sum')
     )
@@ -112,7 +104,7 @@ public function total(Request $request)
     ->whereMonth('date', $month)
     ->groupBy('operation_date')
     ->get();
-    return view('total_report', compact('operations', 'month', 'year', 'daysInMonth'));
+    return view('total_report', compact('operations', 'month', 'year'));
 }
 }
 
