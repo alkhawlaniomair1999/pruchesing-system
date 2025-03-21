@@ -77,7 +77,7 @@ class CasherProcController extends Controller
     public function update(Request $request)
     {
         try {
-          // جلب السجل المطلوب من casher_procs مع التحقق من وجوده
+  // جلب السجل المطلوب من casher_procs مع التحقق من وجوده
 $cp = casher_procs::find($request->id);
 
 if ($cp) {
@@ -101,10 +101,12 @@ if ($cp) {
     } else {
         // التعامل مع الحالة عندما لا يتم العثور على السجل في cashers
         // يمكنك إضافة رسالة خطأ أو تسجيل الحدث
+        return response()->json(['error' => 'Casher not found'], 404);
     }
 } else {
     // التعامل مع الحالة عندما لا يتم العثور على السجل في casher_procs
     // يمكنك إضافة رسالة خطأ أو تسجيل الحدث
+    return response()->json(['error' => 'Casher process not found'], 404);
 }
 
             if ($cp->casher_id == $request->casher_id) {
