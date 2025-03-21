@@ -86,18 +86,16 @@ if ($cp) {
 
     if ($c) {
         // إعداد البيانات للتحديث
-        $data = [
-            'casher_id' => $request->casher_id,
-            'date' => $request->date,
-            'total' => $request->total,
-            'bank' => $request->bank,
-            'cash' => $request->cash,
-            'out' => $request->out,
-            'plus' => $request->total - ($request->out + $request->cash + $request->bank),
-        ];
+        $cp->casher_id = $request->casher_id;
+        $cp->date = $request->date;
+        $cp->total = $request->total;
+        $cp->bank = $request->bank;
+        $cp->cash = $request->cash;
+        $cp->out = $request->out;
+        $cp->plus = $request->total - ($request->out + $request->cash + $request->bank);
 
-        // تحديث السجل في casher_procs
-        $cp->update($data);
+        // حفظ التغييرات في قاعدة البيانات
+        $cp->save();
     } else {
         // التعامل مع الحالة عندما لا يتم العثور على السجل في cashers
         // يمكنك إضافة رسالة خطأ أو تسجيل الحدث
