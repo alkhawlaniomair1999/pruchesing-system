@@ -77,17 +77,35 @@ class CasherProcController extends Controller
     public function update(Request $request)
     {
         try {
-            $cp = casher_procs::where('id', $request->id)->first();
-            $c = cashers::where('id', $cp->casher_id)->first();
-            $data['casher_id'] = $request->casher_id;
-            $data['date'] = $request->date;
-            $data['total'] = $request->total;
-            $data['bank'] = $request->bank;
-            $data['cash'] = $request->cash;
-            $data['out'] = $request->out;
-            $x = $request->out + $request->cash + $request->bank;
-            $data['plus'] = $request->total - $x;
-            casher_procs::where('id', $request->id)->update($data);
+          // جلب السجل المطلوب من casher_procs مع التحقق من وجوده
+$cp = casher_procs::find($request->id);
+
+if ($cp) {
+    // جلب السجل المطلوب من cashers مع التحقق من وجوده
+    $c = cashers::find($cp->casher_id);
+
+    if ($c) {
+        // إعداد البيانات للتحديث
+        $data = [
+            'casher_id' => $request->casher_id,
+            'date' => $request->date,
+            'total' => $request->total,
+            'bank' => $request->bank,
+            'cash' => $request->cash,
+            'out' => $request->out,
+            'plus' => $request->total - ($request->out + $request->cash + $request->bank),
+        ];
+
+        // تحديث السجل في casher_procs
+        $cp->update($data);
+    } else {
+        // التعامل مع الحالة عندما لا يتم العثور على السجل في cashers
+        // يمكنك إضافة رسالة خطأ أو تسجيل الحدث
+    }
+} else {
+    // التعامل مع الحالة عندما لا يتم العثور على السجل في casher_procs
+    // يمكنك إضافة رسالة خطأ أو تسجيل الحدث
+}
 
             if ($cp->casher_id == $request->casher_id) {
                 $cacher = cashers::where('id', $request->casher_id)->first();
