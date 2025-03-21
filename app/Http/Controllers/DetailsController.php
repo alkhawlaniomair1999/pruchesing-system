@@ -40,7 +40,7 @@ class DetailsController extends Controller
             $details['date'] = $request->date;
             $details['tax'] = $request->tax;
             if ($request->tax == "True") {
-                $x = $request->totalPrice * (1-0.15);
+                $x = $request->totalPrice / 1.15;
                 $details['price'] = $x;
             } else {
                 $details['price'] = $request->totalPrice;
@@ -107,7 +107,7 @@ class DetailsController extends Controller
             $details['date'] = $request->date;
             $details['tax'] = $request->tax;
             if ($request->tax == "True") {
-                $x = $request->totalPrice * (1-0.15);
+                $x = $request->totalPrice / 1.15;
                 $details['price'] = $x;
             } else {
                 $details['price'] = $request->totalPrice;
