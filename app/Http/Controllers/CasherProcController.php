@@ -85,7 +85,8 @@ class CasherProcController extends Controller
             $data['bank'] = $request->bank;
             $data['cash'] = $request->cash;
             $data['out'] = $request->out;
-            $data['plus'] = $request->total - $request->out + $request->cash + $request->bank;
+            $x = $request->out + $request->cash + $request->bank;
+            $data['plus'] = $request->total - $x;
             casher_procs::where('id', $request->id)->update($data);
 
             if ($cp->casher_id == $request->casher_id) {
