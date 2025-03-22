@@ -311,16 +311,9 @@ class SuppliersController extends Controller
     public function printSupply($id)
     {
         try {
-           // البحث عن تفاصيل التوريد باستخدام العلاقة مع المورد والحساب
-$supply = SupplyDetail::with(['supplier', 'account'])->find($id);
-
-// التحقق مما إذا كانت تفاصيل التوريد موجودة
-if (!$supply) {
-    abort(404, 'Supply not found');
-}
-
-// عرض الصفحة مع تمرير تفاصيل التوريد إلى العرض
-return view('print.print_supply', ['supply' => $supply]);
+            $supply = SupplyDetail::find($id);
+            $account = accounts::find($supply->account_id);
+            return view('print.print_supply', compact('supply','$account'));
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء طباعة بيانات التوريد.');
         }

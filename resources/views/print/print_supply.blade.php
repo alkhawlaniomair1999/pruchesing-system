@@ -180,7 +180,7 @@
 
                         </td>
                         <td>
-                            {{ $supply->account->account ?? '- ' }}
+                            {{ $account->account ?? '- ' }}
                         </td>
                     </tr>
                 </tbody>
