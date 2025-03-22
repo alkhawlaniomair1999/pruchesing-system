@@ -38,7 +38,16 @@ function sortTable(columnIndex, tableId) {
     rows.sort((a, b) => {
         const cellA = a.cells[columnIndex].innerText;
         const cellB = b.cells[columnIndex].innerText;
-        return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+
+        // تحقق مما إذا كانت القيم عددية
+        const valueA = isNaN(cellA) ? cellA : parseFloat(cellA);
+        const valueB = isNaN(cellB) ? cellB : parseFloat(cellB);
+
+        if (typeof valueA === 'number' && typeof valueB === 'number') {
+            return isAscending ? valueA - valueB : valueB - valueA;
+        } else {
+            return isAscending ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+        }
     });
 
     rows.forEach(row => table.appendChild(row));
