@@ -180,7 +180,9 @@
 
                         </td>
                         <td>
-                            {{ $account->account ?? '- ' }}
+                            @if (isset($account))
+                                {{ $account->account }}
+                            @endif
                         </td>
                     </tr>
                 </tbody>
