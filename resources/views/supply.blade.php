@@ -112,7 +112,7 @@
                             @endif
                         @endforeach
 
-                        <td>{{ number_format($p->amount, 2) }}</td>
+                        <td>{{$p->amount }}</td>
                         <td>
                             @if ($p->payment_type === 'cash')
                                 نقداً
