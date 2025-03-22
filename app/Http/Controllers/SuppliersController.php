@@ -313,7 +313,7 @@ class SuppliersController extends Controller
         try {
             $supply = SupplyDetail::find($id);
             if ($supply->payment_type == 'cash') {
-                $account = accounts::find($supply->account_id);
+                $account = accounts::find($supply->account_name);
                 return view('print.print_supply', compact('supply','account'));
             }else{
                 return view('print.print_supply', compact('supply'));
