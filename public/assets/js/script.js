@@ -36,17 +36,17 @@ function sortTable(columnIndex, tableId) {
     table.setAttribute('data-sort-order', isAscending ? 'desc' : 'asc');
 
     rows.sort((a, b) => {
-        const cellA = a.cells[columnIndex].innerText;
-        const cellB = b.cells[columnIndex].innerText;
+        const cellA = a.cells[columnIndex].innerText.trim();
+        const cellB = b.cells[columnIndex].innerText.trim();
 
         // تحقق مما إذا كانت القيم عددية
         const valueA = isNaN(cellA) ? cellA : parseFloat(cellA);
         const valueB = isNaN(cellB) ? cellB : parseFloat(cellB);
 
-        if (typeof valueA === 'number' && typeof valueB === 'number') {
+        if (!isNaN(valueA) && !isNaN(valueB)) {
             return isAscending ? valueA - valueB : valueB - valueA;
         } else {
-            return isAscending ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+            return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
         }
     });
 
