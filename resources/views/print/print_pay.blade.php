@@ -1,4 +1,13 @@
 @extends('include.app')
+
+@section('title')
+طباعة قيد سداد
+@endsection
+
+@section('page')
+    طباعة سندات سداد الموردين
+    @endsection
+
 @section('main')
 
     <style>

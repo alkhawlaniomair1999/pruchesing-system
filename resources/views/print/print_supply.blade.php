@@ -1,4 +1,12 @@
 @extends('include.app')
+@section('title')
+طباعة فاتورة توريد 
+@endsection
+
+@section('page')
+طباعة فاتورة توريد 
+    @endsection
+
 @section('main')
 
     <style>
