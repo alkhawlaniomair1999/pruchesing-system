@@ -134,7 +134,7 @@
             <form id="editForm" action="{{ route('casher_proc.update') }}" method="POST">
                 @csrf
                 <div class="custom-form-fields">
-                    <input type="text" id="id" name="id" style="display: none;">
+                    <input type="number" id="id" name="id" style="display: none;">
                     <div class="custom-form-group third-width">
                         <label for="editCasher">الكاشير:</label>
                         <select id="editCasher" name="casher_id" required>
