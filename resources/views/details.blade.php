@@ -178,7 +178,7 @@
 
                     <div class="custom-form-group half-width">
                         <label for="editTotalPrice">السعر الإجمالي:</label>
-                        <input type="number" id="editTotalPrice" name="totalPrice" required>
+                        <input type="float" id="editTotalPrice" name="totalPrice" required>
                     </div>
 
                     <div class="custom-form-group half-width">
