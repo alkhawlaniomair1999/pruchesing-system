@@ -268,7 +268,24 @@ th {
         padding: 0;
         display: none !important;
     }
-}
+
+
+    .table-container {
+        height: auto !important;
+        overflow: visible !important;
+      }
+      
+      /* تكرار رأس وتذييل الجدول في كل صفحة */
+      thead {
+        display: table-header-group;
+      }
+      tfoot {
+        display: table-footer-group;
+      }
+      
+      /* يمكن إضافة أي تعديلات أخرى لتحسين عرض الجدول */
+    }
+
 
 .print_btn {
     font-size: larger;
