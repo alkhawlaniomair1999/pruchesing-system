@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     paginateTable('casher-table', 'casher-pagination');
     paginateTable('pro-table', 'pro-pagination');
     paginateTable('sys-table', 'sys-pagination');
+    paginateTable('receipt-table', 'receipt-pagination');
 });
 
 document.querySelectorAll('select').forEach(select => {
