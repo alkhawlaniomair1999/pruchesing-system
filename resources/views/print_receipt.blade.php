@@ -171,6 +171,7 @@
                         <th>استلمنا من</th>
 
                         <th>مبلغ وقدره</th>
+                        <th>المبلغ كتابة</th>
                         <th>نوع الدفع</th>
                         <th>بتأريخ</th>
                         <th>وذلك بمقابل</th>
@@ -182,7 +183,8 @@
                         <td>
                             {{ $receipt->customer_name }}
                         </td>
-                        <td>{{ $receipt->amount }} </td>
+                        <td>SAR {{ $receipt->amount }} </td>
+                        <td> {{ $amountInWords }} ريال سعودي</td>
                         <td>
                             @if ($receipt->payment_method == 'cash')
                                 نقدا

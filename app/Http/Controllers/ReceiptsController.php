@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\receipts;
 use Illuminate\Http\Request;
+use NumberToWords\NumberToWords;
+
 
 class ReceiptsController extends Controller
 {
@@ -72,6 +74,18 @@ class ReceiptsController extends Controller
     public function printreceipt($id)
     {
         $receipt = receipts::find($id);
-        return view('print_receipt', compact('receipt'));
+        if (!function_exists('moneyToText')) {
+            function moneyToText($amount) {
+                $numberToWords = new NumberToWords();
+        
+                // الحصول على محول الأرقام إلى كلمات باللغة العربية
+                $numberTransformer = $numberToWords->getNumberTransformer('ar');
+        
+                // تحويل المبلغ إلى كلمات
+                return $numberTransformer->toWords($amount);
+            }
+        }
+        $amountInWords = moneyToText($receipt->amount);
+        return view('print_receipt', compact('receipt','amountInWords'));
     }
 }
