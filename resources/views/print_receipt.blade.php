@@ -142,7 +142,7 @@
             </div>
             <div class="logo">
 
-                <h1> سند قبض </h1>
+                <h1> سند  </h1>
             </div>
             <div class="company-info company-info-left">
                 <p>سجل تجاري رقم 5901719945</p>
