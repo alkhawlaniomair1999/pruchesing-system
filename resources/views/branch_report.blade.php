@@ -7,10 +7,62 @@
     تقارير
 @endsection
 @section('main')
+<style>
+     .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .company-info {
+            width: 45%;
+        }
+
+        .company-info-right {
+            text-align: right;
+            direction: rtl;
+        }
+
+        .company-info-left {
+            text-align: left;
+            direction: ltr;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .logo img {
+            max-width: 120px;
+            height: auto;
+        }
+</style>
     <button class="print_btn" onclick="window.print()">طباعة<i class="fa-solid fa-print"></i></button>
     <button class="print_btn" onclick="window.location.href='{{ url('reports') }}'">
         عودة <i class="fa-solid fa-arrow-right"></i>
     </button>
+    <div class="header">
+        <div class="company-info company-info-right">
+            <h2> مطعم الجمار الرابع لتقديم الوجبات </h2>
+            <p>ابو عريش
+                حي الروضة
+                شارع الامير محمد بن ناصر </p>
+
+        </div>
+        <div class="logo">
+
+            <h1> تقرير فرع </h1>
+        </div>
+        <div class="company-info company-info-left">
+            <p>سجل تجاري رقم 5901719945</p>
+            <p>الرقم الضريبي 310767346400003</p>
+
+        </div>
+    </div>
 
     <h2>تقرير شهر:
         @switch($month)
