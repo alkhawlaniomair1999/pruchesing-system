@@ -709,3 +709,48 @@ display: none;
     background-color: #f2dede;
     border-color: #ebccd1;
 }
+@media print {
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+    }
+
+    tr {
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+
+        display: table-footer-group;
+    }
+
+    /* إخفاء شريط التمرير */
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* تأكد من أن العناصر لا تحتوي على overflow يسبب ظهور شريط التمرير */
+    body,
+    .printable-content {
+        overflow: visible !important;
+    }
+
+    tr {
+        page-break-inside: avoid;
+    }
+
+    .page-break {
+        page-break-before: always;
+    }
+}
