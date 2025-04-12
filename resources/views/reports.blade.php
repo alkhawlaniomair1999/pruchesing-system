@@ -8,6 +8,13 @@
 @endsection
 @section('main')
     <style>
+.page-border {
+        border: 5px solid #000; /* تحديد الحدود بعرض 5 بكسل */
+        padding: 15px; /* مسافة داخلية بين الحدود والمحتوى */
+        margin: 10px auto; /* ضبط الهوامش */
+        width: 100%;
+        box-sizing: border-box; /* ضمان احتساب الحواف مع الحجم الكلي */
+    }
         .header {
             display: flex;
             justify-content: space-between;
@@ -154,11 +161,24 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     <script>
-        function generatePDF() {
-            const element = document.querySelector('.printable-content');
-            html2pdf(element);
-        }
+      function generatePDF() {
+    const element = document.querySelector('.printable-content');
+    const options = {
+        margin: 3, // الهوامش داخل الملف
+        filename: 'report_with_border.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(options).from(element).save();
+}
     </script>
 
 
 @endsection
+
+
+
+
+
+
