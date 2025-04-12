@@ -1,14 +1,14 @@
 @extends('include.app')
+
 @section('title')
-طباعة فاتورة توريد 
+    طباعة سند قبض
 @endsection
 
 @section('page')
-طباعة فاتورة توريد 
-    @endsection
+    طباعة سند قبض
+@endsection
 
 @section('main')
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -126,7 +126,7 @@
         }
     </style>
     <button class="print_btn" onclick="window.print()">طباعة<i class="fa-solid fa-print"></i></button>
-    <button class="print_btn" onclick="window.location.href='{{ url('supplier') }}'">
+    <button class="print_btn" onclick="window.location.href='{{ url('receipt') }}'">
         عودة <i class="fa-solid fa-arrow-right"></i>
     </button>
     <br>
@@ -141,7 +141,6 @@
 
             </div>
             <div class="logo">
-
                 <img src="{{ asset('assets/img/jammar2.png') }}" alt="Logo">
             </div>
             <div class="company-info company-info-left">
@@ -154,10 +153,19 @@
         <!-- Details Section -->
         <div class="details">
             <div>
-                @if (isset($supply))
-                    <p> اسم المورد :{{ $supply->supplier->supplier }}</p>
-                    <p>رقم الفاتورة: [{{ $supply->id }}]</p>
-                    <p>تاريخ الإصدار: {{ $supply->date }}</p>
+                <div>
+                    <p>رقم السند: </p>
+                    <p style="color: red"> {{ $receipt->id }}</p>
+
+                </div>
+                <h3>
+                    سند قبض
+                </h3>
+                <div>
+                    <p>تاريخ الإصدار: </p>
+                    <p style="font-size: 15px"> {{ $receipt->created_at->format('Y-m-d') }}</p>
+
+                </div>
             </div>
         </div>
 
@@ -166,37 +174,43 @@
             <table>
                 <thead>
                     <tr>
-                        <th>التفاصيل</th>
-                        <th>المبلغ</th>
-                        <th>الدفع</th>
-                        <th>الحساب</th>
+                        <th>استلمنا من</th>
+
+                        <th>مبلغ وقدره</th>
+                        <th>المبلغ كتابة</th>
+                        <th>نوع الدفع</th>
+                        <th>بتأريخ</th>
+                        <th>وذلك بمقابل</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- أضف العناصر هنا ديناميكيًا -->
                     <tr>
-                        <td>{{ $supply->details }} </td>
-                        <td>{{ $supply->amount }}</td>
                         <td>
-                            @if ($supply->payment_type === 'cash')
-                                نقداً
-                            @elseif($supply->payment_type === 'credit')
-                                آجل
-                            @else
-                                غير محدد
-                            @endif
-
+                            {{ $receipt->customer_name }}
                         </td>
+                        <td>SAR {{ $receipt->amount }} </td>
+                        <td> {{ $amountInWords }} ريال سعودي</td>
                         <td>
-                            @if (isset($account))
-                                {{ $account->account }}
+                            @if ($receipt->payment_method == 'cash')
+                                نقدا
+                            @elseif ($receipt->payment_method == 'credit')
+                                تحويل لحسابنا البنكي
                             @endif
+                        </td>
+                        <td>{{ $receipt->date }}</td>
+                        <td>
+                            {{ $receipt->detail }}
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        @endif
+        <div
+            style="justify-content: space-between; display: flex; margin-top: 20px; margin-bottom: 100px; margin-right: 60px; margin-left: 60px;">
+            <h2>الحسابات</h2>
+            <h2>المدير العام</h2>
+        </div>
         <!-- Footer Section -->
         <div class="footer">
             <p>طُبع بواسطة: {{ auth()->user()->name }}</p>
@@ -205,5 +219,4 @@
             <p>شكرًا لتعاملكم معنا!</p>
         </div>
     </div>
-
 @endsection

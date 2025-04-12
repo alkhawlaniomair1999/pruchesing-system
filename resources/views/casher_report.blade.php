@@ -7,127 +7,196 @@
     تقارير
 @endsection
 @section('main')
-<button class="print_btn" onclick="window.print()">طباعة<i class="fa-solid fa-print"></i></button>
-<button class="print_btn" onclick="window.location.href='{{ url('reports') }}'">
-    عودة <i class="fa-solid fa-arrow-right"></i>
-</button>
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
 
-    <h2>تقرير شهر: 
-   
+        .company-info {
+            width: 45%;
+        }
 
-@switch( $month )
-    @case(1)
-        يناير
-        @break
-    @case(2)
-        فبراير
-        @break
-    @case(3)
-        مارس
-        @break
-    @case(4)
-        أبريل
-        @break
-    @case(5)
-        مايو
-        @break
-    @case(6)
-        يونيو
-        @break
-    @case(7)
-        يوليو
-        @break
-    @case(8)
-        أغسطس
-        @break
-    @case(9)
-        سبتمبر
-        @break
-    @case(10)
-        أكتوبر
-        @break
-    @case(11)
-        نوفمبر
-        @break
-    @case(12)
-        ديسمبر
-        @break
-    @default
-        رقم الشهر غير صحيح
-@endswitch
-    
-    {{ $month }}-{{ $year }}   للموظف: {{ $c->casher }}</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>التاريخ</th>
-                <th>المبيعات</th>
-                <th>البنك</th>
-                <th>الكاش</th>
-                <th>المصروفات</th>
-                <th>عجز-زيادة</th>
-            </tr>
+        .company-info-right {
+            text-align: right;
+            direction: rtl;
+        }
 
-        </thead>
-        <tbody>
-@php
-    $sum_total=0;
-    $sum_bank=0;
-    $sum_cash=0;
-    $sum_out=0;
-    $sum_plus=0;
-@endphp
+        .company-info-left {
+            text-align: left;
+            direction: ltr;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .logo img {
+            max-width: 120px;
+            height: auto;
+        }
+    </style>
+    <button class="print_btn" onclick="generatePDF()">طباعة<i class="fa-solid fa-print"></i></button>
+    <button class="print_btn" onclick="window.location.href='{{ url('reports') }}'">
+        عودة <i class="fa-solid fa-arrow-right"></i>
+    </button>
+    <div class="printable-content">
+        <div class="header">
+            <div class="company-info company-info-right">
+                <h2> مطعم الجمار الرابع لتقديم الوجبات </h2>
+                <p>ابو عريش
+                    حي الروضة
+                    شارع الامير محمد بن ناصر </p>
+
+            </div>
+            <div class="logo">
+
+                <img src="{{ asset('assets/img/jammar2.png') }}" alt="Logo">
+            </div>
+            <div class="company-info company-info-left">
+                <p>سجل تجاري رقم 5901719945</p>
+                <p>الرقم الضريبي 310767346400003</p>
+
+            </div>
+        </div>
+        <h2>تقرير شهر:
 
 
-            @if (isset($casher_proc))
-                @foreach ($casher_proc as $cp)
-                   
-                    <tr>
-                        <td>{{ $cp->date }}</td>
+            @switch($month)
+                @case(1)
+                    يناير
+                @break
 
-                        <td>{{ $cp->total }}</td>
-                
-                        <td>{{ $cp->bank }}</td>
-                        <td>{{ $cp->cash }}</td>
-                        <td>{{ $cp->out }}</td>
-                        <td>{{ $cp->plus }}</td>
+                @case(2)
+                    فبراير
+                @break
+
+                @case(3)
+                    مارس
+                @break
+
+                @case(4)
+                    أبريل
+                @break
+
+                @case(5)
+                    مايو
+                @break
+
+                @case(6)
+                    يونيو
+                @break
+
+                @case(7)
+                    يوليو
+                @break
+
+                @case(8)
+                    أغسطس
+                @break
+
+                @case(9)
+                    سبتمبر
+                @break
+
+                @case(10)
+                    أكتوبر
+                @break
+
+                @case(11)
+                    نوفمبر
+                @break
+
+                @case(12)
+                    ديسمبر
+                @break
+
+                @default
+                    رقم الشهر غير صحيح
+            @endswitch
+
+            {{ $month }}-{{ $year }} للموظف: {{ $c->casher }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>المبيعات</th>
+                    <th>البنك</th>
+                    <th>الكاش</th>
+                    <th>المصروفات</th>
+                    <th>عجز-زيادة</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @php
+                    $sum_total = 0;
+                    $sum_bank = 0;
+                    $sum_cash = 0;
+                    $sum_out = 0;
+                    $sum_plus = 0;
+                @endphp
 
 
-            </tr>
-@php
-    $sum_total+=$cp->total;
-    $sum_bank+=$cp->bank;
-    $sum_cash+=$cp->cash;
-    $sum_out+=$cp->out;
-    $sum_plus+=$cp->plus;
-@endphp
+                @if (isset($casher_proc))
+                    @foreach ($casher_proc as $cp)
+                        <tr>
+                            <td>{{ $cp->date }}</td>
+
+                            <td>{{ $cp->total }}</td>
+
+                            <td>{{ $cp->bank }}</td>
+                            <td>{{ $cp->cash }}</td>
+                            <td>{{ $cp->out }}</td>
+                            <td>{{ $cp->plus }}</td>
 
 
-@endforeach
-@endif
+                        </tr>
+                        @php
+                            $sum_total += $cp->total;
+                            $sum_bank += $cp->bank;
+                            $sum_cash += $cp->cash;
+                            $sum_out += $cp->out;
+                            $sum_plus += $cp->plus;
+                        @endphp
+                    @endforeach
+                @endif
 
-<tfoot>
-<tr>
-    <th>الاجمالي:</th>
-<th>{{$sum_total}}</th>
-<th>{{$sum_bank}}</th>
-<th>{{$sum_cash}}</th>
-<th>{{$sum_out}}</th>
-<th>{{$sum_plus}}</th>
-
-
-</tr>
-
-
-</tfoot>
-
-
-        </tbody>
-    </table>
+            <tfoot>
+                <tr>
+                    <th>الاجمالي:</th>
+                    <th>{{ $sum_total }}</th>
+                    <th>{{ $sum_bank }}</th>
+                    <th>{{ $sum_cash }}</th>
+                    <th>{{ $sum_out }}</th>
+                    <th>{{ $sum_plus }}</th>
 
 
+                </tr>
 
 
+            </tfoot>
+
+
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <script>
+        function generatePDF() {
+            const element = document.querySelector('.printable-content');
+            html2pdf(element);
+        }
+    </script>
 
 
 @endsection

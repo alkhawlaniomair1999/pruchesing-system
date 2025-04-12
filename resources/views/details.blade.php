@@ -134,7 +134,7 @@
                                 <td>{{ $a->account }}</td>
                             @endif
                         @endforeach
-                        <td>{{ number_format($d->total, 2) }}</td>
+                        <td>{{ $d->total }}</td>
 
                         @if ($d->tax == "True")
                             <td>نعم</td>
@@ -145,7 +145,7 @@
                         @endif
 
 
-                        <td>{{ number_format($d->price, 2) }}</td>
+                        <td>{{$d->price }}</td>
                         <td>
                             {{ $d->date }}
                         </td>
@@ -178,7 +178,7 @@
 
                     <div class="custom-form-group half-width">
                         <label for="editTotalPrice">السعر الإجمالي:</label>
-                        <input type="number" id="editTotalPrice" name="totalPrice" required>
+                        <input type="float" id="editTotalPrice" name="totalPrice" required>
                     </div>
 
                     <div class="custom-form-group half-width">

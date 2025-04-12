@@ -104,12 +104,12 @@
                                 @endforeach
                             @endif
                         @endforeach
-                        <td>{{ number_format($d->total, 1) }}</td>
+                        <td>{{$d->total }}</td>
 
-                        <td>{{ number_format($d->bank, 1) }}</td>
-                        <td>{{ number_format($d->cash, 1) }}</td>
-                        <td>{{ number_format($d->out, 1) }}</td>
-                        <td>{{ number_format($d->plus, 1) }}</td>
+                        <td>{{ $d->bank }}</td>
+                        <td>{{ $d->cash }}</td>
+                        <td>{{ $d->out }}</td>
+                        <td>{{ $d->plus }}</td>
                         <td>{{ $d->date }}</td>
 
 
@@ -134,7 +134,7 @@
             <form id="editForm" action="{{ route('casher_proc.update') }}" method="POST">
                 @csrf
                 <div class="custom-form-fields">
-                    <input type="text" id="id" name="id" style="display: none;">
+                    <input type="number" id="id" name="id" style="display: none;">
                     <div class="custom-form-group third-width">
                         <label for="editCasher">الكاشير:</label>
                         <select id="editCasher" name="casher_id" required>

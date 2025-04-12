@@ -425,8 +425,13 @@ class SuppliersController extends Controller
     public function printSupply($id)
     {
         try {
-            $supply = SupplyDetail::with(['supplier', 'account'])->findOrFail($id);
-            return view('print.print_supply', compact('supply'));
+            $supply = SupplyDetail::find($id);
+            if ($supply->payment_type == 'cash') {
+                $account = accounts::find($supply->account_name);
+                return view('print.print_supply', compact('supply','account'));
+            }else{
+                return view('print.print_supply', compact('supply'));
+            }
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء طباعة بيانات التوريد.');
         }

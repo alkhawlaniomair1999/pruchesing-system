@@ -13,6 +13,7 @@ use App\Http\Controllers\CasherProcController;
 use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PayController;
+use App\Http\Controllers\ReceiptsController;
 
 
 
@@ -99,6 +100,10 @@ Route::post('/pay/updatePay', [PayController::class, 'updatePay'])->name('pay.up
 Route::get('/pay/destroy/{id}', [PayController::class, 'destroy'])->name('pay.destroy');
 Route::get('/pay/printpay/{id}', [PayController::class, 'printpay'])->name('pay.printpay');
 
+//سند قبض
+Route::get('/receipt', [ReceiptsController::class, 'index'])->name('receipt.index');
+Route::post('/receipt/store', [ReceiptsController::class, 'store'])->name('receipt.store');
+Route::get('/receipt/printreceipt/{id}', [ReceiptsController::class, 'printreceipt'])->name('receipt.printreceipt');
 
 
 

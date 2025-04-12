@@ -112,7 +112,7 @@
                             @endif
                         @endforeach
 
-                        <td>{{ number_format($p->amount, 2) }}</td>
+                        <td>{{$p->amount }}</td>
                         <td>
                             @if ($p->payment_type === 'cash')
                                 نقداً
@@ -178,7 +178,7 @@
                     </div>
                     <div class="custom-form-group third-width">
                         <label for="editAmount">المبلغ:</label>
-                        <input type="text" id="editAmount" name="amount" required>
+                        <input type="float" id="editAmount" name="amount" required>
                     </div>
                     <div class="custom-form-group third-width">
                         <label for="payType">نوع السند:</label>

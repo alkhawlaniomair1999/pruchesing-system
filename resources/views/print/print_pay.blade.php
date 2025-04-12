@@ -1,4 +1,13 @@
 @extends('include.app')
+
+@section('title')
+طباعة قيد سداد
+@endsection
+
+@section('page')
+    طباعة سندات سداد الموردين
+    @endsection
+
 @section('main')
 
     <style>
@@ -109,7 +118,7 @@
             </div>
             <div class="logo">
                 
-                <h1> سداد </h1>
+                <img src="{{ asset('assets/img/jammar2.png') }}" alt="Logo">
             </div>
             <div class="company-info company-info-left">
                 <p>سجل تجاري رقم 5901719945</p>

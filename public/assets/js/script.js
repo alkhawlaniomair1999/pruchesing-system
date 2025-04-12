@@ -36,9 +36,18 @@ function sortTable(columnIndex, tableId) {
     table.setAttribute('data-sort-order', isAscending ? 'desc' : 'asc');
 
     rows.sort((a, b) => {
-        const cellA = a.cells[columnIndex].innerText;
-        const cellB = b.cells[columnIndex].innerText;
-        return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+        const cellA = a.cells[columnIndex].innerText.trim();
+        const cellB = b.cells[columnIndex].innerText.trim();
+
+        // تحقق مما إذا كانت القيم عددية
+        const valueA = isNaN(cellA) ? cellA : parseFloat(cellA);
+        const valueB = isNaN(cellB) ? cellB : parseFloat(cellB);
+
+        if (!isNaN(valueA) && !isNaN(valueB)) {
+            return isAscending ? valueA - valueB : valueB - valueA;
+        } else {
+            return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+        }
     });
 
     rows.forEach(row => table.appendChild(row));
@@ -83,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     paginateTable('casher-table', 'casher-pagination');
     paginateTable('pro-table', 'pro-pagination');
     paginateTable('sys-table', 'sys-pagination');
+    paginateTable('receipt-table', 'receipt-pagination');
 });
 
 document.querySelectorAll('select').forEach(select => {

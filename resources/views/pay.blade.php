@@ -96,7 +96,7 @@
                                 <td>{{ $s->supplier }}</td>
                             @endif
                         @endforeach
-                        <td>{{ number_format($p->amount, 2) }}</td>
+                        <td>{{$p->amount }}</td>
 
                         @foreach ($accounts as $a)
                             @if ($a->id == $p->account)
