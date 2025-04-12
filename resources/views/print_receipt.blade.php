@@ -141,8 +141,7 @@
 
             </div>
             <div class="logo">
-
-                <h1> سند  </h1>
+                <img src="{{ asset('assets/img/jammar2.png') }}" alt="Logo">
             </div>
             <div class="company-info company-info-left">
                 <p>سجل تجاري رقم 5901719945</p>
@@ -154,12 +153,19 @@
         <!-- Details Section -->
         <div class="details">
             <div>
+                <div>
+                    <p>رقم السند: </p>
+                    <p style="color: red"> {{ $receipt->id }}</p>
 
-                <p>رقم السند: {{ $receipt->id }}</p>
+                </div>
                 <h3>
                     سند قبض
                 </h3>
-                <p>تاريخ الإصدار: {{ $receipt->created_at }}</p>
+                <div>
+                    <p>تاريخ الإصدار: </p>
+                    <p style="font-size: 15px"> {{ $receipt->created_at }}</p>
+
+                </div>
             </div>
         </div>
 
