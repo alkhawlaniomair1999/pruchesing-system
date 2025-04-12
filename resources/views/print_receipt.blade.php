@@ -163,7 +163,7 @@
                 </h3>
                 <div>
                     <p>تاريخ الإصدار: </p>
-                    <p style="font-size: 15px"> {{ $receipt->created_at }}</p>
+                    <p style="font-size: 15px"> {{ $receipt->created_at->format('Y-m-d') }}</p>
 
                 </div>
             </div>
