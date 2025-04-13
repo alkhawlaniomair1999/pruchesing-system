@@ -7,6 +7,7 @@
     التسجيل اليومي
 @endsection
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 @section('main')
     @if (session('success'))
@@ -136,16 +137,16 @@
                         @endforeach
                         <td>{{ $d->total }}</td>
 
-                        @if ($d->tax == "True")
+                        @if ($d->tax == 'True')
                             <td>نعم</td>
-                        @elseif ($d->tax == "False")
+                        @elseif ($d->tax == 'False')
                             <td>لا</td>
                         @else
                             <td></td>
                         @endif
 
 
-                        <td>{{$d->price }}</td>
+                        <td>{{ $d->price }}</td>
                         <td>
                             {{ $d->date }}
                         </td>
@@ -240,7 +241,10 @@
 
     <!-- CSS للنموذج المنبثق -->
 
-    <!-- JavaScript لفتح وإغلاق النموذج المنبثق -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <!-- تضمين jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>    <!-- JavaScript لفتح وإغلاق النموذج المنبثق -->
     <script>
         let currentRow; // متغير لتخزين الصف الحالي الذي يتم تعديله
 
@@ -307,5 +311,18 @@
                 window.location.href = '/details/destroy/' + id;
             }
         }
+        $(document).ready(function() {
+            // تهيئة Select2 على قائمة الخيارات الخاصة بالصنف
+            $('#item').select2({
+                placeholder: "اختر صنفًا",
+                allowClear: true
+            });
+
+            // تهيئة Select2 على قائمة الخيارات الخاصة بالصنف في النموذج المنبثق
+            $('#editItem').select2({
+                placeholder: "اختر صنفًا",
+                allowClear: true
+            });
+        });
     </script>
 @endsection
