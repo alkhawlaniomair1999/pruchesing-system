@@ -21,7 +21,7 @@
     <div class="custom-form-container">
         <div class="custom-form-header">
             <button type="button" id="toggleButton" onclick="toggleForm()">-</button>
-            <h2 class="custom-form-title"> إضافة عملية توريد  </h2>
+            <h2 class="custom-form-title"> إضافة عملية توريد </h2>
             <p></p>
         </div>
         <form id="detailsForm" action="{{ route('supplier.storeSupply') }}" method="POST">
@@ -31,12 +31,10 @@
                     <label for="description">التفصيل:</label>
                     <input type="text" id="description" name="details" required>
                 </div>
-
                 <div class="custom-form-group fourth-width">
                     <label for="price">المبلغ:</label>
                     <input type="float" id="price" name="amount" required>
                 </div>
-
                 <div class="custom-form-group third-width">
                     <label for="paymentType">نوع السند:</label>
                     <select id="paymentType" name="payment_type" onchange="toggleAccountField()" required>
@@ -54,7 +52,6 @@
                         @endif
                     </select>
                 </div>
-
                 <div class="custom-form-group third-width" id="accountField">
                     <label for="account"> حساب:</label>
                     <select id="account" name="account_name">
@@ -75,14 +72,12 @@
                     <input type="date" id="date" name="date" required>
                 </div>
             </div>
-
             <div class="custom-form-group">
                 <button type="submit">إضافة</button>
             </div>
         </form>
     </div>
     <br><br>
-
     <h2>جدول عرض البيانات</h2>
     <input type="text" class="search-input" placeholder="بحث في السندات..." onkeyup="searchTable(this, 'pro-table')">
     <table id="pro-table">
@@ -94,7 +89,6 @@
                 <th onclick="sortTable(3, 'pro-table')"> المبلغ</th>
                 <th onclick="sortTable(4, 'pro-table')">الدفع</th>
                 <th onclick="sortTable(5, 'pro-table')">الحساب</th>
-
                 <th onclick="sortTable(6, 'pro-table')"> التاريخ </th>
                 <th onclick="sortTable(7, 'pro-table')">الإجراءات</th>
             </tr>
@@ -105,14 +99,12 @@
                     <tr>
                         <td>{{ $p->id }}</td>
                         <td>{{ $p->details }}</td>
-
                         @foreach ($suppliers as $a)
                             @if ($a->id == $p->supplier_id)
                                 <td>{{ $a->supplier }}</td>
                             @endif
                         @endforeach
-
-                        <td>{{$p->amount }}</td>
+                        <td>{{ $p->amount }}</td>
                         <td>
                             @if ($p->payment_type === 'cash')
                                 نقداً
@@ -122,7 +114,6 @@
                                 غير محدد
                             @endif
                         </td>
-
                         <td>
                             @if (isset($accounts))
                                 @foreach ($accounts as $ac)
@@ -143,15 +134,12 @@
                                 onclick="window.location.href='/supplier/printSupply/{{ $p->id }}'">
                                 طباعة <i class="fa-solid fa-print"></i>
                             </button>
-
-
                         </td>
                     </tr>
                 @endforeach
             @endif
         </tbody>
     </table>
-
     <!-- HTML للنموذج المنبثق -->
     <div id="editModal" class="modal">
         <div class="modal-content">
@@ -165,7 +153,6 @@
                         <label for="editDescription">التفصيل:</label>
                         <input type="text" id="editDescription" name="details" required>
                     </div>
-
                     <div class="custom-form-group third-width">
                         <label for="editSupplier">المورد :</label>
                         <select id="editSupplier" name="supplier_id" required>
@@ -187,7 +174,6 @@
                             <option value="credit">آجل</option>
                         </select>
                     </div>
-
                     <div class="custom-form-group third-width">
                         <label for="editAccount">الحساب:</label>
                         <select id="editAccount" name="account_name" required>
@@ -208,27 +194,19 @@
                         <input type="date" id="date" name="date" required>
                     </div>
                 </div>
-
                 <div class="custom-form-group">
                     <button type="submit">حفظ التعديلات</button>
                 </div>
             </form>
         </div>
     </div>
-
     <script>
-        let currentRow; // متغير لتخزين الصف الحالي الذي يتم تعديله
-
-        // فتح النموذج المنبثق وتعبئة البيانات الحالية
+        let currentRow; 
         function openModal(button) {
-            currentRow = button.parentElement.parentElement; // الحصول على الصف الحالي
+            currentRow = button.parentElement.parentElement;
             const cells = currentRow.getElementsByTagName('td');
-
-            // تعبئة النموذج بالبيانات الحالية
             document.getElementById('id').value = cells[0].innerText;
             document.getElementById('editDescription').value = cells[1].innerText;
-
-            // تعيين القيمة الافتراضية لعنصر "select" الخاص بالصنف
             const itemText = cells[2].innerText;
             const itemSelect = document.getElementById('editSupplier');
             for (let i = 0; i < itemSelect.options.length; i++) {
@@ -246,7 +224,6 @@
                     break;
                 }
             }
-            // تعيين القيمة الافتراضية لعنصر "select" الخاص بالحساب
             const accountText = cells[5].innerText;
             const accountSelect = document.getElementById('editAccount');
             for (let i = 0; i < accountSelect.options.length; i++) {
@@ -255,25 +232,18 @@
                     break;
                 }
             }
-            // تعيين التاريخ كقيمة افتراضية
-            const dateText = cells[6].innerText; // افترض أن التاريخ في العمود التاسع
+            const dateText = cells[6].innerText;
             document.getElementById('date').value = dateText;
-
             document.getElementById('editModal').style.display = 'block';
         }
-        // إغلاق النموذج المنبثق
         function closeModal() {
             document.getElementById('editModal').style.display = 'none';
         }
 
         function confirmDelete(id, pa) {
             if (confirm('هل أنت متأكد أنك تريد حذف هذا السجل؟')) {
-                // إذا تم التأكيد، قم بتوجيه المستخدم إلى الراوت الخاص بالحذف
                 window.location.href = pa + id;
             }
         }
     </script>
-
-
-
 @endsection

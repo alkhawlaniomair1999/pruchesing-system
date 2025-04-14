@@ -14,6 +14,7 @@ use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PayController;
 use App\Http\Controllers\ReceiptsController;
+use App\Http\Controllers\EmpsController;
 
 
 
@@ -105,6 +106,15 @@ Route::get('/receipt', [ReceiptsController::class, 'index'])->name('receipt.inde
 Route::post('/receipt/store', [ReceiptsController::class, 'store'])->name('receipt.store');
 Route::get('/receipt/printreceipt/{id}', [ReceiptsController::class, 'printreceipt'])->name('receipt.printreceipt');
 
+//الموظفين
+Route::get('/emps', [EmpsController::class, 'index'])->name('emps.index');
+Route::post('/emps/store', [EmpsController::class, 'store'])->name('emps.store');
+Route::post('/emps/update', [EmpsController::class, 'update'])->name('emps.update');
+Route::get('/emps/destroy/{id}', [EmpsController::class, 'destroy'])->name('emps.destroy');
+Route::get('/emps/print/{id}', [EmpsController::class, 'print'])->name('emps.print');
+Route::post('/emps/dis', [EmpsController::class, 'dis'])->name('emps.dis');
+Route::get('/emps/zeros', [EmpsController::class, 'zeros'])->name('emps.zeros');
+Route::get('/emps/print_report', [EmpsController::class, 'print_report'])->name('emps.print_report');
 
 
 
