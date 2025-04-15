@@ -63,7 +63,7 @@
         <h2>جدول عرض بيانات الموظفين</h2>
         <button class="print_btn" onclick="window.location.href='{{ url('emps/print_report') }}'">طباعة<i
                 class="fa-solid fa-print"></i></button>
-        <button class="s_btn" onclick="confirmZeros('/emps/zeros')">تصفير الخصومات</button>
+        <button class="sBtn" onclick="confirmZeros('/emps/zeros')">تصفير الخصومات</button>
     </div>
     <input type="text" class="search-input" placeholder="بحث في الموظفين..."
         onkeyup="searchTable(this, 'employee-table')">

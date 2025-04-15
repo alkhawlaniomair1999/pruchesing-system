@@ -11,7 +11,7 @@ html {
     direction: rtl;
     /* Set the direction to RTL */
 }
-.s_btn{
+.sBtn{
     background-color: #d81010;
     /* Changed to a darker, calmer blue color */
     color: white;
