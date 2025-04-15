@@ -11,7 +11,7 @@
         background-color: #f44336;
         color: white;
         padding: 3px 20px;
-        font-size: 5px;
+        font-size: 1em;
         border: none;
         border-radius: 5px;
         cursor: pointer;
