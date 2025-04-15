@@ -10,8 +10,9 @@
     .sBtn {
         background-color: #f44336;
         color: white;
-        padding: 3px 20px;
-        font-size: 1em;
+        padding: 5px 20px;
+        font-size: 1.1em;
+        font-style: bold;
         border: none;
         border-radius: 5px;
         cursor: pointer;
