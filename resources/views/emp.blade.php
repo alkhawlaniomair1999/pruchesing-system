@@ -6,7 +6,20 @@
 @section('page')
     الموظفين
 @endsection
-
+<style>
+    .sBtn {
+        background-color: #f44336;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .sBtn:hover {
+        background-color: #d32f2f;
+    }
+</style>
+    
 @section('main')
     @if (session('success'))
         <div class="alert alert-success" id="success-alert">
