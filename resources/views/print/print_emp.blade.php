@@ -111,12 +111,27 @@
 عودة <i class="fa-solid fa-arrow-right"></i>
 </button>
 <br>
+<div class="header">
+    <div class="company-info company-info-right">
+        <h2> مطعم الجمار الرابع لتقديم الوجبات </h2>
+        <p>ابو عريش
+            حي الروضة
+            شارع الامير محمد بن ناصر </p>
+
+    </div>
+    <div class="logo">
+        <img src="{{ asset('assets/img/jammar2.png') }}" alt="Logo">
+    </div>
+    <div class="company-info company-info-left">
+        <p>سجل تجاري رقم 5901719945</p>
+        <p>الرقم الضريبي 310767346400003</p>
+
+    </div>
+</div>
     <div class="col">
         <center>
             <h1>سند استلام راتب</h1>
         </center>
-        <br>
-        <br>
         <br>
         <div class="row">
             <h3> انا الموقع ادناه: {{ $emps->name_emp }}</h3>
