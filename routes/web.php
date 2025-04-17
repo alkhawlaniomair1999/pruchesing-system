@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PayController;
 use App\Http\Controllers\ReceiptsController;
 use App\Http\Controllers\EmpsController;
+use App\Http\Controllers\InvoicesController;
 
 
 
@@ -116,9 +117,16 @@ Route::post('/emps/dis', [EmpsController::class, 'dis'])->name('emps.dis');
 Route::get('/emps/zeros', [EmpsController::class, 'zeros'])->name('emps.zeros');
 Route::get('/emps/print_report', [EmpsController::class, 'print_report'])->name('emps.print_report');
 
-
-
-
+//الفواتير
+Route::get('/invoices', [InvoicesController::class, 'index'])->name('invoices.index');
+Route::get('invoice_details', [InvoicesController::class, 'invoice_details'])->name('invoices.invoice_details');
+Route::post('/invoices/store', [InvoicesController::class, 'store'])->name('invoices.store');
+Route::post('/invoices/update', [InvoicesController::class, 'update'])->name('invoices.update');
+Route::get('/invoices/destroy/{id}', [InvoicesController::class, 'destroy'])->name('invoices.destroy');
+Route::get('/invoices/print/{id}', [InvoicesController::class, 'print'])->name('invoices.print');
+Route::post('/invoices/details', [InvoicesController::class, 'details'])->name('invoices.details');
+Route::post('/invoices/update_detail', [InvoicesController::class, 'update_detail'])->name('invoices.update_detail');
+Route::get('/invoices/destroy_detail/{id}', [InvoicesController::class, 'destroy_detail'])->name('invoices.destroy_detail');
 });
 
 require __DIR__.'/auth.php';
