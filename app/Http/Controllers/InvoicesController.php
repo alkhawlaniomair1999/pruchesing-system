@@ -67,7 +67,7 @@ class InvoicesController extends Controller
         $invoice_details = invoice_details::where('invoice_id', $request->invoice_id)->get();
         return view('invoice_details', compact('invoice', 'invoice_details'))->with('success', 'Invoice created successfully.');
     }
-    public function update_details(Request $request)
+    public function update_detail(Request $request)
     {
         $detail = invoice_details::findOrFail($request->id);
         $detail->update($request->all());
@@ -75,7 +75,7 @@ class InvoicesController extends Controller
         $details = invoice_details::where('invoice_id', $request->invoice_id)->get();
         return view('invoice_details', compact('invoice', 'details'))->with('success', 'Invoice created successfully.');
     }
-    public function destroy_details($id)
+    public function destroy_detail($id)
     {
         $detail = invoice_details::findOrFail($id);
         $detail->delete();
