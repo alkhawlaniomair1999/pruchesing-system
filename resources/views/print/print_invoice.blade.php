@@ -124,6 +124,16 @@
         .footer p {
             margin: 0;
         }
+
+        .tb_total {
+            width: 50%;
+            border: 1px solid #000;
+            border-radius: 5px;
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 1.2em;
+            /* تكبير الخط */
+        }
     </style>
     <button class="print_btn" onclick="window.print()">طباعة<i class="fa-solid fa-print"></i></button>
     <button class="print_btn" onclick="window.location.href='{{ url('invoices') }}'">
@@ -156,7 +166,11 @@
             <div>
                 @if (isset($invoice))
                     <p> اسم العميل :{{ $invoice->customer_name }}</p>
-                    <p>رقم الفاتورة: [{{ $invoice->id }}]</p>
+                    <div>
+                        <p>رقم الفاتورة:
+                        <p style="color: red">{{ $invoice->id }}</p>
+                        </p>
+                    </div>
                     <p>تاريخ الفاتورة: {{ $invoice->invoice_date }}</p>
             </div>
             <div>
@@ -166,6 +180,12 @@
                 <p>رقم الجوال: {{ $invoice->phone_number }}</p>
             </div>
         </div>
+        @php
+            $total = 0;
+            $total_discount = 0;
+            $total_tax = 0;
+            $net_total = 0;
+        @endphp
 
         <!-- Items Section -->
         <div class="items">
@@ -192,8 +212,15 @@
                                 <td>{{ $d->product_name }}</td>
                                 <td>{{ $d->quantity }}</td>
                                 <td>{{ $d->price }}</td>
-                                <td>{{ $d->discount }}</td>
-                                <td>{{ $d->price * $d->quantity - $d->discount }}</td>
+                                <td>
+                                    {{ $d->discount }}
+                                </td>
+                                @php $total_discount += $d->discount @endphp
+
+                                <td>
+                                    {{ $d->price * $d->quantity - $d->discount }}
+                                </td>
+                                @php $total += $d->price * $d->quantity - $d->discount @endphp
                                 @if ($d->tax == 'نعم')
                                     <td>15</td>
                                 @else
@@ -202,6 +229,7 @@
                                 <td>
                                     @if ($d->tax == 'نعم')
                                         {{ ($d->price * $d->quantity - $d->discount) * 0.15 }}
+                                        @php $total_tax += ($d->price * $d->quantity - $d->discount) * 0.15 @endphp
                                     @else
                                         0
                                     @endif
@@ -209,8 +237,10 @@
                                 <td>
                                     @if ($d->tax == 'نعم')
                                         {{ $d->price * $d->quantity - $d->discount + ($d->price * $d->quantity - $d->discount) * 0.15 }}
+                                        @php $net_total += $d->price * $d->quantity - $d->discount + ($d->price * $d->quantity - $d->discount) * 0.15 @endphp
                                     @else
                                         {{ $d->price * $d->quantity - $d->discount }}
+                                        @php $net_total += $d->price * $d->quantity - $d->discount @endphp
                                     @endif
                                 </td>
                         @endforeach
@@ -218,6 +248,24 @@
                 </tbody>
             </table>
         </div>
+        <table class="tb_total">
+            <tr>
+                <td>الاجمالي:</td>
+                <td>{{ $total }}</td>
+            </tr>
+            <tr>
+                <td>الخصم:</td>
+                <td>{{ $total_discount }}</td>
+            </tr>
+            <tr>
+                <td>الضريبة:</td>
+                <td>{{ $total_tax }}</td>
+            </tr>
+            <tr>
+                <td>الصافي:</td>
+                <td>{{ $net_total }}</td>
+            </tr>
+        </table>
         @endif
         <!-- Footer Section -->
         <div class="footer">
