@@ -132,4 +132,15 @@ class InvoicesController extends Controller
 
         return redirect()->route('invoices.index')->with('success', 'Invoice deleted successfully.');
     }
+    public function print($id)
+    {
+        $invoice = invoices::findOrFail($id);
+        $invoice_details = invoice_details::where('invoice_id', $id)->get();
+        return view('print/print_invoice', compact('invoice', 'invoice_details'));
+    }
+    public function show($id){
+        $invoice = invoices::findOrFail($id);
+        $invoice_details = invoice_details::where('invoice_id', $id)->get();
+        return view('invoice_details', compact('invoice', 'invoice_details'));
+    }
 }

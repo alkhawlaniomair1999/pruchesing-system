@@ -127,6 +127,8 @@ Route::get('/invoices/print/{id}', [InvoicesController::class, 'print'])->name('
 Route::post('/invoices/details', [InvoicesController::class, 'details'])->name('invoices.details');
 Route::post('/invoices/update_detail', [InvoicesController::class, 'update_detail'])->name('invoices.update_detail');
 Route::get('/invoices/destroy_detail/{id}', [InvoicesController::class, 'destroy_detail'])->name('invoices.destroy_detail');
+Route::get('/invoices/show/{id}', [InvoicesController::class, 'show'])->name('invoices.show');
+
 });
 
 require __DIR__.'/auth.php';

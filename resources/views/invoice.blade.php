@@ -95,6 +95,10 @@
                                 onclick="window.location.href='/invoices/print/{{ $invoice->id }}'">
                                 طباعة <i class="fa-solid fa-print"></i>
                             </button>
+                            <button class="btn btn-primary"
+                                onclick="window.location.href='/invoices/show/{{ $invoice->id }}'">
+                                تفاصيل <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         </td>
                     </tr>
                 @endforeach
@@ -111,31 +115,31 @@
                 @csrf
                 <div class="custom-form-fields">
                     <input type="text" id="id" name="id" style="display: none;">
-                        <div class="custom-form-group third-width">
-                            <label for="edit_customer_name">اسم العميل:</label>
-                            <input type="text" id="edit_customer_name" name="customer_name" required>
-                        </div>
-                        <div class="custom-form-group fourth-width">
-                            <label for="edit_tax_id">الرقم الضريبي:</label>
-                            <input type="number" id="edit_tax_id" name="tax_id" required>
-                        </div>
-                        <div class="custom-form-group fourth-width">
-                            <label for="edit_address">العنوان:</label>
-                            <input type="text" id="edit_address" name="address">
-                        </div>
-                        <div class="custom-form-group fourth-width">
-                            <label for="edit_phone_number">رقم الجوال:</label>
-                            <input type="number" id="edit_phone_number" name="phone_number">
-                        </div>
-                        <div class="custom-form-group fourth-width">
-                            <label for="edit_invoice_date">تاريخ الفاتورة:</label>
-                            <input type="date" id="edit_invoice_date" name="invoice_date" required>
-                        </div>
-                        <div class="custom-form-group fourth-width">
-                            <label for="edit_supply_date">تاريخ التوريد:</label>
-                            <input type="date" id="edit_supply_date" name="supply_date">
-                        </div>
+                    <div class="custom-form-group third-width">
+                        <label for="edit_customer_name">اسم العميل:</label>
+                        <input type="text" id="edit_customer_name" name="customer_name" required>
                     </div>
+                    <div class="custom-form-group fourth-width">
+                        <label for="edit_tax_id">الرقم الضريبي:</label>
+                        <input type="number" id="edit_tax_id" name="tax_id" required>
+                    </div>
+                    <div class="custom-form-group fourth-width">
+                        <label for="edit_address">العنوان:</label>
+                        <input type="text" id="edit_address" name="address">
+                    </div>
+                    <div class="custom-form-group fourth-width">
+                        <label for="edit_phone_number">رقم الجوال:</label>
+                        <input type="number" id="edit_phone_number" name="phone_number">
+                    </div>
+                    <div class="custom-form-group fourth-width">
+                        <label for="edit_invoice_date">تاريخ الفاتورة:</label>
+                        <input type="date" id="edit_invoice_date" name="invoice_date" required>
+                    </div>
+                    <div class="custom-form-group fourth-width">
+                        <label for="edit_supply_date">تاريخ التوريد:</label>
+                        <input type="date" id="edit_supply_date" name="supply_date">
+                    </div>
+                </div>
                 <div class="custom-form-group">
                     <button type="submit">حفظ التعديلات</button>
                 </div>

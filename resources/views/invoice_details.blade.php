@@ -63,6 +63,9 @@
     </div>
     <br><br>
     <h2>جدول عرض بيانات الفاتورة الضريبة رقم: {{ $invoice->id }}</h2>
+    <button class="print_btn" onclick="window.location.href='/invoices/print/{{ $invoice->id }}'">
+        طباعة <i class="fa-solid fa-print"></i>
+    </button>
     <input type="text" class="search-input" placeholder="بحث في الفواتير الضريبية..."
         onkeyup="searchTable(this, 'invoice-table')">
     <table id="invoice-table">
@@ -94,7 +97,8 @@
                         <td>{{ $invoice_detail->price * $invoice_detail->quantity - $invoice_detail->discount }}</td>
                         <td>{{ $invoice_detail->tax }}</td>
                         <td>{{ $invoice_detail->tax == 'نعم' ? ($invoice_detail->price * $invoice_detail->quantity - $invoice_detail->discount) * 0.15 : 0 }}
-                            <td>{{ $invoice_detail->tax == 'نعم' ? ($invoice_detail->price * $invoice_detail->quantity - $invoice_detail->discount)+(($invoice_detail->price * $invoice_detail->quantity - $invoice_detail->discount) * 0.15):$invoice_detail->price * $invoice_detail->quantity - $invoice_detail->discount }}</td>
+                        <td>{{ $invoice_detail->tax == 'نعم' ? $invoice_detail->price * $invoice_detail->quantity - $invoice_detail->discount + ($invoice_detail->price * $invoice_detail->quantity - $invoice_detail->discount) * 0.15 : $invoice_detail->price * $invoice_detail->quantity - $invoice_detail->discount }}
+                        </td>
                         </td>
                         <td class="action-buttons">
                             <button class="edit-btn" onclick="openModal(this)">تعديل<i
@@ -121,7 +125,8 @@
             <form id="editForm" action="{{ route('invoices.update_detail') }}" method="POST">
                 @csrf
                 <div class="custom-form-fields">
-                    <input type="number" id="invoice_id" name="invoice_id" value="{{ $invoice->id }}" style="display: none;">
+                    <input type="number" id="invoice_id" name="invoice_id" value="{{ $invoice->id }}"
+                        style="display: none;">
                     <input type="number" id="id" name="id" style="display: none;">
                     <div class="custom-form-group third-width">
                         <label for="edit_product_name">اسم الصنف:</label>
@@ -151,9 +156,9 @@
                         </select>
                     </div>
                 </div>
-                    <div class="custom-form-group">
-                        <button type="submit">حفظ التعديلات</button>
-                    </div>
+                <div class="custom-form-group">
+                    <button type="submit">حفظ التعديلات</button>
+                </div>
             </form>
         </div>
     </div>
