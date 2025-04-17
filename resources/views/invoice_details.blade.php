@@ -121,7 +121,8 @@
             <form id="editForm" action="{{ route('invoices.update_detail') }}" method="POST">
                 @csrf
                 <div class="custom-form-fields">
-                    <input type="text" id="id" name="id" style="display: none;">
+                    <input type="number" id="invoice_id" name="invoice_id" value="{{ $invoice->id }}" style="display: none;">
+                    <input type="number" id="id" name="id" style="display: none;">
                     <div class="custom-form-group third-width">
                         <label for="edit_product_name">اسم الصنف:</label>
                         <input type="text" id="edit_product_name" name="product_name" required>

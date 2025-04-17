@@ -42,8 +42,8 @@ class InvoicesController extends Controller
         invoices::create($request->all());
         $id = invoices::latest()->first();
         $invoice = invoices::findOrFail($id->id);
-        $details = invoice_details::where('invoice_id', $id->id)->get();
-        return view('invoice_details', compact('invoice'))->with('success', 'Invoice created successfully.');
+        $invoice_details = invoice_details::where('invoice_id', $id->id)->get();
+        return view('invoice_details', compact('invoice','invoice_details'))->with('success', 'Invoice created successfully.');
     }
 
     /**
@@ -70,16 +70,29 @@ class InvoicesController extends Controller
     public function update_detail(Request $request)
     {
         $detail = invoice_details::findOrFail($request->id);
-        $detail->update($request->all());
+        $detail['product_name'] = $request->product_name;
+        $detail['quantity'] = $request->quantity;
+        $detail['price'] = $request->price;
+        $detail['product_code'] = $request->product_code;
+        $detail['tax'] = $request->tax;
+        if ($request->discount == null) {
+            $detail['discount'] = 0;
+        } else {
+            $detail['discount'] = $request->discount;
+        }
+        $detail->save();
         $invoice = invoices::findOrFail($request->invoice_id);
-        $details = invoice_details::where('invoice_id', $request->invoice_id)->get();
-        return view('invoice_details', compact('invoice', 'details'))->with('success', 'Invoice created successfully.');
+        $invoice_details = invoice_details::where('invoice_id', $request->invoice_id)->get();
+        return view('invoice_details', compact('invoice', 'invoice_details'))->with('success', 'Invoice updated successfully.');    
     }
     public function destroy_detail($id)
     {
         $detail = invoice_details::findOrFail($id);
+        $invoice_id = $detail->invoice_id;
         $detail->delete();
-        return redirect()->back()->with('success', 'Invoice deleted successfully.');
+        $invoice = invoices::findOrFail($invoice_id);
+        $invoice_details = invoice_details::where('invoice_id', $invoice_id)->get();
+        return view('invoice_details', compact('invoice', 'invoice_details'))->with('success', 'Invoice deleted successfully.');
     }
 
     /**
