@@ -16,7 +16,7 @@ use App\Http\Controllers\PayController;
 use App\Http\Controllers\ReceiptsController;
 use App\Http\Controllers\EmpsController;
 use App\Http\Controllers\InvoicesController;
-
+use App\Http\Controllers\InventoryController;
 
 
 Route::get('/', function () {
@@ -128,6 +128,9 @@ Route::post('/invoices/details', [InvoicesController::class, 'details'])->name('
 Route::post('/invoices/update_detail', [InvoicesController::class, 'update_detail'])->name('invoices.update_detail');
 Route::get('/invoices/destroy_detail/{id}', [InvoicesController::class, 'destroy_detail'])->name('invoices.destroy_detail');
 Route::get('/invoices/show/{id}', [InvoicesController::class, 'show'])->name('invoices.show');
+
+//المخازن
+Route::get('/inventory', [ItemsController::class, 'index'])->name('inventory.index');
 
 });
 
