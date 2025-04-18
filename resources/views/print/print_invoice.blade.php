@@ -66,13 +66,14 @@
             padding: 10px;
             margin-bottom: 20px;
             border-radius: 5px;
-
+            display: flex;
+            justify-content: space-between;
             font-size: 1.3em;
             /* تكبير الخط */
         }
 
         .details div {
-            display: flex;
+            display: block;
             justify-content: space-between;
             align-items: center;
         }
@@ -162,24 +163,33 @@
         </div>
 
         <!-- Details Section -->
+        <h3 style="text-align: center">فاتورة ضريبية</h3>
         <div class="details">
-            <div>
-                @if (isset($invoice))
+            @if (isset($invoice))
+                <div class="company-info-right">
                     <p> اسم العميل :{{ $invoice->customer_name }}</p>
-                    <div>
-                        <p>رقم الفاتورة:
-                        <p style="color: red">{{ $invoice->id }}</p>
-                        </p>
-                    </div>
+                    <p>الرقم الضريبي: {{ $invoice->tax_id }}</p>
+                    @if (!empty($invoice->address))
+                        <p>العنوان: {{ $invoice->address }}</p>
+                    @endif
+                    @if (!empty($invoice->phone_number))
+                        <p>رقم الجوال: {{ $invoice->phone_number }}</p>
+                    @endif
+                </div>
+                <div style="text-align: center">
+                    <p>رقم الفاتورة:
+                    <p style="color: red">{{ $invoice->id }}</p>
+                    </p>
+                </div>
+                <div class="company-info-left">
                     <p>تاريخ الفاتورة: {{ $invoice->invoice_date }}</p>
-            </div>
-            <div>
-                <p>الرقم الضريبي: {{ $invoice->tax_id }}</p>
-                <p>تاريخ التوريد: {{ $invoice->supply_date }}</p>
-                <p>العنوان: {{ $invoice->address }}</p>
-                <p>رقم الجوال: {{ $invoice->phone_number }}</p>
-            </div>
+                    @if (!empty($invoice->supply_date))
+                        <p>تاريخ التوريد: {{ $invoice->supply_date }}</p>
+                    @endif
+
+                </div>
         </div>
+
         @php
             $total = 0;
             $total_discount = 0;

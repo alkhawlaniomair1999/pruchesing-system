@@ -29,7 +29,7 @@
             <div class="custom-form-fields">
                 <div class="custom-form-group fourth-width">
                     <label for="item">الصنف:</label>
-                    <select id="item" name="item" required>
+                    <select id="item" name="item_id" required>
                         @if (isset($items))
                             @foreach ($items as $d)
                                 <option value="{{ $d->id }}">{{ $d->item }}</option>
@@ -39,29 +39,35 @@
                 </div>
                 <div class="custom-form-group fourth-width">
                     <label for="branch">الفرع:</label>
-                    <select id="branch" name="branch" required>
+                    <select id="branch" name="branch_id" required>
                         @if (isset($branches))
                             @foreach ($branches as $b)
-                                <option value="{{ $b->id }}">{{ $d->branch }}</option>
+                                <option value="{{ $b->id }}">{{ $b->branch }}</option>
                             @endforeach
                         @endif
                     </select>
                 </div>
-                <label for="month">اختر الشهر:</label>
-                <select name="month" id="month">
-                    @for ($m = 1; $m <= 12; $m++)
-                        <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}
-                        </option>
-                    @endfor
-                </select>
+                <div class="custom-form-group fourth-width">
+                    <label for="month">اختر الشهر:</label>
+                    <select name="month" id="month">
+                        @for ($m = 1; $m <= 12; $m++)
+                            <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>
+                                {{ $m }}
+                            </option>
+                        @endfor
+                    </select>
+                </div>
+                <div class="custom-form-group fourth-width">
 
-                <label for="year">اختر السنة:</label>
-                <select name="year" id="year">
-                    @for ($y = 2023; $y <= now()->year; $y++)
-                        <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}
-                        </option>
-                    @endfor
-                </select>
+                    <label for="year">اختر السنة:</label>
+                    <select name="year" id="year">
+                        @for ($y = 2023; $y <= now()->year; $y++)
+                            <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>
+                                {{ $y }}
+                            </option>
+                        @endfor
+                    </select>
+                </div>
                 <div class="custom-form-group fourth-width">
                     <label for="first_inventory">رصيد اول المدة:</label>
                     <input type="number" id="first_inventory" name="first_inventory">
@@ -142,7 +148,7 @@
                     <input type="text" id="id" name="id" style="display: none;">
                     <div class="custom-form-group fourth-width">
                         <label for="edit_item">الصنف:</label>
-                        <select id="edit_item" name="item" required>
+                        <select id="edit_item" name="item_id" required>
                             @if (isset($items))
                                 @foreach ($items as $d)
                                     <option value="{{ $d->id }}">{{ $d->item }}</option>
@@ -152,29 +158,34 @@
                     </div>
                     <div class="custom-form-group fourth-width">
                         <label for="edit_branch">الفرع:</label>
-                        <select id="edit_branch" name="branch" required>
+                        <select id="edit_branch" name="branch_id" required>
                             @if (isset($branches))
                                 @foreach ($branches as $b)
-                                    <option value="{{ $b->id }}">{{ $d->branch }}</option>
+                                    <option value="{{ $b->id }}">{{ $b->branch }}</option>
                                 @endforeach
                             @endif
                         </select>
                     </div>
-                    <label for="edit_month">اختر الشهر:</label>
-                    <select name="edit_month" id="month">
-                        @for ($m = 1; $m <= 12; $m++)
-                            <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}
-                            </option>
-                        @endfor
-                    </select>
-    
-                    <label for="edit_year">اختر السنة:</label>
-                    <select name="edit_year" id="year">
-                        @for ($y = 2023; $y <= now()->year; $y++)
-                            <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}
-                            </option>
-                        @endfor
-                    </select>
+                    <div class="custom-form-group fourth-width">
+                        <label for="edit_month">اختر الشهر:</label>
+                        <select name="month" id="edit_month">
+                            @for ($m = 1; $m <= 12; $m++)
+                                <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>
+                                    {{ $m }}
+                                </option>
+                            @endfor
+                        </select>
+                    </div>
+                    <div class="custom-form-group fourth-width">
+                        <label for="edit_year">اختر السنة:</label>
+                        <select name="year" id="edit_year">
+                            @for ($y = 2023; $y <= now()->year; $y++)
+                                <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>
+                                    {{ $y }}
+                                </option>
+                            @endfor
+                        </select>
+                    </div>
                     <div class="custom-form-group fourth-width">
                         <label for="edit_first_inventory">رصيد اول المدة:</label>
                         <input type="number" id="edit_first_inventory" name="first_inventory">
@@ -198,44 +209,45 @@
         let currentRow;
 
         function openModal(button) {
-            currentRow = button.parentElement.parentElement;
+            currentRow = button.closest('tr');
             const cells = currentRow.getElementsByTagName('td');
             document.getElementById('id').value = cells[0].innerText;
+            const itemText = cells[1].innerText;
             const itemSelect = document.getElementById('edit_item');
-            const itemId = cells[1].innerText;
             for (let i = 0; i < itemSelect.options.length; i++) {
-                if (itemSelect.options[i].text === itemId) {
+                if (itemSelect.options[i].text === itemText) {
                     itemSelect.selectedIndex = i;
                     break;
                 }
             }
+            const branchText = cells[2].innerText;
             const branchSelect = document.getElementById('edit_branch');
-            const branchId = cells[2].innerText;
             for (let i = 0; i < branchSelect.options.length; i++) {
-                if (branchSelect.options[i].text === branchId) {
+                if (branchSelect.options[i].text === branchText) {
                     branchSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            const month = cells[3].innerText;
+            const monthSelect = document.getElementById('month');
+            for (let i = 0; i < monthSelect.options.length; i++) {
+                if (monthSelect.options[i].value == month) {
+                    monthSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            const year = cells[4].innerText;
+            const yearSelect = document.getElementById('year');
+            for (let i = 0; i < yearSelect.options.length; i++) {
+                if (yearSelect.options[i].value == year) {
+                    yearSelect.selectedIndex = i;
                     break;
                 }
             }
             document.getElementById('edit_first_inventory').value = cells[5].innerText;
             document.getElementById('edit_last_inventory').value = cells[6].innerText;
             document.getElementById('edit_inventory_out').value = cells[7].innerText;
-            const monthText = cells[3].innerText;
-            const monthSelect = document.getElementById('edit_month');
-            for (let i = 0; i < monthSelect.options.length; i++) {
-                if (monthSelect.options[i].text === monthText) {
-                    monthSelect.selectedIndex = i;
-                    break;
-                }
-            }
-            const yearText = cells[4].innerText;
-            const yearSelect = document.getElementById('edit_year');
-            for (let i = 0; i < yearSelect.options.length; i++) {
-                if (yearSelect.options[i].text === yearText) {
-                    yearSelect.selectedIndex = i;
-                    break;
-                }
-            }
+
             document.getElementById('editModal').style.display = 'block';
         }
 
