@@ -131,6 +131,7 @@ Route::get('/invoices/show/{id}', [InvoicesController::class, 'show'])->name('in
 
 //المخازن
 Route::get('/inventory', [ItemsController::class, 'index'])->name('inventory.index');
+Route::post('/inventory/store', [InventoryController::class, 'store'])->name('inventory.store');
 
 });
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\inventory;
+use App\Models\items;
+use App\Models\branches;
 use Illuminate\Http\Request;
 
 class InventoryController extends Controller
@@ -12,7 +14,9 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        //
+        $items = items::all();
+        $branches = branches::all();
+        return view('inventory', compact('items', 'branches'));
     }
 
     /**
