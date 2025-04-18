@@ -411,6 +411,8 @@ tr:nth-child(odd) {
     .sidebar {
         display: none;
         transform: translateX(0);
+        overflow-y: auto;
+        
     }
 
     .sidebar.collapsed {
