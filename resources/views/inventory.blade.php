@@ -82,46 +82,48 @@
     </div>
     <br><br>
     <h2>جدول عرض البيانات</h2>
-    <input type="text" class="search-input" placeholder="بحث في الفواتير الضريبية..."
+    <input type="text" class="search-input" placeholder="بحث في المخزون ..."
         onkeyup="searchTable(this, 'invoice-table')">
     <table id="invoice-table">
         <thead>
             <tr>
                 <th onclick="sortTable(0, 'invoice-table')">الرقم</th>
-                <th onclick="sortTable(1, 'invoice-table')">اسم العميل</th>
-                <th onclick="sortTable(2, 'invoice-table')">الرقم الضريبي</th>
-                <th onclick="sortTable(3, 'invoice-table')"> العنوان</th>
-                <th onclick="sortTable(4, 'invoice-table')">رقم الهاتف</th>
-                <th onclick="sortTable(5, 'invoice-table')">تاريخ الفاتورة</th>
-                <th onclick="sortTable(6, 'invoice-table')"> تاريخ التوريد </th>
-                <th onclick="sortTable(7, 'invoice-table')">الإجراءات</th>
+                <th onclick="sortTable(1, 'invoice-table')"> الصنف</th>
+                <th onclick="sortTable(2, 'invoice-table')"> الفرع</th>
+                <th onclick="sortTable(3, 'invoice-table')"> الشهر</th>
+                <th onclick="sortTable(4, 'invoice-table')"> السنة</th>
+                <th onclick="sortTable(5, 'invoice-table')">رصيد اول المدة</th>
+                <th onclick="sortTable(6, 'invoice-table')">رصيد اخر المدة</th>
+                <th onclick="sortTable(7, 'invoice-table')">المنصرف </th>
+                <th>الإجراءات</th>
             </tr>
         </thead>
         <tbody>
-            @if (isset($invoices))
-                @foreach ($invoices as $invoice)
+            @if (isset($inventory))
+                @foreach ($inventory as $i)
                     <tr>
-                        <td>{{ $invoice->id }}</td>
-                        <td>{{ $invoice->customer_name }}</td>
-                        <td>{{ $invoice->tax_id }}</td>
-                        <td>{{ $invoice->address }}</td>
-                        <td>{{ $invoice->phone_number }}</td>
-                        <td>{{ $invoice->invoice_date }}</td>
-                        <td>{{ $invoice->supply_date }}</td>
+                        <td>{{ $i->id }}</td>
+                        @foreach ($items as $item)
+                            @if ($item->id == $i->item_id)
+                                <td>{{ $item->item }}</td>
+                            @endif
+                        @endforeach
+                        @foreach ($branches as $branch)
+                            @if ($branch->id == $i->branch_id)
+                                <td>{{ $branch->branch }}</td>
+                            @endif
+                        @endforeach
+                        <td>{{ $i->month }}</td>
+                        <td>{{ $i->year }}</td>
+                        <td>{{ $i->first_inventory }}</td>
+                        <td>{{ $i->last_inventory }}</td>
+                        <td>{{ $i->inventory_out }}</td>
                         <td class="action-buttons">
                             <button class="edit-btn" onclick="openModal(this)">تعديل<i
                                     class="fa-solid fa-pen-to-square"></i></button>
                             <button class="delete-btn"
-                                onclick="confirmDelete({{ $invoice->id }},'/invoices/destroy/')">حذف<i
+                                onclick="confirmDelete({{ $i->id }},'/inventory/destroy/')">حذف<i
                                     class="fa-solid fa-trash"></i></button>
-                            <button class="btn btn-success"
-                                onclick="window.location.href='/invoices/print/{{ $invoice->id }}'">
-                                طباعة <i class="fa-solid fa-print"></i>
-                            </button>
-                            <button class="btn btn-primary"
-                                onclick="window.location.href='/invoices/show/{{ $invoice->id }}'">
-                                تفاصيل <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
                         </td>
                     </tr>
                 @endforeach
@@ -134,33 +136,56 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>تعديل البيانات</h2>
-            <form id="editForm" action="{{ route('invoices.update') }}" method="POST">
+            <form id="editForm" action="{{ route('inventory.update') }}" method="POST">
                 @csrf
                 <div class="custom-form-fields">
                     <input type="text" id="id" name="id" style="display: none;">
-                    <div class="custom-form-group third-width">
-                        <label for="edit_customer_name">اسم العميل:</label>
-                        <input type="text" id="edit_customer_name" name="customer_name" required>
+                    <div class="custom-form-group fourth-width">
+                        <label for="edit_item">الصنف:</label>
+                        <select id="edit_item" name="item" required>
+                            @if (isset($items))
+                                @foreach ($items as $d)
+                                    <option value="{{ $d->id }}">{{ $d->item }}</option>
+                                @endforeach
+                            @endif
+                        </select>
                     </div>
                     <div class="custom-form-group fourth-width">
-                        <label for="edit_tax_id">الرقم الضريبي:</label>
-                        <input type="number" id="edit_tax_id" name="tax_id" required>
+                        <label for="edit_branch">الفرع:</label>
+                        <select id="edit_branch" name="branch" required>
+                            @if (isset($branches))
+                                @foreach ($branches as $b)
+                                    <option value="{{ $b->id }}">{{ $d->branch }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                    <label for="edit_month">اختر الشهر:</label>
+                    <select name="edit_month" id="month">
+                        @for ($m = 1; $m <= 12; $m++)
+                            <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}
+                            </option>
+                        @endfor
+                    </select>
+    
+                    <label for="edit_year">اختر السنة:</label>
+                    <select name="edit_year" id="year">
+                        @for ($y = 2023; $y <= now()->year; $y++)
+                            <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}
+                            </option>
+                        @endfor
+                    </select>
+                    <div class="custom-form-group fourth-width">
+                        <label for="edit_first_inventory">رصيد اول المدة:</label>
+                        <input type="number" id="edit_first_inventory" name="first_inventory">
                     </div>
                     <div class="custom-form-group fourth-width">
-                        <label for="edit_address">العنوان:</label>
-                        <input type="text" id="edit_address" name="address">
+                        <label for="edit_last_inventory">رصيد اخر المدة:</label>
+                        <input type="number" id="edit_last_inventory" name="last_inventory">
                     </div>
                     <div class="custom-form-group fourth-width">
-                        <label for="edit_phone_number">رقم الجوال:</label>
-                        <input type="number" id="edit_phone_number" name="phone_number">
-                    </div>
-                    <div class="custom-form-group fourth-width">
-                        <label for="edit_invoice_date">تاريخ الفاتورة:</label>
-                        <input type="date" id="edit_invoice_date" name="invoice_date" required>
-                    </div>
-                    <div class="custom-form-group fourth-width">
-                        <label for="edit_supply_date">تاريخ التوريد:</label>
-                        <input type="date" id="edit_supply_date" name="supply_date">
+                        <label for="edit_inventory_out"> المنصرف:</label>
+                        <input type="number" id="edit_inventory_out" name="inventory_out">
                     </div>
                 </div>
                 <div class="custom-form-group">
@@ -176,14 +201,41 @@
             currentRow = button.parentElement.parentElement;
             const cells = currentRow.getElementsByTagName('td');
             document.getElementById('id').value = cells[0].innerText;
-            document.getElementById('edit_customer_name').value = cells[1].innerText;
-            document.getElementById('edit_tax_id').value = cells[2].innerText;
-            document.getElementById('edit_address').value = cells[3].innerText;
-            document.getElementById('edit_phone_number').value = cells[4].innerText;
-            const dateText = cells[5].innerText;
-            document.getElementById('edit_invoice_date').value = dateText;
-            const dateText2 = cells[6].innerText;
-            document.getElementById('edit_supply_date').value = dateText2;
+            const itemSelect = document.getElementById('edit_item');
+            const itemId = cells[1].innerText;
+            for (let i = 0; i < itemSelect.options.length; i++) {
+                if (itemSelect.options[i].text === itemId) {
+                    itemSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            const branchSelect = document.getElementById('edit_branch');
+            const branchId = cells[2].innerText;
+            for (let i = 0; i < branchSelect.options.length; i++) {
+                if (branchSelect.options[i].text === branchId) {
+                    branchSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            document.getElementById('edit_first_inventory').value = cells[5].innerText;
+            document.getElementById('edit_last_inventory').value = cells[6].innerText;
+            document.getElementById('edit_inventory_out').value = cells[7].innerText;
+            const monthText = cells[3].innerText;
+            const monthSelect = document.getElementById('edit_month');
+            for (let i = 0; i < monthSelect.options.length; i++) {
+                if (monthSelect.options[i].text === monthText) {
+                    monthSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            const yearText = cells[4].innerText;
+            const yearSelect = document.getElementById('edit_year');
+            for (let i = 0; i < yearSelect.options.length; i++) {
+                if (yearSelect.options[i].text === yearText) {
+                    yearSelect.selectedIndex = i;
+                    break;
+                }
+            }
             document.getElementById('editModal').style.display = 'block';
         }
 

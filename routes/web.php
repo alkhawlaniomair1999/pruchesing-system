@@ -130,8 +130,10 @@ Route::get('/invoices/destroy_detail/{id}', [InvoicesController::class, 'destroy
 Route::get('/invoices/show/{id}', [InvoicesController::class, 'show'])->name('invoices.show');
 
 //المخازن
-Route::get('/inventory', [ItemsController::class, 'index'])->name('inventory.index');
+Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
 Route::post('/inventory/store', [InventoryController::class, 'store'])->name('inventory.store');
+Route::post('/inventory/update', [InventoryController::class, 'update'])->name('inventory.update');
+Route::get('/inventory/destroy/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
 
 });
 
