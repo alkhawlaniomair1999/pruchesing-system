@@ -72,7 +72,11 @@ main {
     /* Keep the default direction for RTL */
 }
 
+
 .sidebar {
+    overflow-y: auto; /* تمكين شريط التمرير العمودي */
+    border: 1px solid #ccc; /* إضافة حدود اختيارية */
+    padding: 10px; /* مساحة داخلية */
     width: 200px;
     background: #ffffff;
     padding: 0;
