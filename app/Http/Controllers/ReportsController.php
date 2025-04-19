@@ -11,6 +11,7 @@ use App\Models\details;
 use App\Models\items;
 use App\Models\cashers;
 use App\Models\casher_procs;
+use App\Models\inventories;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Event\Runtime\OperatingSystem;
 
@@ -106,10 +107,23 @@ public function total(Request $request)
     ->get();
     return view('total_report', compact('operations', 'month', 'year'));
 }
+public function inventory(Request $request)
+{
+    $month = $request->input('month');
+    $year = $request->input('year');
+    $details = DB::table('details')
+    ->select('item_id', 'branch_id', DB::raw('SUM(total) as total_sum'))
+    ->whereMonth('date', $month)
+    ->whereYear('date', $year)
+    ->groupBy('item_id', 'branch_id')
+    ->get();
+    $inventories = inventories::where('year', $year)->where('month', $month)->get();
+    $branches = Branch::all();
+    $items = items::all();
+    return view('inventory_report', compact('inventories','details', 'month', 'year','branches','items'));
 }
-
-    
-
+   
+}
 
 
 
