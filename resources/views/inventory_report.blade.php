@@ -141,9 +141,16 @@
                             @php
                                 $total = 0;
                                 $count = 0;
+                                $sum_total = [];
+                                $total_total = 0;
                             @endphp
                             <td>{{ $i->item }}</td>
                             @if (isset($branches))
+                                @foreach ($branches as $b)
+                                    @php
+                                        $sum_total[$b->id] = 0;
+                                    @endphp
+                                @endforeach
                                 @foreach ($branches as $b)
                                     @if (isset($inventories))
                                         @foreach ($inventories as $inv)
@@ -151,6 +158,8 @@
                                                 <td>{{ $inv->first_inventory }}</td>
                                                 @php
                                                     $total += $inv->first_inventory;
+                                                    $total_total += $inv->first_inventory;
+                                                    $sum_total[$b->id] += $inv->first_inventory;
                                                 @endphp
                                             @else
                                                 @php
@@ -177,6 +186,8 @@
                                                 <td>{{ $d->total_sum }}</td>
                                                 @php
                                                     $total += $d->total_sum;
+                                                    $total_total += $d->total_sum;
+                                                    $sum_total[$b->id] += $d->total_sum;
                                                 @endphp
                                             @else
                                                 @php
@@ -197,17 +208,61 @@
                                     $total = 0;
                                 @endphp
                                 @foreach ($branches as $b)
-                                    <td></td>
+                                    <td>{{ $sum_total[$b->id] }}</td>
                                 @endforeach
-                                <td></td>
+                                <td>{{ $total_total }}</td>
                                 @foreach ($branches as $b)
-                                    <td></td>
+                                    @if (isset($inventories))
+                                        @foreach ($inventories as $inv)
+                                            @if ($inv->branch_id == $b->id && $inv->item_id == $i->id)
+                                                <td>{{ $inv->last_inventory }}</td>
+                                                @php
+                                                    $total += $inv->last_inventory;
+                                                @endphp
+                                            @else
+                                                @php
+                                                    $count += 1;
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                    @if ($count == count($inventories))
+                                        <td></td>
+                                    @endif
+                                    @php
+                                        $count = 0;
+                                    @endphp
                                 @endforeach
-                                <td></td>
+                                <td>{{ $total }}</td>
+                                @php
+                                    $total = 0;
+                                @endphp
                                 @foreach ($branches as $b)
-                                    <td></td>
+                                    @if (isset($inventories))
+                                        @foreach ($inventories as $inv)
+                                            @if ($inv->branch_id == $b->id && $inv->item_id == $i->id)
+                                                <td>{{ $inv->inventory_out }}</td>
+                                                @php
+                                                    $total += $inv->inventory_out;
+                                                @endphp
+                                            @else
+                                                @php
+                                                    $count += 1;
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                    @if ($count == count($inventories))
+                                        <td></td>
+                                    @endif
+                                    @php
+                                        $count = 0;
+                                    @endphp
                                 @endforeach
-                                <td></td>
+                                <td>{{ $total }}</td>
+                                @php
+                                    $total = 0;
+                                @endphp
                             @endif
 
                         </tr>
