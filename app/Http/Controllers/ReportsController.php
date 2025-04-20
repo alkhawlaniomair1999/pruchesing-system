@@ -13,8 +13,9 @@ use App\Models\cashers;
 use App\Models\casher_procs;
 use App\Models\inventories;
 use Illuminate\Support\Facades\DB;
-use PHPUnit\Event\Runtime\OperatingSystem;
+use Mpdf\Mpdf;
 
+use PHPUnit\Event\Runtime\OperatingSystem;
 class ReportsController extends Controller
 {
     public function index()
@@ -123,6 +124,52 @@ public function inventory(Request $request)
     return view('inventory_report', compact('inventories','details', 'month', 'year','branches','items'));
 }
    
+
+
+// public function inventory(Request $request)
+// {
+//     $month = $request->input('month');
+//     $year  = $request->input('year');
+
+//     // جلب البيانات المطلوبة
+//     $details = DB::table('details')
+//         ->select('item_id', 'branch_id', DB::raw('SUM(total) as total_sum'))
+//         ->whereMonth('date', $month)
+//         ->whereYear('date', $year)
+//         ->groupBy('item_id', 'branch_id')
+//         ->get();
+
+//     $inventories = inventories::where('year', $year)->where('month', $month)->get();
+//     $branches    = Branch::all();
+//     $items       = items::all();
+
+//     // تحويل قالب Blade إلى HTML
+//     $html = view('inventory_report', compact('inventories', 'details', 'month', 'year', 'branches', 'items'))->render();
+
+//     try {
+//         // إنشاء مثيل لمكتبة mPDF مع إعدادات تدعم اللغة العربية والتنسيق الأفقي (landscape)
+//         $mpdf = new Mpdf([
+//             'debug'        => true,
+//             'default_font' => 'dejavusans',
+//             'format'       => 'A4-L'
+//         ]);
+
+//         // كتابة مخرجات الـ HTML إلى ملف PDF
+//         $mpdf->WriteHTML($html);
+
+//         // عرض ملف الـ PDF في المتصفح (يمكنك استخدام 'D' للتنزيل)
+//         return $mpdf->Output('inventory_report.pdf', 'I');
+//     } catch (\Exception $e) {
+//         // تسجيل الخطأ في سجلات Laravel
+//         \Log::error('Error generating PDF: ' . $e->getMessage());
+//         // إعادة استجابة JSON مع رسالة خطأ مناسبة
+//         return response()->json(['error' => 'حدث خطأ أثناء توليد ملف PDF.'], 500);
+//     }
+// }
+
+
+
+
 }
 
 
