@@ -241,9 +241,9 @@
                                     @if (isset($inventories))
                                         @foreach ($inventories as $inv)
                                             @if ($inv->branch_id == $b->id && $inv->item_id == $i->id)
-                                                <td>{{ $inv->inventory_out }}</td>
+                                                <td>{{ $sum_total[$b->id] - $inv->last_inventory }}</td>
                                                 @php
-                                                    $total += $inv->inventory_out;
+                                                    $total += $sum_total[$b->id] - $inv->last_inventory;
                                                 @endphp
                                             @else
                                                 @php
