@@ -20,8 +20,9 @@
             --secondary-color: #fff;
             --background-color: #f4f4f4;
             --accent-color: #e74c3c;
-            --header-bg-color: #3498db;  /* لون مميز لرأس الجدول */
-            --header-text-color: #fff;
+            /* تم تعديل ألوان الجدول لتكون مناسبة للطباعة */
+            --header-bg-color: #f2f2f2;  
+            --header-text-color: #000;
             --row-even-bg: #f9f9f9;
             --row-odd-bg: #fff;
             --hover-bg: #f1f1f1;
@@ -104,17 +105,15 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
-            /* نعيين اتجاه LTR لضمان بقاء الترتيب كما في الكود */
-            direction: ltr;
+            direction: ltr; /* لضمان ترتيب صحيح بين العناصر */
         }
         .invoice-heading > div {
             flex: 1;
-            white-space: nowrap;  /* إبقاء المحتوى في سطر واحد */
+            white-space: nowrap;  /* إجبار عرض المحتوى في سطر واحد */
         }
         .invoice-heading .left {
             text-align: left;
-            /* إعادة اتجاه المحتوى إلى RTL داخل العنصر */
-            direction: rtl;
+            direction: rtl; /* إعادة اتجاه العنصر إلى RTL */
         }
         .invoice-heading .center {
             text-align: center;
@@ -125,6 +124,12 @@
         .invoice-heading .right {
             text-align: right;
             direction: rtl;
+        }
+        /* تعديل رقم الفاتورة: لون أحمر داكن وحجم أكبر */
+        .invoice-heading .right span {
+            color: #8B0000;
+            font-size: 1.3em;
+            font-weight: bold;
         }
         /* قسم التفاصيل المُتبقية */
         .details {
@@ -142,7 +147,7 @@
         }
         .details .row span {
             margin-right: 20px;
-            font-size: 1.1em;
+            font-size: 1.2em;
             white-space: nowrap;
         }
         /* تحسين تصميم الجدول */
@@ -226,7 +231,7 @@
             <!-- قسم الرأس: معلومات الشركة -->
             <div class="header">
                 <div class="company-info company-info-right">
-                    <h4>مطعم الجمار الرابع لتقديم الوجبات</h4>
+                    <h2>مطعم الجمار الرابع لتقديم الوجبات</h2>
                     <p>ابو عريش، حي الروضة، شارع الأمير محمد بن ناصر</p>
                 </div>
                 <div class="logo">
