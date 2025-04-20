@@ -60,7 +60,9 @@
             text-align: center;
         }
     </style>
-    <button class="print_btn" onclick="generatePDF()">طباعة<i class="fa-solid fa-print"></i></button>
+    <button class="print_btn"
+        onclick="exportTableToExcel('tableID', 'تقرير المخزون {{ $month }}/{{ $year }}')">
+        أكسل <i class="fa-solid fa-file-excel"></i></button>
     <button class="print_btn" onclick="window.location.href='{{ url('reports') }}'">
         عودة <i class="fa-solid fa-arrow-right"></i>
     </button>
@@ -84,7 +86,7 @@
             </div>
         </div>
         <h2>تقرير شهر: {{ $month }}/{{ $year }}</h2>
-        <table class="printable-content">
+        <table class="printable-content" id="tableID">
             <thead>
                 @php
                     $total = 1;
@@ -272,29 +274,18 @@
         </table>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
-        function generatePDF() {
-            const element = document.querySelector('.printable-content');
-            const options = {
-                margin: 3, // الهوامش داخل الملف
-                filename: 'report_with_border.pdf',
-                image: {
-                    type: 'jpeg',
-                    quality: 0.98
-                },
-                html2canvas: {
-                    scale: 2
-                },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'portrait'
-                }
-            };
-            html2pdf().set(options).from(element).save();
+        // دالة لتصدير الجدول إلى ملف Excel
+        function exportTableToExcel(tableID, filename = 'excel_data') {
+            // احصل على الجدول
+            const table = document.getElementById(tableID);
+            const workbook = XLSX.utils.table_to_book(table, {
+                sheet: "Sheet1"
+            });
+
+            // احفظ الملف
+            XLSX.writeFile(workbook, `${filename}.xlsx`);
         }
     </script>
-
-
 @endsection
