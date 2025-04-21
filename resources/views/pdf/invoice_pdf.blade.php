@@ -1,13 +1,10 @@
-@extends('include.app')
-@section('title')
-    طباعة فاتورة ضريبية
-@endsection
+<!-- resources/views/report.blade.php -->
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
 
-@section('page')
-    طباعة فاتورة ضريبية
-@endsection
-
-@section('main')
+    <title>التقرير</title>
     <style>
         /* إعادة تعيين القيم الافتراضية */
         * {
@@ -15,6 +12,16 @@
             padding: 0;
             box-sizing: border-box;
         }
+       
+    @font-face {
+        font-family: 'Amiri';
+        src: url('{{ public_path('fonts/Amiri-Regular.ttf') }}');
+    }
+    body {
+        font-family: 'Amiri', sans-serif;
+        direction: rtl; /* لضبط الاتجاه */
+    }
+
         :root {
             --primary-color: #000;
             --secondary-color: #fff;
@@ -31,7 +38,8 @@
             --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         body {
-            font-family: Arial, sans-serif;
+            
+        font-family: 'Amiri', Arial, sans-serif;
             direction: rtl;
             text-align: right;
             background-color: var(--background-color);
@@ -217,19 +225,10 @@
         }
     </style>
 
-    <div class="container">
-        <div class="actions">
-            <button onclick="window.print()">
-                <i class="fa-solid fa-print"></i> طباعة
-            </button>
-            <button onclick="window.location.href='{{ url('invoices') }}'">
-                <i class="fa-solid fa-arrow-right"></i> عودة
-            </button>
-            <button onclick="window.location.href='/generate-pdf/{{ $invoice->id }}'">
-    <i class="fa-solid fa-file-pdf"></i> تحويل إلى PDF
-</button>
-        </div>
-
+</head>
+<body>
+<div class="container">
+        
         <div class="invoice">
             <!-- قسم الرأس: معلومات الشركة -->
             <div class="header">
@@ -238,7 +237,7 @@
                     <p>ابو عريش، حي الروضة، شارع الأمير محمد بن ناصر</p>
                 </div>
                 <div class="logo">
-                    <img src="{{ asset('assets/img/jammar2.png') }}" alt="Logo">
+                    <!-- <img src="{{ asset('assets/img/jammar2.png') }}" alt="Logo"> -->
                 </div>
                 <div class="company-info company-info-left">
                     <p>سجل تجاري رقم: 5901719945</p>
@@ -253,7 +252,7 @@
                     <span><strong>تاريخ الفاتورة:</strong> {{ $invoice->invoice_date }}</span>
                 </div>
                 <div class="center">
-                    <span>فاتورة ضريبية</span>
+                    <span>invoice</span>
                 </div>
                 <div class="right">
                     <span><strong>رقم الفاتورة:</strong> {{ $invoice->id }}</span>
@@ -376,4 +375,5 @@
             </div>
         </div>
     </div>
-@endsection
+</body>
+</html>

@@ -17,6 +17,7 @@ use App\Http\Controllers\ReceiptsController;
 use App\Http\Controllers\EmpsController;
 use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\pdfController;
 
 
 Route::get('/', function () {
@@ -135,6 +136,11 @@ Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory
 Route::post('/inventory/store', [InventoryController::class, 'store'])->name('inventory.store');
 Route::post('/inventory/update', [InventoryController::class, 'update'])->name('inventory.update');
 Route::get('/inventory/destroy/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+
+//pdf
+Route::get('/generate-pdf/{id}', [pdfController::class, 'generatePDF'])->name('generatePDF');
+
+
 
 });
 
