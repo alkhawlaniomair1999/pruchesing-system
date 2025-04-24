@@ -104,7 +104,7 @@
                                 @endforeach
                             @endif
                         @endforeach
-                        <td>{{$d->total }}</td>
+                        <td>{{ $d->total }}</td>
 
                         <td>{{ $d->bank }}</td>
                         <td>{{ $d->cash }}</td>
@@ -201,8 +201,8 @@
                 }
             }
             document.getElementById('editTotal').value = cells[3].innerText;
-            document.getElementById('editCash').value = cells[4].innerText;
-            document.getElementById('editBank').value = cells[5].innerText;
+            document.getElementById('editCash').value = cells[5].innerText;
+            document.getElementById('editBank').value = cells[4].innerText;
             document.getElementById('editOut').value = cells[6].innerText;
 
             document.getElementById('editModal').style.display = 'block';

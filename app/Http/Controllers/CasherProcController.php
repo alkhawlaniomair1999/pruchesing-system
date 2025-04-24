@@ -23,11 +23,6 @@ class CasherProcController extends Controller
         }
     }
 
-    public function create()
-    {
-        // تنفيذ الكود هنا
-    }
-
     public function store(Request $request)
     {
         try {
@@ -64,34 +59,56 @@ class CasherProcController extends Controller
         }
     }
 
-    public function show($casher_proc)
-    {
-        // تنفيذ الكود هنا
-    }
-
-    public function edit($casher_proc)
-    {
-        // تنفيذ الكود هنا
-    }
-
     public function update(Request $request)
     {
         try {
-            // جلب السجل المطلوب من casher_procs مع التحقق من وجوده
-            $cp = casher_procs::find($request->id);
-    
+            // جلب العملية القديمة
+            $cp = casher_procs::where('id', $request->id)->first();
             if (!$cp) {
-                return response()->json(['error' => 'Casher process not found'], 404);
+                return redirect()->back()->with('error', 'العملية غير موجودة.');
             }
     
-            // جلب السجل المطلوب من cashers مع التحقق من وجوده
-            $c = cashers::find($cp->casher_id);
+            // جلب الكاشير والفرع القديمين
+            $old_casher = cashers::where('id', $cp->casher_id)->first();
+            $old_branch = Branch::where('id', $old_casher->branch_id)->first();
     
-            if (!$c) {
-                return response()->json(['error' => 'Casher not found'], 404);
+            // جلب الحسابات القديمة
+            $old_box = accounts::where('branch_id', $old_branch->id)->where('type', 'box')->first();
+            $old_bank = accounts::where('branch_id', $old_branch->id)->where('type', 'bank')->first();
+       
+            // 1. إرجاع المبالغ القديمة من الحسابات القديمة
+            if ($old_box) {
+                $old_box->debt -= $cp->cash;
+                $old_box->balance -= $cp->cash;
+                $old_box->save();
+            }
+            if ($old_bank) {
+                $old_bank->debt -= $cp->bank;
+                $old_bank->balance -= $cp->bank;
+                $old_bank->save();
+            }
+              // استرجاع الكاشير والفرع الجديدين
+              $new_casher = cashers::where('id', $request->casher_id)->first();
+              $new_branch = Branch::where('id', $new_casher->branch_id)->first();
+      
+              // جلب الحسابات الجديدة
+              $new_box = accounts::where('branch_id', $new_branch->id)->where('type', 'box')->first();
+              $new_bank = accounts::where('branch_id', $new_branch->id)->where('type', 'bank')->first();
+   
+    
+            // 2. إضافة المبالغ الجديدة إلى الحسابات الجديدة
+            if ($new_box) {
+                $new_box->debt += $request->cash;
+                $new_box->balance += $request->cash;
+                $new_box->save();
+            }
+            if ($new_bank) {
+                $new_bank->debt += $request->bank;
+                $new_bank->balance += $request->bank;
+                $new_bank->save();
             }
     
-            // إعداد البيانات للتحديث
+            // 3. تحديث بيانات العملية
             $cp->casher_id = $request->casher_id;
             $cp->date = $request->date;
             $cp->total = $request->total;
@@ -99,53 +116,22 @@ class CasherProcController extends Controller
             $cp->cash = $request->cash;
             $cp->out = $request->out;
             $cp->plus = $request->total - ($request->out + $request->cash + $request->bank);
-    
-            // حفظ التغييرات في قاعدة البيانات
             $cp->save();
     
-            // تحديث الحسابات بناءً على casher_id
-            $this->updateAccounts($cp, $request, $c);
-    
-            // تسجيل العملية
-            $br = Branch::where('id', $c->branch_id)->first();
+            // 4. تسجيل العملية في SystemOperation
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'تعديل',
-                'details' => 'تعديل عملية كاشير - الكاشير: ' . $c->casher . ', الفرع: ' . $br->branch . ', المبلغ النقدي: ' . $request->cash . ', المبلغ البنكي: ' . $request->bank,
+                'details' => 'تعديل عملية كاشير - الكاشير القديم: ' . $old_casher->casher . ', الفرع القديم: ' . $old_branch->branch .
+                    ', الكاشير الجديد: ' . $new_casher->casher . ', الفرع الجديد: ' . $new_branch->branch .
+                    ', المبلغ النقدي الجديد: ' . $request->cash . ', المبلغ البنكي الجديد: ' . $request->bank,
                 'status' => 'successful',
             ]);
     
-            return redirect()->back()->with('success', 'تم تحديث العملية بنجاح!');
+            return redirect()->back()->with('success', 'تم تعديل العملية بنجاح!');
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'حدث خطأ أثناء تحديث العملية.');
+            return redirect()->back()->with('error', 'حدث خطأ أثناء تعديل العملية.');
         }
-    }
-    
-    private function updateAccounts($cp, $request, $c)
-    {
-        $cacher = cashers::where('id', $request->casher_id)->first();
-        $sameBranch = $c->branch_id == $cacher->branch_id;
-    
-        $this->updateAccountBalances($c->branch_id, -$cp->cash, -$cp->bank);
-    
-        if ($sameBranch) {
-            $this->updateAccountBalances($cacher->branch_id, $request->cash, $request->bank);
-        } else {
-            $this->updateAccountBalances($cacher->branch_id, $request->cash, $request->bank);
-        }
-    }
-    
-    private function updateAccountBalances($branchId, $cashChange, $bankChange)
-    {
-        $box = accounts::where('branch_id', $branchId)->where('type', 'box')->first();
-        $box->debt += $cashChange;
-        $box->balance += $cashChange;
-        $box->save();
-    
-        $bank = accounts::where('branch_id', $branchId)->where('type', 'bank')->first();
-        $bank->debt += $bankChange;
-        $bank->balance += $bankChange;
-        $bank->save();
     }
 
     public function destroy($id)
