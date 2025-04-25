@@ -5,6 +5,7 @@ use App\Models\details;
 use App\Models\accounts;
 use App\Models\Branch;
 use App\Models\items;
+use App\Models\Suppliers;
 use App\Models\SystemOperation;
 use Illuminate\Http\Request;
 use Exception;
@@ -18,7 +19,8 @@ class DetailsController extends Controller
             $Branch = Branch::all();
             $accounts = accounts::all();
             $details = details::all();
-            return view('details', ['items' => $items, 'Branch' => $Branch, 'accounts' => $accounts, 'details' => $details]);
+            $suppliers = Suppliers::all();
+            return view('details', ['items' => $items, 'suppliers'=> $suppliers, 'Branch' => $Branch, 'accounts' => $accounts, 'details' => $details]);
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء جلب البيانات.');
         }
@@ -31,12 +33,18 @@ class DetailsController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        try{
             $details['detail'] = $request->detail;
             $details['total'] = $request->totalPrice;
             $details['item_id'] = $request->item;
             $details['branch_id'] = $request->branch;
-            $details['account_id'] = $request->account;
+            $details['payment_method'] = $request->payment_method;
+            if ($request->payment_method == "cash") {
+                $details['account_id'] = $request->account;
+
+            } else {
+                $details['account_id'] = $request->supplier;
+            }
             $details['date'] = $request->date;
             $details['tax'] = $request->tax;
             if ($request->tax == "True") {
@@ -46,33 +54,34 @@ class DetailsController extends Controller
                 $details['price'] = $request->totalPrice;
             }
             details::create($details);
-
+            if($request->payment_method == "cash"){
             $acc = accounts::where('id', $request->account)->first();
             $credit = $acc['credit'] + $request->totalPrice;
             $balance = $acc['balance'] - $request->totalPrice;
             accounts::where('id', $request->account)->update(['credit' => $credit, 'balance' => $balance]);
-
             SystemOperation::create([
                 'user_id' => auth()->id(),
                 'operation_type' => 'إضافة',
                 'details' => 'إضافة تفاصيل - العنصر: ' . items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . $acc->account . ', المبلغ: ' . $request->totalPrice,
                 'status' => 'successful',
             ]);
-
+            }else{
+                $s = Suppliers::where('id', $request->supplier)->first();
+                $credit = $s['credit'] + $request->totalPrice;
+                $balance = $s['balance'] - $request->totalPrice;
+                Suppliers::where('id', $request->supplier)->update(['credit' => $credit, 'balance' => $balance]);
+                SystemOperation::create([
+                    'user_id' => auth()->id(),
+                    'operation_type' => 'إضافة',
+                    'details' => 'إضافة تفاصيل - العنصر: ' . items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . $s->supplier . ', المبلغ: ' . $request->totalPrice,
+                    'status' => 'successful',
+                ]);
+            }        
             return redirect()->back()->with('success', 'تم إنشاء التفاصيل بنجاح!');
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء إنشاء التفاصيل.');
         }
-    }
 
-    public function show(details $details)
-    {
-        // تنفيذ الكود هنا
-    }
-
-    public function edit(details $details)
-    {
-        // تنفيذ الكود هنا
     }
 
     public function update(Request $request)

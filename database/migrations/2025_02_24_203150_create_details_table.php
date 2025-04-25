@@ -18,14 +18,13 @@ return new class extends Migration
             $table->float('total');
             $table->string('tax');
             $table->float('price');
+            $table->string('payment_method');
             $table->date('date');
             $table->unsignedBigInteger('item_id');
-            $table->unsignedBigInteger('branch_id');
-            $table->unsignedBigInteger('account_id');
+            $table->integer('branch_id');
+            $table->BigInteger('account_id');
             $table->foreign('item_id')->references('id')->on('items');
             $table->foreign('branch_id')->references('id')->on('branches');
-            $table->foreign('account_id')->references('id')->on('accounts');
-
         });
     }
 
