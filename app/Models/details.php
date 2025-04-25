@@ -9,5 +9,5 @@ class details extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['detail','total','tax','price','date','item_id','branch_id','account_id', 'updated_at', 'created_at'];
+    protected $fillable = ['detail','total','tax','price','payment_method','date','item_id','branch_id','account_id', 'updated_at', 'created_at'];
 }
