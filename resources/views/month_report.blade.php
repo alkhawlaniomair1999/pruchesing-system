@@ -6,140 +6,237 @@
 @section('page')
     تقارير
 @endsection
+
 @section('main')
     <style>
-        select {
-            padding: 10px;
+        /* تحسين تصميم الحقول والأزرار */
+        select, button {
+            padding: 12px 15px;
             font-size: 16px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            background-color: #fff;
-            appearance: none;
-            /* إخفاء السهم */
-            background-position: right 10px center;
-            background-repeat: no-repeat;
+            border-radius: 10px;
+            border: 1px solid #007BFF;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, button:hover {
+            border-color: #0056b3;
+            background-color: #e6f2ff;
+        }
+
+        button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #007BFF;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
+
+        button i {
+            font-size: 18px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        fieldset {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        legend {
+            font-weight: bold;
+            font-size: 18px;
+            color: #000;
+            padding: 0 10px;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap; /* يسمح بالتفاف العناصر عند ضيق المساحة */
         }
     </style>
 
-    <!-- التسجيل اليومي -->
-    <h2>تقرير التسجيل اليومي الشهري</h2>
-    <form action="{{ route('reports.monthly') }}" method="post">
-        @csrf
-        <label for="month">اختر الشهر:</label>
-        <select name="month" id="month">
-            @for ($m = 1; $m <= 12; $m++)
-                <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}</option>
-            @endfor
-        </select>
+    <!-- تقرير التسجيل اليومي الشهري -->
+    <fieldset>
+        <legend>تقرير التسجيل اليومي الشهري</legend>
+        <form action="{{ route('reports.monthly') }}" method="post">
+            @csrf
+            <div class="form-row">
+                <label for="month">اختر الشهر:</label>
+                <select name="month" id="month">
+                    @for ($m = 1; $m <= 12; $m++)
+                        <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}</option>
+                    @endfor
+                </select>
 
-        <label for="year">اختر السنة:</label>
-        <select name="year" id="year">
-            @for ($y = 2023; $y <= now()->year; $y++)
-                <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>
-            @endfor
-        </select>
-        <button type="submit" class="print_btn"> عرض التقرير<i class=""></i></button>
-    </form>
-    <!-- المخزون  -->
-    <h2>تقرير المخزون الشهري</h2>
-    <form action="{{ route('reports.inventory') }}" method="post">
-        @csrf
-        <label for="month">اختر الشهر:</label>
-        <select name="month" id="month">
-            @for ($m = 1; $m <= 12; $m++)
-                <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}</option>
-            @endfor
-        </select>
+                <label for="year">اختر السنة:</label>
+                <select name="year" id="year">
+                    @for ($y = 2023; $y <= now()->year; $y++)
+                        <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+                <button type="submit">
+                    <i class="fas fa-calendar-alt"></i> عرض التقرير
+                </button>
+            </div>
+        </form>
+    </fieldset>
 
-        <label for="year">اختر السنة:</label>
-        <select name="year" id="year">
-            @for ($y = 2023; $y <= now()->year; $y++)
-                <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}
-                </option>
-            @endfor
-        </select>
-        <button type="submit" class="print_btn"> عرض التقرير<i class=""></i></button>
-    </form>
-    <!-- تقرير التسجيل الشهري حسب الكاشير -->
+    <!-- تقرير التسجيل اليومي الشهري بدون الضريبة -->
+    <fieldset>
+        <legend>تقرير التسجيل اليومي الشهري بدون الضريبة</legend>
+        <form action="{{ route('reports.monthly_tax') }}" method="post">
+            @csrf
+            <div class="form-row">
+                <label for="month">اختر الشهر:</label>
+                <select name="month" id="month">
+                    @for ($m = 1; $m <= 12; $m++)
+                        <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}</option>
+                    @endfor
+                </select>
 
-    <h2>تقرير الكاشير اليومي الشهري</h2>
-    <form action="{{ route('reports.casher') }}" method="post">
-        @csrf
-        <label for="casher"> الكاشير:</label>
-        <select name="casher" id="casher">
-            @foreach ($cashers as $casher)
-                <option value="{{ $casher->id }}">{{ $casher->casher }}</option>
-            @endforeach
-        </select>
+                <label for="year">اختر السنة:</label>
+                <select name="year" id="year">
+                    @for ($y = 2023; $y <= now()->year; $y++)
+                        <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+                <button type="submit">
+                    <i class="fas fa-percent"></i> عرض التقرير
+                </button>
+            </div>
+        </form>
+    </fieldset>
 
-        <label for="month"> الشهر:</label>
-        <select name="month" id="month">
-            @for ($m = 1; $m <= 12; $m++)
-                <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}
-                </option>
-            @endfor
-        </select>
+    <!-- تقرير المخزون الشهري -->
+    <fieldset>
+        <legend>تقرير المخزون الشهري</legend>
+        <form action="{{ route('reports.inventory') }}" method="post">
+            @csrf
+            <div class="form-row">
+                <label for="month">اختر الشهر:</label>
+                <select name="month" id="month">
+                    @for ($m = 1; $m <= 12; $m++)
+                        <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}</option>
+                    @endfor
+                </select>
 
-        <label for="year"> السنة:</label>
-        <select name="year" id="year">
-            @for ($y = 2023; $y <= now()->year; $y++)
-                <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}
-                </option>
-            @endfor
-        </select>
+                <label for="year">اختر السنة:</label>
+                <select name="year" id="year">
+                    @for ($y = 2023; $y <= now()->year; $y++)
+                        <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+                <button type="submit">
+                    <i class="fas fa-box"></i> عرض التقرير
+                </button>
+            </div>
+        </form>
+    </fieldset>
 
-        <button type="submit" class="print_btn">عرض التقرير<i class=""></i></button>
-    </form>
+    <!-- تقرير الكاشير اليومي الشهري -->
+    <fieldset>
+        <legend>تقرير الكاشير اليومي الشهري</legend>
+        <form action="{{ route('reports.casher') }}" method="post">
+            @csrf
+            <div class="form-row">
+                <label for="casher">الكاشير:</label>
+                <select name="casher" id="casher">
+                    @foreach ($cashers as $casher)
+                        <option value="{{ $casher->id }}">{{ $casher->casher }}</option>
+                    @endforeach
+                </select>
 
-    <!-- تقارير الفروع -->
+                <label for="month">الشهر:</label>
+                <select name="month" id="month">
+                    @for ($m = 1; $m <= 12; $m++)
+                        <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}</option>
+                    @endfor
+                </select>
 
+                <label for="year">السنة:</label>
+                <select name="year" id="year">
+                    @for ($y = 2023; $y <= now()->year; $y++)
+                        <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+                <button type="submit">
+                    <i class="fas fa-user"></i> عرض التقرير
+                </button>
+            </div>
+        </form>
+    </fieldset>
 
-    <h2>تقرير عمليات الكواشير لفرع معين خلال شهر</h2>
-    <form action="{{ route('reports.branch') }}" method="post">
-        @csrf
-        <label for="branch"> الفروع:</label>
-        <select name="branch" id="branch">
-            @foreach ($branches as $branch)
-                <option value="{{ $branch->id }}">{{ $branch->branch }}</option>
-            @endforeach
-        </select>
+    <!-- تقرير عمليات الكواشير لفرع معين خلال شهر -->
+    <fieldset>
+        <legend>تقرير عمليات الكواشير لفرع معين خلال شهر</legend>
+        <form action="{{ route('reports.branch') }}" method="post">
+            @csrf
+            <div class="form-row">
+                <label for="branch">الفروع:</label>
+                <select name="branch" id="branch">
+                    @foreach ($branches as $branch)
+                        <option value="{{ $branch->id }}">{{ $branch->branch }}</option>
+                    @endforeach
+                </select>
 
-        <label for="month"> الشهر:</label>
-        <select name="month" id="month">
-            @for ($m = 1; $m <= 12; $m++)
-                <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}
-                </option>
-            @endfor
-        </select>
+                <label for="month">الشهر:</label>
+                <select name="month" id="month">
+                    @for ($m = 1; $m <= 12; $m++)
+                        <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}</option>
+                    @endfor
+                </select>
 
-        <label for="year"> السنة:</label>
-        <select name="year" id="year">
-            @for ($y = 2023; $y <= now()->year; $y++)
-                <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}
-                </option>
-            @endfor
-        </select>
+                <label for="year">السنة:</label>
+                <select name="year" id="year">
+                    @for ($y = 2023; $y <= now()->year; $y++)
+                        <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+                <button type="submit">
+                    <i class="fas fa-map-marker-alt"></i> عرض التقرير
+                </button>
+            </div>
+        </form>
+    </fieldset>
 
-        <button type="submit" class="print_btn">عرض التقرير<i class=""></i></button>
-    </form>
-    <h2>التقرير الاجمالي لعمليات الكاشير خلال الشهر </h2>
-    <form action="{{ route('reports.total') }}" method="post">
-        @csrf
-        <label for="month">اختر الشهر:</label>
-        <select name="month" id="month">
-            @for ($m = 1; $m <= 12; $m++)
-                <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}
-                </option>
-            @endfor
-        </select>
+    <!-- التقرير الإجمالي لعمليات الكاشير خلال الشهر -->
+    <fieldset>
+        <legend>التقرير الإجمالي لعمليات الكاشير خلال الشهر</legend>
+        <form action="{{ route('reports.total') }}" method="post">
+            @csrf
+            <div class="form-row">
+                <label for="month">اختر الشهر:</label>
+                <select name="month" id="month">
+                    @for ($m = 1; $m <= 12; $m++)
+                        <option value="{{ $m }}" {{ $m == now()->month ? 'selected' : '' }}>{{ $m }}</option>
+                    @endfor
+                </select>
 
-        <label for="year">اختر السنة:</label>
-        <select name="year" id="year">
-            @for ($y = 2023; $y <= now()->year; $y++)
-                <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}
-                </option>
-            @endfor
-        </select>
-        <button type="submit" class="print_btn"> عرض التقرير<i class=""></i></button>
-    </form>
+                <label for="year">اختر السنة:</label>
+                <select name="year" id="year">
+                    @for ($y = 2023; $y <= now()->year; $y++)
+                        <option value="{{ $y }}" {{ $y == now()->year ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+                <button type="submit">
+                    <i class="fas fa-chart-bar"></i> عرض التقرير
+                </button>
+            </div>
+        </form>
+    </fieldset>
 @endsection

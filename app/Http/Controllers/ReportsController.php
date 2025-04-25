@@ -47,6 +47,20 @@ class ReportsController extends Controller
 
         return view('reports',['accounts'=>$accounts,'branches'=>$branches,'details'=>$details,'items'=>$items,'month'=>$month,'year'=>$year]);
     }
+    public function monthly_tax(Request $request)
+    {
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        $details = details::whereYear('date', $year)->whereMonth('date', $month)->get();
+        $accounts = accounts::all();
+        $branches = Branch::all();
+        $items = items::all();
+
+        return view('print.monthly_tax',['accounts'=>$accounts,'branches'=>$branches,'details'=>$details,'items'=>$items,'month'=>$month,'year'=>$year]);
+    }
+
+
     public function casher(Request $request)
     {
         $casher = $request->input('casher');

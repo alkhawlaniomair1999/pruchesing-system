@@ -65,6 +65,7 @@ Route::post('/reports/casher', [ReportsController::class, 'casher'])->name('repo
 Route::post('/reports/branch', [ReportsController::class, 'branch'])->name('reports.branch');
 Route::post('/reports/total', [ReportsController::class, 'total'])->name('reports.total');
 Route::get('/reports/opreation_sys',[ReportsController::class,'opreation_sys'])->name('reports.opreation_sys');
+Route::post('/reports/monthly_tax', [ReportsController::class, 'monthly_tax'])->name('reports.monthly_tax');
 
 //الكاشير
 Route::post('/casher', [CasherController::class, 'store'])->name('casher.store');
