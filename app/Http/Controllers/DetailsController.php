@@ -88,7 +88,8 @@ class DetailsController extends Controller
     {
         try {
             $det = details::where('id', $request->id)->first();
-            $ce = accounts::where('id', $det['account_id'])->first();
+            if($det->payment_method == 'cash' && $request->payment_method == 'cash'){
+                $ce = accounts::where('id', $det['account_id'])->first();
             if ($det['account_id'] == $request->account) {
                 $c2 = $ce['credit'] - $det['total'] + $request->totalPrice;
                 accounts::where('id', $ce['id'])->update(['credit' => $c2]);
@@ -108,11 +109,65 @@ class DetailsController extends Controller
                 $balance = $acc1['debt'] - $acc1['credit'];
                 accounts::where('id', $request->account)->update(['balance' => $balance]);
             }
+            } elseif ($det->payment_method == 'cash' && $request->payment_method != 'cash') {
+                $ce = accounts::where('id', $det['account_id'])->first();
+                $c2 = $ce['credit'] - $det['total'];
+                accounts::where('id', $ce['id'])->update(['credit' => $c2]);
+                $ac = accounts::where('id', $ce['id'])->first();
+                $balance = $ac['debt'] - $ac['credit'];
+                accounts::where('id', $ce['id'])->update(['balance' => $balance]);
+                $acc = Suppliers::where('id', $request->supplier)->first();
+                $credit = $acc['credit'] + $request->totalPrice;
+                Suppliers::where('id', $request->supplier)->update(['credit' => $credit]);
+                $acc1 = Suppliers::where('id', $request->supplier)->first();
+                $balance = $acc1['debt'] - $acc1['credit'];
+                Suppliers::where('id', $request->supplier)->update(['balance' => $balance]);
+            } elseif ($det->payment_method != 'cash' && $request->payment_method == 'cash') {
+                $ce = Suppliers::where('id', $det['account_id'])->first();
+                $c2 = $ce['credit'] - $det['total'];
+                Suppliers::where('id', $ce['id'])->update(['credit' => $c2]);
+                $ac = Suppliers::where('id', $ce['id'])->first();
+                $balance = $ac['debt'] - $ac['credit'];
+                Suppliers::where('id', $ce['id'])->update(['balance' => $balance]);
+                $acc = accounts::where('id', $request->account)->first();
+                $credit = $acc['credit'] + $request->totalPrice;
+                accounts::where('id', $request->account)->update(['credit' => $credit]);
+                $acc1 = accounts::where('id', $request->account)->first();
+                $balance = $acc1['debt'] - $acc1['credit'];
+                accounts::where('id', $request->account)->update(['balance' => $balance]);
+            } elseif ($det->payment_method != 'cash' && $request->payment_method != 'cash') {
+                $ce = Suppliers::where('id', $det['account_id'])->first();
+                if ($det['account_id'] == $request->supplier) {
+                    $c2 = $ce['credit'] - $det['total'] + $request->totalPrice;
+                    Suppliers::where('id', $ce['id'])->update(['credit' => $c2]);
+                    $acc = Suppliers::where('id', $ce['id'])->first();
+                    $balance = $acc['debt'] - $acc['credit'];
+                    Suppliers::where('id', $ce['id'])->update(['balance' => $balance]);
+                } else {
+                    $c2 = $ce['credit'] - $det['total'];
+                    Suppliers::where('id', $ce['id'])->update(['credit' => $c2]);
+                    $ac = Suppliers::where('id', $ce['id'])->first();
+                    $balance = $ac['debt'] - $ac['credit'];
+                    Suppliers::where('id', $ce['id'])->update(['balance' => $balance]);
+                    $acc = accounts::where('id', $request->account)->first();
+                    $credit = $acc['credit'] + $request->totalPrice;
+                    accounts::where('id', $request->account)->update(['credit' => $credit]);
+                    $acc1 = accounts::where('id', $request->account)->first();
+                    $balance = $acc1['debt'] - $acc1['credit'];
+                    accounts::where('id', $request->account)->update(['balance' => $balance]);
+                }
+            }
+            
             $details['detail'] = $request->detail;
             $details['total'] = $request->totalPrice;
             $details['item_id'] = $request->item;
             $details['branch_id'] = $request->branch;
-            $details['account_id'] = $request->account;
+            $details['payment_method'] = $request->payment_method;
+            if ($request->payment_method == "cash") {
+                $details['account_id'] = $request->account;
+            } else {
+                $details['account_id'] = $request->supplier;
+            }
             $details['date'] = $request->date;
             $details['tax'] = $request->tax;
             if ($request->tax == "True") {
@@ -122,14 +177,23 @@ class DetailsController extends Controller
                 $details['price'] = $request->totalPrice;
             }
             details::where('id', $request->id)->update($details);
-
-            SystemOperation::create([
-                'user_id' => auth()->id(),
-                'operation_type' => 'تعديل',
-                'details' => 'تعديل تفاصيل - العنصر: ' . items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . accounts::find($request->account)->account . ', المبلغ: ' . $request->totalPrice,
-                'status' => 'successful',
-            ]);
-
+            if ($request->payment_method == 'cash') {
+                SystemOperation::create([
+                    'user_id' => auth()->id(),
+                    'operation_type' => 'تعديل',
+                    'details' => 'تعديل تفاصيل - العنصر: ' . items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . accounts::find($request->account)->account . ', المبلغ: ' . $request->totalPrice,
+                    'status' => 'successful',
+                ]);
+                }else{
+                    SystemOperation::create([
+                        'user_id' => auth()->id(),
+                        'operation_type' => 'تعديل',
+                        'details' => 'تعديل تفاصيل - العنصر: ' . items::find($request->item)->item . ', الفرع: ' . Branch::find($request->branch)->branch . ', الحساب: ' . Suppliers::find($request->supplier)->supplier . ', المبلغ: ' . $request->totalPrice,
+                        'status' => 'successful',
+                    ]);
+        
+                }
+          
             return redirect()->back()->with('success', 'تم تحديث التفاصيل بنجاح!');
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حدث خطأ أثناء تحديث التفاصيل.');
@@ -140,21 +204,42 @@ class DetailsController extends Controller
     {
         try {
             $c1 = details::where('id', $id)->first();
-            $ce = accounts::where('id', $c1['account_id'])->first();
-            $c2 = $ce['credit'] - $c1['total'];
-            $balance = $ce['balance'] + $c1['total'];
-            accounts::where('id', $ce['id'])->update(['credit' => $c2]);
-            $ce = accounts::where('id', $c1['account_id'])->first();
-            $balance = $ce['debt'] - $ce['credit'];
-            accounts::where('id', $ce['id'])->update(['balance' => $balance]);
+            if($c1->payment_method == 'cash'){
+                $ce = accounts::where('id', $c1['account_id'])->first();
+                $c2 = $ce['credit'] - $c1['total'];
+                $balance = $ce['balance'] + $c1['total'];
+                accounts::where('id', $ce['id'])->update(['credit' => $c2]);
+                $ce = accounts::where('id', $c1['account_id'])->first();
+                $balance = $ce['debt'] - $ce['credit'];
+                accounts::where('id', $ce['id'])->update(['balance' => $balance]);
+            }
+            else{
+                $ce = Suppliers::where('id', $c1['account_id'])->first();
+                $c2 = $ce['credit'] - $c1['total'];
+                $balance = $ce['balance'] + $c1['total'];
+                Suppliers::where('id', $ce['id'])->update(['credit' => $c2]);
+                $ce = Suppliers::where('id', $c1['account_id'])->first();
+                $balance = $ce['debt'] - $ce['credit'];
+                Suppliers::where('id', $ce['id'])->update(['balance' => $balance]);
+            }
             details::where('id', $id)->delete();
-
-            SystemOperation::create([
-                'user_id' => auth()->id(),
-                'operation_type' => 'حذف',
-                'details' => 'حذف تفاصيل - العنصر: ' . items::find($c1['item_id'])->item . ', الفرع: ' . Branch::find($c1['branch_id'])->branch . ', الحساب: ' . $ce->account . ', المبلغ: ' . $c1['total'],
-                'status' => 'successful',
-            ]);
+            if ($c1->payment_method == 'cash') {
+                $ce = accounts::where('id', $c1['account_id'])->first();
+                SystemOperation::create([
+                    'user_id' => auth()->id(),
+                    'operation_type' => 'حذف',
+                    'details' => 'حذف تفاصيل - العنصر: ' . items::find($c1['item_id'])->item . ', الفرع: ' . Branch::find($c1['branch_id'])->branch . ', الحساب: ' . $ce->account . ', المبلغ: ' . $c1['total'],
+                    'status' => 'successful',
+                ]);
+            } else {
+                $ce = Suppliers::where('id', $c1['account_id'])->first();
+                SystemOperation::create([
+                    'user_id' => auth()->id(),
+                    'operation_type' => 'حذف',
+                    'details' => 'حذف تفاصيل - العنصر: ' . items::find($c1['item_id'])->item . ', الفرع: ' . Branch::find($c1['branch_id'])->branch . ', الحساب: ' . $ce->supplier . ', المبلغ: ' . $c1['total'],
+                    'status' => 'successful',
+                ]);
+            }
 
             return redirect()->back()->with('success', 'تم حذف التفاصيل بنجاح!');
         } catch (Exception $e) {
@@ -162,8 +247,4 @@ class DetailsController extends Controller
         }
     }
 
-    public function getDetails($id)
-    {
-        // تنفيذ الكود هنا
-    }
 }
