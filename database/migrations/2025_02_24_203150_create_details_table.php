@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('payment_method');
             $table->date('date');
             $table->unsignedBigInteger('item_id');
-            $table->integer('branch_id');
-            $table->BigInteger('account_id');
+            $table->unsignedBigInteger('branch_id');
+            $table->integer('account_id');
             $table->foreign('item_id')->references('id')->on('items');
             $table->foreign('branch_id')->references('id')->on('branches');
         });
