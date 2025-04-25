@@ -57,12 +57,8 @@
                     <select id="account" name="account_name">
                         @if (isset($accounts))
                             @foreach ($accounts as $d1)
-                                @foreach ($Branch as $b1)
-                                    @if ($b1->id == $d1->branch_id)
-                                        <option value="{{ $d1->id }}">{{ $d1->account }} ({{ $b1->branch }})
-                                        </option>
-                                    @endif
-                                @endforeach
+                                <option value="{{ $d1->id }}">{{ $d1->account }}
+                                </option>
                             @endforeach
                         @endif
                     </select>
@@ -90,7 +86,7 @@
                 <th onclick="sortTable(4, 'pro-table')">الدفع</th>
                 <th onclick="sortTable(5, 'pro-table')">الحساب</th>
                 <th onclick="sortTable(6, 'pro-table')"> التاريخ </th>
-                <th onclick="sortTable(7, 'pro-table')">الإجراءات</th>
+                <th>الإجراءات</th>
             </tr>
         </thead>
         <tbody>
@@ -174,17 +170,13 @@
                             <option value="credit">آجل</option>
                         </select>
                     </div>
-                    <div class="custom-form-group third-width">
+                    <div class="custom-form-group third-width" id="accountField">
                         <label for="editAccount">الحساب:</label>
                         <select id="editAccount" name="account_name" required>
                             @if (isset($accounts))
                                 @foreach ($accounts as $d1)
-                                    @foreach ($Branch as $b1)
-                                        @if ($b1->id == $d1->branch_id)
-                                            <option value="{{ $d1->id }}">{{ $d1->account }}({{ $b1->branch }})
-                                            </option>
-                                        @endif
-                                    @endforeach
+                                    <option value="{{ $d1->id }}">{{ $d1->account }}
+                                    </option>
                                 @endforeach
                             @endif
                         </select>
@@ -201,7 +193,8 @@
         </div>
     </div>
     <script>
-        let currentRow; 
+        let currentRow;
+
         function openModal(button) {
             currentRow = button.parentElement.parentElement;
             const cells = currentRow.getElementsByTagName('td');
@@ -224,6 +217,7 @@
                     break;
                 }
             }
+
             const accountText = cells[5].innerText;
             const accountSelect = document.getElementById('editAccount');
             for (let i = 0; i < accountSelect.options.length; i++) {
@@ -234,8 +228,25 @@
             }
             const dateText = cells[6].innerText;
             document.getElementById('date').value = dateText;
-            document.getElementById('editModal').style.display = 'block';
+            // إظهار المودال
+            const modal = document.getElementById('editModal');
+            modal.style.display = 'block';
+            // العثور على الفورم داخل المودال
+            let form = modal.querySelector('form');
+            if (form) {
+                // نفذ الدالة بعد التأكد من ضبط القيمة الجديدة للسلكت
+                toggleAccountFieldInForm(form);
+
+                // أضف مستمع للحدث عند تغيير الخيار
+                const paymentType = form.querySelector('[name="payment_type"]');
+                if (paymentType) {
+                    paymentType.addEventListener('change', function() {
+                        toggleAccountFieldInForm(form);
+                    });
+                }
+            }
         }
+
         function closeModal() {
             document.getElementById('editModal').style.display = 'none';
         }
@@ -245,5 +256,37 @@
                 window.location.href = pa + id;
             }
         }
+
+        function toggleAccountFieldInForm(form) {
+            // هنا يجب التأكد من name الصحيح في فورم التعديل
+            var paymentType = form.querySelector('[name="payment_type"]');
+            // أو غيره حسب اسم السلكت في الفورم المنبثق
+            if (!paymentType) { // fallback إلى ID إذا لم يتم العثور على name
+                paymentType = document.getElementById('payType');
+            }
+            var accountField = form.querySelector('#accountField');
+            if (!paymentType || !accountField) return;
+
+            if (paymentType.value === 'cash') {
+                accountField.style.display = '';
+            } else {
+                accountField.style.display = 'none';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var forms = document.querySelectorAll('form');
+
+            forms.forEach(function(form) {
+                var paymentType = form.querySelector('[name="payment_type"]');
+                if (paymentType) {
+                    // نفذ عند التحميل لمطابقة الحالة الحالية
+                    toggleAccountFieldInForm(form);
+                    // نفذ عند تغيير الاختيار
+                    paymentType.addEventListener('change', function() {
+                        toggleAccountFieldInForm(form);
+                    });
+                }
+            });
+        });
     </script>
 @endsection

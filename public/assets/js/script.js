@@ -121,15 +121,7 @@ function toggleForm() {
         button.textContent = "+"; // تغيير النص إلى "+"
     }
 }
-function toggleAccountField() {
-    var paymentType = document.getElementById('paymentType').value;
-    var accountField = document.getElementById('accountField');
-    if (paymentType === 'cash') {
-        accountField.style.display = 'block';
-    } else {
-        accountField.classList.remove('customStyle');
-    }
-}
+
 
 // function toggleAccountField() {
 //     var paymentType = document.getElementById('paymentType').value;

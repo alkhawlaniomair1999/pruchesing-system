@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\invoices;
 use App\Models\invoice_details;
 use Illuminate\Http\Request;
+use Exception;
 
 class InvoicesController extends Controller
 {
@@ -18,32 +19,30 @@ class InvoicesController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'customer_name' => 'required|string|max:255',
-            'tax_id' => 'required|integer',
-            'address' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|integer',
-            'invoice_date' => 'required|date',
-            'supply_date' => 'nullable|date',
-        ]);
+        try {
+            $request->validate([
+                'customer_name' => 'required|string|max:255',
+                'tax_id' => 'required|integer',
+                'address' => 'nullable|string|max:255',
+                'phone_number' => 'nullable|integer',
+                'invoice_date' => 'required|date',
+                'supply_date' => 'nullable|date',
+            ]);
 
-        invoices::create($request->all());
-        $id = invoices::latest()->first();
-        $invoice = invoices::findOrFail($id->id);
-        $invoice_details = invoice_details::where('invoice_id', $id->id)->get();
-        return view('invoice_details', compact('invoice','invoice_details'))->with('success', 'Invoice created successfully.');
+            invoices::create($request->all());
+            $id = invoices::latest()->first();
+            $invoice = invoices::findOrFail($id->id);
+            $invoice_details = invoice_details::where('invoice_id', $id->id)->get();
+
+            return view('invoice_details', compact('invoice','invoice_details'))
+                ->with('success', 'تم إضافة الفاتورة بنجاح!');
+        } catch (Exception $ex) {
+            return redirect()->back()->withInput()->with('error', 'فشل إضافة الفاتورة! ' . $ex->getMessage());
+        }
     }
 
     /**
@@ -51,56 +50,64 @@ class InvoicesController extends Controller
      */
     public function details(Request $request)
     {
-        $detail['product_name'] = $request->product_name;
-        $detail['quantity'] = $request->quantity;
-        $detail['price'] = $request->price;
-        $detail['product_code'] = $request->product_code;
-        $detail['invoice_id'] = $request->invoice_id;
-        $detail['tax'] = $request->tax;
-        if ($request->discount == null) {
-            $detail['discount'] = 0;
-        } else {
-            $detail['discount'] = $request->discount;
+        try {
+            $detail['product_name'] = $request->product_name;
+            $detail['quantity'] = $request->quantity;
+            $detail['price'] = $request->price;
+            $detail['product_code'] = $request->product_code;
+            $detail['invoice_id'] = $request->invoice_id;
+            $detail['tax'] = $request->tax;
+            $detail['discount'] = $request->discount ?? 0;
+
+            invoice_details::create($detail);
+
+            $invoice = invoices::findOrFail($request->invoice_id);
+            $invoice_details = invoice_details::where('invoice_id', $request->invoice_id)->get();
+
+            return view('invoice_details', compact('invoice', 'invoice_details'))
+                ->with('success', 'تم إضافة الصنف بنجاح!');
+        } catch (Exception $ex) {
+            return redirect()->back()->withInput()->with('error', 'فشل إضافة الصنف! ' . $ex->getMessage());
         }
-        invoice_details::create($detail);
-        $invoice = invoices::findOrFail($request->invoice_id);
-        $invoice_details = invoice_details::where('invoice_id', $request->invoice_id)->get();
-        return view('invoice_details', compact('invoice', 'invoice_details'))->with('success', 'Invoice created successfully.');
     }
+    
     public function update_detail(Request $request)
     {
-        $detail = invoice_details::findOrFail($request->id);
-        $detail['product_name'] = $request->product_name;
-        $detail['quantity'] = $request->quantity;
-        $detail['price'] = $request->price;
-        $detail['product_code'] = $request->product_code;
-        $detail['tax'] = $request->tax;
-        if ($request->discount == null) {
-            $detail['discount'] = 0;
-        } else {
-            $detail['discount'] = $request->discount;
+        try {
+            $detail = invoice_details::findOrFail($request->id);
+            $detail['product_name'] = $request->product_name;
+            $detail['quantity'] = $request->quantity;
+            $detail['price'] = $request->price;
+            $detail['product_code'] = $request->product_code;
+            $detail['tax'] = $request->tax;
+            $detail['discount'] = $request->discount ?? 0;
+            $detail->save();
+
+            $invoice = invoices::findOrFail($request->invoice_id);
+            $invoice_details = invoice_details::where('invoice_id', $request->invoice_id)->get();
+
+            return view('invoice_details', compact('invoice', 'invoice_details'))
+                ->with('success', 'تم تعديل الصنف بنجاح!');
+        } catch (Exception $ex) {
+            return redirect()->back()->withInput()->with('error', 'فشل تعديل الصنف! ' . $ex->getMessage());
         }
-        $detail->save();
-        $invoice = invoices::findOrFail($request->invoice_id);
-        $invoice_details = invoice_details::where('invoice_id', $request->invoice_id)->get();
-        return view('invoice_details', compact('invoice', 'invoice_details'))->with('success', 'Invoice updated successfully.');    
-    }
-    public function destroy_detail($id)
-    {
-        $detail = invoice_details::findOrFail($id);
-        $invoice_id = $detail->invoice_id;
-        $detail->delete();
-        $invoice = invoices::findOrFail($invoice_id);
-        $invoice_details = invoice_details::where('invoice_id', $invoice_id)->get();
-        return view('invoice_details', compact('invoice', 'invoice_details'))->with('success', 'Invoice deleted successfully.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(invoices $invoices)
+    public function destroy_detail($id)
     {
-        //
+        try {
+            $detail = invoice_details::findOrFail($id);
+            $invoice_id = $detail->invoice_id;
+            $detail->delete();
+
+            $invoice = invoices::findOrFail($invoice_id);
+            $invoice_details = invoice_details::where('invoice_id', $invoice_id)->get();
+
+            return view('invoice_details', compact('invoice', 'invoice_details'))
+                ->with('success', 'تم حذف الصنف بنجاح!');
+        } catch (Exception $ex) {
+            return redirect()->back()->with('error', 'فشل حذف الصنف! ' . $ex->getMessage());
+        }
     }
 
     /**
@@ -108,39 +115,58 @@ class InvoicesController extends Controller
      */
     public function update(Request $request, invoices $invoices)
     {
-        $invoice = invoices::findOrFail($request->id);
-        $request->validate([
-            'customer_name' => 'required|string|max:255',
-            'tax_id' => 'required|integer',
-            'address' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|integer',
-            'invoice_date' => 'required|date',
-            'supply_date' => 'nullable|date',
-        ]);
-        $invoice->update($request->all());
+        try {
+            $invoice = invoices::findOrFail($request->id);
+            $request->validate([
+                'customer_name' => 'required|string|max:255',
+                'tax_id' => 'required|integer',
+                'address' => 'nullable|string|max:255',
+                'phone_number' => 'nullable|integer',
+                'invoice_date' => 'required|date',
+                'supply_date' => 'nullable|date',
+            ]);
+            $invoice->update($request->all());
 
-        return redirect()->route('invoices.index')->with('success', 'Invoice updated successfully.');
+            return redirect()->route('invoices.index')->with('success', 'تم تعديل الفاتورة بنجاح!');
+        } catch (Exception $ex) {
+            return redirect()->back()->withInput()->with('error', 'فشل تعديل الفاتورة! ' . $ex->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( $id)
+    public function destroy($id)
     {
-        $invoice = invoices::findOrFail($id);
-        $invoice->delete();
+        try {
+            $invoice = invoices::findOrFail($id);
+            $invoice->delete();
 
-        return redirect()->route('invoices.index')->with('success', 'Invoice deleted successfully.');
+            return redirect()->route('invoices.index')->with('success', 'تم حذف الفاتورة بنجاح!');
+        } catch (Exception $ex) {
+            return redirect()->back()->with('error', 'فشل حذف الفاتورة! ' . $ex->getMessage());
+        }
     }
+
     public function print($id)
     {
-        $invoice = invoices::findOrFail($id);
-        $invoice_details = invoice_details::where('invoice_id', $id)->get();
-        return view('print/print_invoice', compact('invoice', 'invoice_details'));
+        try {
+            $invoice = invoices::findOrFail($id);
+            $invoice_details = invoice_details::where('invoice_id', $id)->get();
+            return view('print/print_invoice', compact('invoice', 'invoice_details'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('error', 'فشل طباعة الفاتورة! ' . $ex->getMessage());
+        }
     }
-    public function show($id){
-        $invoice = invoices::findOrFail($id);
-        $invoice_details = invoice_details::where('invoice_id', $id)->get();
-        return view('invoice_details', compact('invoice', 'invoice_details'));
+
+    public function show($id)
+    {
+        try {
+            $invoice = invoices::findOrFail($id);
+            $invoice_details = invoice_details::where('invoice_id', $id)->get();
+            return view('invoice_details', compact('invoice', 'invoice_details'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('error', 'تعذر عرض تفاصيل الفاتورة! ' . $ex->getMessage());
+        }
     }
 }

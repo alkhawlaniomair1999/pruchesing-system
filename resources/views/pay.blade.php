@@ -21,7 +21,7 @@
     <div class="custom-form-container">
         <div class="custom-form-header">
             <button type="button" id="toggleButton" onclick="toggleForm()">-</button>
-            <h2 class="custom-form-title">  قيد تسديد المورد</h2>
+            <h2 class="custom-form-title"> قيد تسديد المورد</h2>
             <p></p>
         </div>
         <form id="detailsForm" action="{{ route('pay.storepay') }}" method="POST">
@@ -50,12 +50,8 @@
                     <select id="account" name="account">
                         @if (isset($accounts))
                             @foreach ($accounts as $d1)
-                                @foreach ($Branch as $b1)
-                                    @if ($b1->id == $d1->branch_id)
-                                        <option value="{{ $d1->id }}">{{ $d1->account }} ({{ $b1->branch }})
-                                        </option>
-                                    @endif
-                                @endforeach
+                                <option value="{{ $d1->id }}">{{ $d1->account }}
+                                </option>
                             @endforeach
                         @endif
                     </select>
@@ -96,7 +92,7 @@
                                 <td>{{ $s->supplier }}</td>
                             @endif
                         @endforeach
-                        <td>{{$p->amount }}</td>
+                        <td>{{ $p->amount }}</td>
 
                         @foreach ($accounts as $a)
                             @if ($a->id == $p->account)
