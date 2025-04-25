@@ -66,7 +66,14 @@
             </div>
         </div>
 
-        <h2>تقرير شهر:
+        <h2>تقرير عمليات الكاشير لفرع:
+            @if (isset($branches))
+                @foreach ($branches as $ba)
+                    @if ($ba->id == $branchId)
+                        {{ $ba->branch }}
+                    @endif
+                @endforeach
+            @endif -
             @switch($month)
                 @case(1)
                     يناير
@@ -119,16 +126,9 @@
                 @default
                     رقم الشهر غير صحيح
             @endswitch
-            :
+            -
             {{ $year }}
-            -للفرع:
-            @if (isset($branches))
-                @foreach ($branches as $ba)
-                    @if ($ba->id == $branchId)
-                        {{ $ba->branch }}
-                    @endif
-                @endforeach
-            @endif
+            
         </h2>
         @php
             $sum_total = 0;

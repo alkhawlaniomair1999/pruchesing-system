@@ -161,8 +161,8 @@ class SuppliersController extends Controller
                 $supply->account_name = $request->account_name;
             } else if ($request->payment_type == 'credit') {
                 $supplier = Suppliers::find($request->supplier_id);
-                $supplier->debt += $request->amount;
-                $supplier->balance += $request->amount;
+                $supplier->credit += $request->amount;
+                $supplier->balance -= $request->amount;
                 $supplier->save();
 
                 $supply->account_name = null;
@@ -208,11 +208,6 @@ class SuppliersController extends Controller
                 'details' => 'nullable|string',
                 'account_name' => 'required_if:payment_type,cash|exists:accounts,id',
             ]);
-
-            $supply->supplier_id = $request->supplier_id;
-            $supply->details = $request->details;
-            $supply->date = $request->date;
-
             if ($supply->payment_type == $request->payment_type) {
                 if ($request->payment_type == 'cash') {
                     if ($supply->account_name == $request->account_name) {
@@ -248,10 +243,10 @@ class SuppliersController extends Controller
                         $supplier->debt -= $supply->amount;
                         $supplier->credit -= $supply->amount;
                         $supplier->save();
-                        $supplier = Suppliers::findOrFail($request->supplier_id);
-                        $supplier->debt += $request->amount;
-                        $supplier->credit += $request->amount;
-                        $supplier->save();
+                        $supplier2 = Suppliers::findOrFail($request->supplier_id);
+                        $supplier2->debt += $request->amount;
+                        $supplier2->credit += $request->amount;
+                        $supplier2->save();
                     }
 
                     FinancialOperation::create([
@@ -269,18 +264,18 @@ class SuppliersController extends Controller
                 } else if ($request->payment_type == 'credit') {
                     if ($supply->supplier_id == $request->supplier_id) {
                         $supplier = Suppliers::findOrFail($request->supplier_id);
-                        $supplier->debt -= $supply->amount;
+                        $supplier->balance += $supply->amount;
                         $supplier->credit -= $supply->amount;
-                        $supplier->debt += $request->amount;
+                        $supplier->balance -= $request->amount;
                         $supplier->credit += $request->amount;
                         $supplier->save();
                     } else {
                         $supplier = Suppliers::findOrFail($supply->supplier_id);
-                        $supplier->debt -= $supply->amount;
+                        $supplier->balance += $supply->amount;
                         $supplier->credit -= $supply->amount;
                         $supplier->save();
                         $supplier = Suppliers::findOrFail($request->supplier_id);
-                        $supplier->debt += $request->amount;
+                        $supplier->balance -= $request->amount;
                         $supplier->credit += $request->amount;
                         $supplier->save();
                     }
@@ -309,13 +304,13 @@ class SuppliersController extends Controller
                 if ($supply->supplier_id == $request->supplier_id) {
                     $supplier = Suppliers::findOrFail($request->supplier_id);
                     $supplier->credit -= $supply->amount;
-                    $supplier->debt += $request->amount;
+                    $supplier->balance += $supply->amount;
                     $supplier->credit += $request->amount;
-                    $supplier->balance += $request->amount;
+                    $supplier->debt += $request->amount;
                     $supplier->save();
                 } else {
                     $supplier = Suppliers::findOrFail($supply->supplier_id);
-                    $supplier->debt -= $supply->amount;
+                    $supplier->balance += $supply->amount;
                     $supplier->credit -= $supply->amount;
                     $supplier->save();
                     $supplier = Suppliers::findOrFail($request->supplier_id);
@@ -356,7 +351,7 @@ class SuppliersController extends Controller
                     $supplier->credit -= $supply->amount;
                     $supplier->save();
                     $supplier = Suppliers::findOrFail($request->supplier_id);
-                    $supplier->debt += $request->amount;
+                    $supplier->balance -= $request->amount;
                     $supplier->credit += $request->amount;
                     $supplier->save();
                 }
@@ -374,7 +369,9 @@ class SuppliersController extends Controller
 
                 $supply->account_name = null;
             }
-
+            $supply->supplier_id = $request->supplier_id;
+            $supply->details = $request->details;
+            $supply->date = $request->date;
             $supply->amount = $request->amount;
             $supply->payment_type = $request->payment_type;
             $supply->save();
@@ -409,8 +406,8 @@ class SuppliersController extends Controller
             } else if ($supply->payment_type == 'credit') {
                 $supplier = Suppliers::find($supply->supplier_id);
 
-                $supplier->debt -= $supply->amount;
-                $supplier->balance -= $supply->amount;
+                $supplier->credit -= $supply->amount;
+                $supplier->balance += $supply->amount;
                 $supplier->save();
             }
 

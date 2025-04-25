@@ -85,7 +85,7 @@
 
             </div>
         </div>
-        <h2>تقرير شهر: {{ $month }}/{{ $year }}</h2>
+        <h2>تقرير المخزون لشهر: {{ $year }}/{{ $month }}</h2>
         <table class="printable-content" id="tableID">
             <thead>
                 @php
